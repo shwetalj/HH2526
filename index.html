@@ -167,6 +167,67 @@
             }
         }
 
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .marker {
+                width: 40px;
+                height: 40px;
+            }
+
+            .marker-label {
+                font-size: 16px;
+            }
+
+            .hint-popup {
+                min-width: 200px;
+                padding: 10px;
+            }
+
+            .hint-popup h3 {
+                font-size: 1rem;
+            }
+
+            .hint-popup p {
+                font-size: 0.85rem;
+            }
+
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+                }
+                70% {
+                    box-shadow: 0 0 0 5px rgba(255, 0, 0, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+                }
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .marker {
+                width: 35px;
+                height: 35px;
+            }
+
+            .marker-label {
+                font-size: 14px;
+            }
+
+            .map-container {
+                padding: 10px;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+
         .hint-popup {
             position: absolute;
             background: white;
