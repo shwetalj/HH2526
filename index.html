@@ -228,6 +228,173 @@
             }
         }
 
+        /* Mission Table Styles */
+        .mission-table-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .mission-table-container h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .mission-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-collapse: collapse;
+        }
+
+        .mission-table thead {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+        }
+
+        .mission-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: 3px solid #aa0000;
+        }
+
+        .mission-table th:nth-child(1) {
+            width: 8%;
+        }
+
+        .mission-table th:nth-child(2) {
+            width: 20%;
+        }
+
+        .mission-table th:nth-child(3) {
+            width: 42%;
+        }
+
+        .mission-table th:nth-child(4) {
+            width: 30%;
+        }
+
+        .mission-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .mission-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .mission-table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .mission-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .mission-number {
+            font-weight: bold;
+            color: #ff0000;
+            font-size: 1rem;
+        }
+
+        .mission-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .mission-desc {
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .mission-points {
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive table for tablets */
+        @media (max-width: 768px) {
+            .mission-table-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .mission-table th {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .mission-table td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+
+            .mission-table th:nth-child(3),
+            .mission-table td:nth-child(3) {
+                display: none;
+            }
+        }
+
+        /* Responsive table for mobile */
+        @media (max-width: 480px) {
+            .mission-table-container {
+                padding: 0 10px;
+                margin: 20px auto;
+            }
+
+            .mission-table {
+                font-size: 0.8rem;
+            }
+
+            .mission-table thead {
+                display: none;
+            }
+
+            .mission-table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 2px solid #ff0000;
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            .mission-table td {
+                display: block;
+                text-align: left;
+                padding: 5px 10px;
+                border: none;
+                position: relative;
+                padding-left: 40%;
+            }
+
+            .mission-table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: 35%;
+                font-weight: bold;
+                color: #ff0000;
+            }
+
+            .mission-table td:nth-child(1):before { content: "Mission:"; }
+            .mission-table td:nth-child(2):before { content: "Name:"; }
+            .mission-table td:nth-child(3):before { content: "Desc:"; display: none; }
+            .mission-table td:nth-child(4):before { content: "Points:"; }
+
+            .mission-table td:nth-child(3) {
+                display: none;
+            }
+        }
+
         .hint-popup {
             position: absolute;
             background: white;
@@ -426,6 +593,119 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Mission Information Table -->
+    <div class="mission-table-container">
+        <h2>Mission Information</h2>
+        <table class="mission-table">
+            <thead>
+                <tr>
+                    <th>Mission #</th>
+                    <th>Mission Name</th>
+                    <th>Description</th>
+                    <th>Points Scoring</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="mission-number">M01</td>
+                    <td class="mission-name">Surface Brushing</td>
+                    <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
+                    <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M02</td>
+                    <td class="mission-name">Map Reveal</td>
+                    <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
+                    <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M03</td>
+                    <td class="mission-name">Mineshaft Explorer</td>
+                    <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
+                    <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M04</td>
+                    <td class="mission-name">Careful Recovery</td>
+                    <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
+                    <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M05</td>
+                    <td class="mission-name">Who Lived Here?</td>
+                    <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
+                    <td class="mission-points">• Structure floor completely upright: 30 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M06</td>
+                    <td class="mission-name">Forge</td>
+                    <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
+                    <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M07</td>
+                    <td class="mission-name">Heavy Lifting</td>
+                    <td class="mission-desc">Move the millstone that was used to process grain.</td>
+                    <td class="mission-points">• Millstone not touching base: 30 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M08</td>
+                    <td class="mission-name">Silo</td>
+                    <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
+                    <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M09</td>
+                    <td class="mission-name">What's on Sale?</td>
+                    <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
+                    <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M10</td>
+                    <td class="mission-name">Tip the Scales</td>
+                    <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
+                    <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M11</td>
+                    <td class="mission-name">Angler Artifacts</td>
+                    <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
+                    <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M12</td>
+                    <td class="mission-name">Salvage Operation</td>
+                    <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
+                    <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M13</td>
+                    <td class="mission-name">Statue Rebuild</td>
+                    <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
+                    <td class="mission-points">• Statue completely raised: 30 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M14</td>
+                    <td class="mission-name">Forum</td>
+                    <td class="mission-desc">Deliver artifacts to the forum and choose significant items to display.</td>
+                    <td class="mission-points">• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">M15</td>
+                    <td class="mission-name">Site Marking</td>
+                    <td class="mission-desc">Place flags to mark locations for further study.</td>
+                    <td class="mission-points">• Each site with flag: 10 pts</td>
+                </tr>
+                <tr>
+                    <td class="mission-number">PT</td>
+                    <td class="mission-name">Precision Tokens</td>
+                    <td class="mission-desc">Start with 6 tokens. Lose one for each robot interruption outside home.</td>
+                    <td class="mission-points">1 token: 10 pts<br>2 tokens: 15 pts<br>3 tokens: 25 pts<br>4 tokens: 35 pts<br>5-6 tokens: 50 pts</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <!-- Hint Popup -->
