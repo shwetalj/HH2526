@@ -127,33 +127,56 @@
         .marker {
             position: absolute;
             width: 80px;
-            height: 80px;
+            height: auto;
             border: none;
-            border-radius: 50%;
-            background: #ff0000;
             cursor: pointer;
             transition: all 0.3s ease;
-            animation: pulse 2s infinite;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             transform: translate(-50%, -50%);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-        }
-
-        .marker:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: #cc0000;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 1);
         }
 
         .marker-label {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
             color: white;
             font-size: 32px;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             z-index: 1;
         }
+
+        .marker-name {
+            margin-top: 5px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .marker:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .marker:hover .marker-label {
+            background: #cc0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 1);
+        }
+
 
         @keyframes pulse {
             0% {
@@ -173,13 +196,15 @@
                 font-size: 1.8rem;
             }
 
-            .marker {
+            .marker-label {
                 width: 40px;
                 height: 40px;
+                font-size: 16px;
             }
 
-            .marker-label {
-                font-size: 16px;
+            .marker-name {
+                font-size: 10px;
+                padding: 2px 5px;
             }
 
             .hint-popup {
@@ -210,13 +235,15 @@
 
         /* Extra small devices */
         @media (max-width: 480px) {
-            .marker {
+            .marker-label {
                 width: 35px;
                 height: 35px;
+                font-size: 14px;
             }
 
-            .marker-label {
-                font-size: 14px;
+            .marker-name {
+                font-size: 9px;
+                padding: 2px 4px;
             }
 
             .map-container {
@@ -517,71 +544,85 @@
                 <!-- M01 -->
                 <div class="marker" style="left: 16%; top: 43%;" data-mission="01">
                     <span class="marker-label">01</span>
+                    <span class="marker-name">Surface Brushing</span>
                 </div>
                 
                 <!-- M02 -->
                 <div class="marker" style="left: 19%; top: 15%;" data-mission="02">
                     <span class="marker-label">02</span>
+                    <span class="marker-name">Map Reveal</span>
                 </div>
                 
                 <!-- M03 -->
                 <div class="marker" style="left: 37%; top: 13%;" data-mission="03">
                     <span class="marker-label">03</span>
+                    <span class="marker-name" style="position: absolute; left: 75px; top: 50%; transform: translateY(-50%); margin-top: 0;">Mineshaft Explorer</span>
                 </div>
                 
                 <!-- M04 -->
                 <div class="marker" style="left: 34%; top: 23%;" data-mission="04">
                     <span class="marker-label">04</span>
+                    <span class="marker-name">Careful Recovery</span>
                 </div>
                 
                 <!-- M05 -->
                 <div class="marker" style="left: 73.5%; top: 13.9%;" data-mission="05">
                     <span class="marker-label">05</span>
+                    <span class="marker-name" style="position: absolute; right: 60px; top: 50%; transform: translateY(-50%); margin-top: 0;">Who Lived Here?</span>
                 </div>
                 
                 <!-- M06 -->
                 <div class="marker" style="left: 79%; top: 24.7%;" data-mission="06">
                     <span class="marker-label">06</span>
+                    <span class="marker-name">Forge</span>
                 </div>
                 
                 <!-- M07 -->
                 <div class="marker" style="left: 84.2%; top: 13%;" data-mission="07">
                     <span class="marker-label">07</span>
+                    <span class="marker-name">Heavy Lifting</span>
                 </div>
                 
                 <!-- M08 -->
                 <div class="marker" style="left: 83.6%; top: 42.5%;" data-mission="08">
                     <span class="marker-label">08</span>
+                    <span class="marker-name">Silo</span>
                 </div>
                 
                 <!-- M09 -->
                 <div class="marker" style="left: 65.7%; top: 45.7%;" data-mission="09">
                     <span class="marker-label">09</span>
+                    <span class="marker-name">What's on Sale?</span>
                 </div>
                 
                 <!-- M10 -->
                 <div class="marker" style="left: 58.2%; top: 49.8%;" data-mission="10">
                     <span class="marker-label">10</span>
+                    <span class="marker-name">Tip the Scales</span>
                 </div>
                 
                 <!-- M11 -->
                 <div class="marker" style="left: 58.1%; top: 90.9%;" data-mission="11">
                     <span class="marker-label">11</span>
+                    <span class="marker-name">Angler Artifacts</span>
                 </div>
                 
                 <!-- M12 -->
                 <div class="marker" style="left: 46.8%; top: 91%;" data-mission="12">
                     <span class="marker-label">12</span>
+                    <span class="marker-name">Salvage Operation</span>
                 </div>
                 
                 <!-- M13 -->
                 <div class="marker" style="left: 44.2%; top: 44.5%;" data-mission="13">
                     <span class="marker-label">13</span>
+                    <span class="marker-name">Statue Rebuild</span>
                 </div>
                 
                 <!-- M14 -->
                 <div class="marker" style="left: 38%; top: 48%;" data-mission="14">
                     <span class="marker-label">14</span>
+                    <span class="marker-name">Forum</span>
                 </div>
             </div>
             
@@ -789,63 +830,67 @@
             });
         });
         
-        // Mission data with hints
+        // Mission data with scoring information
         const missionData = {
             '01': {
-                title: 'Mission 01: Equipment Inspection',
-                hint: 'Push both inspection models completely past their inspection space lines. Tip: Use a wide attachment to push both models simultaneously for efficiency.'
+                title: 'M01: Surface Brushing',
+                hint: '<b>Points:</b><br>• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts<br><br><b>Strategy:</b> Approach from the side. Use a gentle sweeping motion to clear the surface.'
             },
             '02': {
-                title: 'Mission 02: Oil Drilling',
-                hint: 'Extract oil samples by activating the pump mechanism. Strategy: Approach from the side for better alignment and use consistent motor power.'
+                title: 'M02: Map Reveal',
+                hint: '<b>Points:</b><br>• Topsoil sections cleared: 10 pts each<br><br><b>Strategy:</b> Use precise movements to reveal the map sections systematically.'
             },
             '03': {
-                title: 'Mission 03: Energy Storage',
-                hint: 'Place energy units in the designated storage area. Consider using a scoop attachment to carry multiple units in one trip.'
+                title: 'M03: Mineshaft Explorer',
+                hint: '<b>Points:</b><br>• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts<br><br><b>Strategy:</b> Navigate carefully through the mineshaft entry.'
             },
             '04': {
-                title: 'Mission 04: Solar Farm',
-                hint: 'Remove the solar panel units from their holders. Tip: A gentle lifting motion works better than pulling directly.'
+                title: 'M04: Careful Recovery',
+                hint: '<b>Points:</b><br>• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts<br><br><b>Strategy:</b> Extract artifacts carefully while maintaining site stability.'
             },
             '05': {
-                title: 'Mission 05: Smart Grid',
-                hint: 'Connect the power nodes to complete the circuit. Use precise movements and consider the order of connections.'
+                title: 'M05: Who Lived Here?',
+                hint: '<b>Points:</b><br>• Structure floor completely upright: 30 pts<br><br><b>Strategy:</b> Rebuild the structure to restore the village.'
             },
             '06': {
-                title: 'Mission 06: Hybrid Car',
-                hint: 'Move the hybrid car to the charging station. Align your robot parallel to the car for better control during pushing.'
+                title: 'M06: Forge',
+                hint: '<b>Points:</b><br>• Ore blocks not touching forge: 10 pts each<br><br><b>Strategy:</b> Release ore blocks carefully. One contains a fossilized artifact.'
             },
             '07': {
-                title: 'Mission 07: Wind Turbine',
-                hint: 'Release the wind turbine blades. A rotating attachment can help activate the release mechanism efficiently.'
+                title: 'M07: Heavy Lifting',
+                hint: '<b>Points:</b><br>• Millstone not touching base: 30 pts<br><br><b>Strategy:</b> Use mechanical advantage to move the heavy millstone.'
             },
             '08': {
-                title: 'Mission 08: Power Plant',
-                hint: 'Convert energy units at the power plant. Time your approach to avoid interference with other missions.'
+                title: 'M08: Silo',
+                hint: '<b>Points:</b><br>• Preserved pieces outside silo: 10 pts each<br><br><b>Strategy:</b> Empty the silo systematically for lab analysis.'
             },
             '09': {
-                title: 'Mission 09: Dinosaur Discovery',
-                hint: 'Carefully extract the dinosaur fossil. Use slow, controlled movements to prevent damage to the model.'
+                title: 'M09: What\'s on Sale?',
+                hint: '<b>Points:</b><br>• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts<br><br><b>Strategy:</b> Restore the market stall to reveal traded items.'
             },
             '10': {
-                title: 'Mission 10: Geothermal Energy',
-                hint: 'Activate the geothermal plant mechanism. Consider the weight distribution of your robot when applying force.'
+                title: 'M10: Tip the Scales',
+                hint: '<b>Points:</b><br>• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts<br><br><b>Strategy:</b> Balance the ancient scale carefully.'
             },
             '11': {
-                title: 'Mission 11: Innovation Project',
-                hint: 'Deliver your innovation model to the designated area. Practice the delivery motion to ensure smooth placement.'
+                title: 'M11: Angler Artifacts',
+                hint: '<b>Points:</b><br>• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts<br><br><b>Strategy:</b> Use the crane to excavate port artifacts.'
             },
             '12': {
-                title: 'Mission 12: Precision Tokens',
-                hint: 'Collect precision tokens throughout your run. Plan your route to maximize token collection while completing other missions.'
+                title: 'M12: Salvage Operation',
+                hint: '<b>Points:</b><br>• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts<br><br><b>Strategy:</b> Excavate the ship without damaging its structure.'
             },
             '13': {
-                title: 'Mission 13: Research Station',
-                hint: 'Activate the research station mechanism. Approach from the correct angle to ensure proper engagement with the trigger.'
+                title: 'M13: Statue Rebuild',
+                hint: '<b>Points:</b><br>• Statue completely raised: 30 pts<br><br><b>Strategy:</b> Reconstruct the statue to understand its significance.'
             },
             '14': {
-                title: 'Mission 14: Sample Collection',
-                hint: 'Collect and deliver samples to the designated area. Use a secure container attachment to prevent samples from falling during transport.'
+                title: 'M14: Forum',
+                hint: '<b>Points:</b><br>• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)<br><br><b>Strategy:</b> Deliver and display artifacts.'
+            },
+            '15': {
+                title: 'M15: Site Marking',
+                hint: '<b>Points:</b><br>• Each site with flag: 10 pts<br><br><b>Strategy:</b> Place flags accurately to mark study locations.'
             }
         };
 
@@ -855,10 +900,9 @@
         const hintTitle = document.getElementById('hintTitle');
         const hintContent = document.getElementById('hintContent');
 
-        // Add click event to each marker
+        // Add hover events to each marker
         markers.forEach(marker => {
-            marker.addEventListener('click', function(e) {
-                e.stopPropagation();
+            marker.addEventListener('mouseenter', function(e) {
                 const missionId = this.getAttribute('data-mission');
                 const mission = missionData[missionId];
                 
@@ -866,11 +910,29 @@
                     showHint(mission, this);
                 }
             });
+            
+            marker.addEventListener('mouseleave', function(e) {
+                // Hide hint when mouse leaves, unless hovering over the hint itself
+                setTimeout(() => {
+                    if (!hintPopup.matches(':hover')) {
+                        closeHint();
+                    }
+                }, 100);
+            });
+        });
+        
+        // Keep hint open when hovering over it
+        hintPopup.addEventListener('mouseenter', function() {
+            hintPopup.classList.add('active');
+        });
+        
+        hintPopup.addEventListener('mouseleave', function() {
+            closeHint();
         });
 
         function showHint(mission, markerElement) {
             hintTitle.textContent = mission.title;
-            hintContent.textContent = mission.hint;
+            hintContent.innerHTML = mission.hint;
             
             // Position the popup near the marker
             const rect = markerElement.getBoundingClientRect();
