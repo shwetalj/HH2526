@@ -240,6 +240,14 @@
                 margin-bottom: 15px;
             }
 
+            .marker {
+                transform: translate(-50%, calc(-50% + 2%));
+            }
+
+            .marker:hover {
+                transform: translate(-50%, calc(-50% + 2%)) scale(1.1);
+            }
+
             .marker-label {
                 width: 25px;
                 height: 25px;
@@ -249,6 +257,12 @@
             .marker-name {
                 font-size: 7px;
                 padding: 1px 2px;
+                position: relative !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                transform: none !important;
+                margin-top: 5px !important;
             }
 
             .map-container {
