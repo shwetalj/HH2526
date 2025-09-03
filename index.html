@@ -357,15 +357,19 @@
         }
 
         .mission-table th:nth-child(2) {
-            width: 20%;
+            width: 18%;
         }
 
         .mission-table th:nth-child(3) {
-            width: 42%;
+            width: 35%;
         }
 
         .mission-table th:nth-child(4) {
-            width: 30%;
+            width: 25%;
+        }
+
+        .mission-table th:nth-child(5) {
+            width: 14%;
         }
 
         .mission-table tbody tr {
@@ -396,6 +400,19 @@
             color: #333;
         }
 
+        .mission-link {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mission-link:hover {
+            color: #cc0000;
+            text-decoration: underline;
+        }
+
         .mission-desc {
             color: #666;
             line-height: 1.4;
@@ -407,6 +424,109 @@
             text-align: left;
             line-height: 1.5;
             font-size: 0.9rem;
+        }
+
+        .mission-video {
+            text-align: center;
+        }
+
+        .video-link {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-link:hover {
+            background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .video-placeholder {
+            color: #999;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* Video Modal Styles */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .video-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .video-close-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .video-close-btn:hover {
+            background: #cc0000;
+            transform: scale(1.1);
+        }
+
+        #videoTitle {
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
         }
 
         /* Responsive table for tablets */
@@ -618,7 +738,7 @@
                 </div>
                 
                 <!-- M03 -->
-                <div class="marker" style="left: 37%; top: 15%;" data-mission="03">
+                <div class="marker" style="left: 37.5%; top: 14%;" data-mission="03">
                     <span class="marker-label">03</span>
                     <span class="marker-name" style="position: absolute; left: 85px; top: 50%; transform: translateY(-50%); margin-top: 0;">Mineshaft Explorer</span>
                 </div>
@@ -630,7 +750,7 @@
                 </div>
                 
                 <!-- M05 -->
-                <div class="marker" style="left: 73.5%; top: 15.9%;" data-mission="05">
+                <div class="marker" style="left: 73.5%; top: 14.9%;" data-mission="05">
                     <span class="marker-label">05</span>
                     <span class="marker-name" style="position: absolute; right: 75px; top: 50%; transform: translateY(-50%); margin-top: 0;">Who Lived Here?</span>
                 </div>
@@ -710,104 +830,121 @@
                     <th>Mission Name</th>
                     <th>Description</th>
                     <th>Points Scoring</th>
+                    <th>Video</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="mission-number">M01</td>
-                    <td class="mission-name">Surface Brushing</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="01">Surface Brushing</a></td>
                     <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
                     <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('OUHg0bMwHtM', 'M01: Surface Brushing')">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M02</td>
-                    <td class="mission-name">Map Reveal</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="02">Map Reveal</a></td>
                     <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
                     <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M03</td>
-                    <td class="mission-name">Mineshaft Explorer</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="03">Mineshaft Explorer</a></td>
                     <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
                     <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M04</td>
-                    <td class="mission-name">Careful Recovery</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="04">Careful Recovery</a></td>
                     <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
                     <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M05</td>
-                    <td class="mission-name">Who Lived Here?</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="05">Who Lived Here?</a></td>
                     <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
                     <td class="mission-points">• Structure floor completely upright: 30 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M06</td>
-                    <td class="mission-name">Forge</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="06">Forge</a></td>
                     <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
                     <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M07</td>
-                    <td class="mission-name">Heavy Lifting</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="07">Heavy Lifting</a></td>
                     <td class="mission-desc">Move the millstone that was used to process grain.</td>
                     <td class="mission-points">• Millstone not touching base: 30 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M08</td>
-                    <td class="mission-name">Silo</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="08">Silo</a></td>
                     <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
                     <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M09</td>
-                    <td class="mission-name">What's on Sale?</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="09">What's on Sale?</a></td>
                     <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
                     <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M10</td>
-                    <td class="mission-name">Tip the Scales</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="10">Tip the Scales</a></td>
                     <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
                     <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M11</td>
-                    <td class="mission-name">Angler Artifacts</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="11">Angler Artifacts</a></td>
                     <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
                     <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M12</td>
-                    <td class="mission-name">Salvage Operation</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="12">Salvage Operation</a></td>
                     <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
                     <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M13</td>
-                    <td class="mission-name">Statue Rebuild</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="13">Statue Rebuild</a></td>
                     <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
                     <td class="mission-points">• Statue completely raised: 30 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M14</td>
-                    <td class="mission-name">Forum</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="14">Forum</a></td>
                     <td class="mission-desc">Deliver artifacts to the forum and choose significant items to display.</td>
                     <td class="mission-points">• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">M15</td>
-                    <td class="mission-name">Site Marking</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="15">Site Marking</a></td>
                     <td class="mission-desc">Place flags to mark locations for further study.</td>
                     <td class="mission-points">• Each site with flag: 10 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
                 <tr>
                     <td class="mission-number">PT</td>
-                    <td class="mission-name">Precision Tokens</td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="PT">Precision Tokens</a></td>
                     <td class="mission-desc">Start with 6 tokens. Lose one for each robot interruption outside home.</td>
                     <td class="mission-points">1 token: 10 pts<br>2 tokens: 15 pts<br>3 tokens: 25 pts<br>4 tokens: 35 pts<br>5-6 tokens: 50 pts</td>
+                    <td class="mission-video"><span class="video-placeholder">Coming Soon</span></td>
                 </tr>
             </tbody>
         </table>
@@ -818,6 +955,17 @@
         <button class="close-btn" onclick="closeHint()">&times;</button>
         <h3 id="hintTitle">Mission Title</h3>
         <p id="hintContent">Mission hint content will appear here.</p>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="video-close-btn" onclick="closeVideo()">&times;</button>
+            <h3 id="videoTitle">Mission Video</h3>
+            <div class="video-container" id="videoContainer">
+                <!-- YouTube iframe will be inserted here -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -955,6 +1103,10 @@
             '15': {
                 title: 'M15: Site Marking',
                 hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; border-radius: 5px;"></picture>'
+            },
+            'PT': {
+                title: 'Precision Tokens',
+                hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; border-radius: 5px;"></picture>'
             }
         };
 
@@ -994,6 +1146,32 @@
             closeHint();
         });
 
+        // Add hover events to table mission links
+        const missionLinks = document.querySelectorAll('.mission-link');
+        missionLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+            });
+            
+            link.addEventListener('mouseenter', function(e) {
+                const missionId = this.getAttribute('data-mission');
+                const mission = missionData[missionId];
+                
+                if (mission) {
+                    showHint(mission, this);
+                }
+            });
+            
+            link.addEventListener('mouseleave', function(e) {
+                // Hide hint when mouse leaves, unless hovering over the hint itself
+                setTimeout(() => {
+                    if (!hintPopup.matches(':hover')) {
+                        closeHint();
+                    }
+                }, 100);
+            });
+        });
+
         function showHint(mission, markerElement) {
             hintTitle.textContent = mission.title;
             hintContent.innerHTML = mission.hint;
@@ -1029,6 +1207,31 @@
         // Handle window resize
         window.addEventListener('resize', function() {
             closeHint();
+        });
+        
+        // Video modal functions
+        function playVideo(videoId, title) {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const videoTitle = document.getElementById('videoTitle');
+            
+            videoTitle.textContent = title;
+            videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            modal.classList.add('active');
+        }
+        
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            modal.classList.remove('active');
+            videoContainer.innerHTML = ''; // Stop video playback
+        }
+        
+        // Close modal when clicking outside the video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
         });
     </script>
 </body>
