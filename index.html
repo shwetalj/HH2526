@@ -193,18 +193,18 @@
         /* Mobile responsive styles */
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
 
             .marker-label {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
             }
 
             .marker-name {
-                font-size: 10px;
-                padding: 2px 5px;
+                font-size: 8px;
+                padding: 1px 3px;
             }
 
             .hint-popup {
@@ -225,7 +225,7 @@
                     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
                 }
                 70% {
-                    box-shadow: 0 0 0 5px rgba(255, 0, 0, 0);
+                    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0);
                 }
                 100% {
                     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
@@ -233,17 +233,22 @@
             }
         }
 
-        /* Extra small devices */
+        /* Extra small devices (phones in portrait) */
         @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
             .marker-label {
-                width: 35px;
-                height: 35px;
-                font-size: 14px;
+                width: 25px;
+                height: 25px;
+                font-size: 10px;
             }
 
             .marker-name {
-                font-size: 9px;
-                padding: 2px 4px;
+                font-size: 7px;
+                padding: 1px 2px;
             }
 
             .map-container {
@@ -252,6 +257,47 @@
 
             body {
                 padding: 10px;
+            }
+
+            .controls {
+                margin: 10px 0;
+            }
+
+            .toggle-grid {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .coord-display {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+
+        /* Mobile landscape mode */
+        @media (max-width: 896px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+
+            .marker-label {
+                width: 22px;
+                height: 22px;
+                font-size: 9px;
+            }
+
+            .marker-name {
+                font-size: 6px;
+                padding: 1px 2px;
+            }
+
+            .map-container {
+                padding: 5px;
+            }
+
+            body {
+                padding: 5px;
             }
         }
 
@@ -428,7 +474,8 @@
             border: 2px solid #ff0000;
             border-radius: 10px;
             padding: 15px;
-            min-width: 250px;
+            min-width: 300px;
+            max-width: 350px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 1000;
             display: none;
@@ -834,63 +881,63 @@
         const missionData = {
             '01': {
                 title: 'M01: Surface Brushing',
-                hint: '<b>Points:</b><br>• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts<br><br><b>Strategy:</b> Approach from the side. Use a gentle sweeping motion to clear the surface.'
+                hint: '<img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; border-radius: 5px;">'
             },
             '02': {
                 title: 'M02: Map Reveal',
-                hint: '<b>Points:</b><br>• Topsoil sections cleared: 10 pts each<br><br><b>Strategy:</b> Use precise movements to reveal the map sections systematically.'
+                hint: '<img src="mission_cards/M02_Map_Reward.png" style="width: 100%; border-radius: 5px;">'
             },
             '03': {
                 title: 'M03: Mineshaft Explorer',
-                hint: '<b>Points:</b><br>• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts<br><br><b>Strategy:</b> Navigate carefully through the mineshaft entry.'
+                hint: '<img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; border-radius: 5px;">'
             },
             '04': {
                 title: 'M04: Careful Recovery',
-                hint: '<b>Points:</b><br>• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts<br><br><b>Strategy:</b> Extract artifacts carefully while maintaining site stability.'
+                hint: '<img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; border-radius: 5px;">'
             },
             '05': {
                 title: 'M05: Who Lived Here?',
-                hint: '<b>Points:</b><br>• Structure floor completely upright: 30 pts<br><br><b>Strategy:</b> Rebuild the structure to restore the village.'
+                hint: '<img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; border-radius: 5px;">'
             },
             '06': {
                 title: 'M06: Forge',
-                hint: '<b>Points:</b><br>• Ore blocks not touching forge: 10 pts each<br><br><b>Strategy:</b> Release ore blocks carefully. One contains a fossilized artifact.'
+                hint: '<img src="mission_cards/M06_Forge.png" style="width: 100%; border-radius: 5px;">'
             },
             '07': {
                 title: 'M07: Heavy Lifting',
-                hint: '<b>Points:</b><br>• Millstone not touching base: 30 pts<br><br><b>Strategy:</b> Use mechanical advantage to move the heavy millstone.'
+                hint: '<img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; border-radius: 5px;">'
             },
             '08': {
                 title: 'M08: Silo',
-                hint: '<b>Points:</b><br>• Preserved pieces outside silo: 10 pts each<br><br><b>Strategy:</b> Empty the silo systematically for lab analysis.'
+                hint: '<img src="mission_cards/M08_Silo.png" style="width: 100%; border-radius: 5px;">'
             },
             '09': {
                 title: 'M09: What\'s on Sale?',
-                hint: '<b>Points:</b><br>• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts<br><br><b>Strategy:</b> Restore the market stall to reveal traded items.'
+                hint: '<img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; border-radius: 5px;">'
             },
             '10': {
                 title: 'M10: Tip the Scales',
-                hint: '<b>Points:</b><br>• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts<br><br><b>Strategy:</b> Balance the ancient scale carefully.'
+                hint: '<img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; border-radius: 5px;">'
             },
             '11': {
                 title: 'M11: Angler Artifacts',
-                hint: '<b>Points:</b><br>• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts<br><br><b>Strategy:</b> Use the crane to excavate port artifacts.'
+                hint: '<img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; border-radius: 5px;">'
             },
             '12': {
                 title: 'M12: Salvage Operation',
-                hint: '<b>Points:</b><br>• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts<br><br><b>Strategy:</b> Excavate the ship without damaging its structure.'
+                hint: '<img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; border-radius: 5px;">'
             },
             '13': {
                 title: 'M13: Statue Rebuild',
-                hint: '<b>Points:</b><br>• Statue completely raised: 30 pts<br><br><b>Strategy:</b> Reconstruct the statue to understand its significance.'
+                hint: '<img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; border-radius: 5px;">'
             },
             '14': {
                 title: 'M14: Forum',
-                hint: '<b>Points:</b><br>• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)<br><br><b>Strategy:</b> Deliver and display artifacts.'
+                hint: '<img src="mission_cards/M14_Forum.png" style="width: 100%; border-radius: 5px;">'
             },
             '15': {
                 title: 'M15: Site Marking',
-                hint: '<b>Points:</b><br>• Each site with flag: 10 pts<br><br><b>Strategy:</b> Place flags accurately to mark study locations.'
+                hint: '<img src="mission_cards/M15_Site_Marking.png" style="width: 100%; border-radius: 5px;">'
             }
         };
 
