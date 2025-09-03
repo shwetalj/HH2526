@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLL Unearthed Mission Guide</title>
+    <title>History Hackers 2025-2026</title>
     <style>
         * {
             margin: 0;
@@ -16,6 +16,51 @@
             background: linear-gradient(135deg, #4a4a4a 0%, #1a1a1a 50%, #2c2c2c 100%);
             min-height: 100vh;
             padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 3.5em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ff6b00, #ffd700);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 3s ease-in-out infinite;
+            font-weight: 900;
+            position: relative;
+            filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.6));
+        }
+        
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.2em;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .container {
@@ -193,7 +238,13 @@
         /* Mobile responsive styles */
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.5rem;
+                font-size: 2rem;
+                letter-spacing: 2px;
+            }
+            .subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+                margin-bottom: 20px;
             }
 
             .marker-label {
@@ -707,7 +758,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>FLL Unearthed Mission Guide</h1>
+        <h1>History Hackers 2025-2026</h1>
+        <div class="subtitle">FLL UNEARTHED • TEAM #71494 • DIGGING INTO THE PAST</div>
         
         <div class="map-container">
             <div class="controls">
