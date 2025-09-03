@@ -647,16 +647,27 @@
             }
             
             .header {
-                padding: 15px;
+                padding: 8px;
                 margin-bottom: 10px;
+                position: static; /* Ensure it's not sticky */
+                background: transparent; /* Remove background on mobile */
+                border: none;
             }
             
             .header h1 {
-                font-size: 1.6rem;
+                font-size: 1.3rem;
+                margin-bottom: 0.25rem;
+                background: none; /* Remove gold gradient */
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: var(--gold); /* Just use gold text color */
+                background-clip: unset;
+                padding: 0;
             }
             
             .header .subtitle {
-                font-size: 1rem;
+                font-size: 0.85rem;
+                opacity: 0.7;
+                display: none; /* Hide subtitle on mobile to save more space */
             }
             
             .section-title {
@@ -707,12 +718,7 @@
             }
             
             .achievement {
-                top: 70px; /* Move below header */
-                right: 10px;
-                left: 10px; /* Full width on mobile */
-                padding: 12px 15px;
-                font-size: 0.9rem;
-                text-align: center;
+                display: none !important; /* Hide achievement popup on mobile to save space */
             }
             
             .visual-explainer {
@@ -1633,7 +1639,7 @@ while not my_motor.done():
                     </div>
 
                     <div class="visual-explainer">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 20px 0;" class="responsive-grid">
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; justify-content: center;" class="responsive-grid">
                             <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
                                 <div style="font-size: 2rem;">👁️</div>
                                 <div>Color Sensor</div>

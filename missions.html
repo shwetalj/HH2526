@@ -271,6 +271,33 @@
 
         /* Extra small devices (phones in portrait) */
         @media (max-width: 480px) {
+            .hint-popup {
+                min-width: 150px;
+                max-width: 280px; /* Fixed max width instead of viewport percentage */
+                padding: 10px;
+                max-height: 400px; /* Fixed max height */
+                left: 50% !important;
+                transform: translateX(-50%);
+                margin: 0 auto;
+            }
+            
+            .hint-popup img {
+                max-width: 260px; /* Constrain image width */
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+            
+            .hint-popup h3 {
+                font-size: 0.95rem;
+            }
+            
+            .hint-popup p {
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
             h1 {
                 font-size: 1.2rem;
                 margin-bottom: 15px;
@@ -652,6 +679,14 @@
             z-index: 1000;
             display: none;
             animation: fadeIn 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .hint-popup img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            display: block;
         }
 
         .hint-popup.active {
@@ -739,6 +774,14 @@
             .hint-popup {
                 min-width: 200px;
                 max-width: 90vw;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            
+            .hint-popup img {
+                max-width: 100%;
+                height: auto;
+                display: block;
             }
         }
     /* Animated Background */
@@ -1153,67 +1196,67 @@
         const missionData = {
             '01': {
                 title: 'M01: Surface Brushing',
-                hint: '<picture><source srcset="mission_cards/M01_Surface_Brushing.webp" type="image/webp"><img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M01_Surface_Brushing.webp" type="image/webp"><img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '02': {
                 title: 'M02: Map Reveal',
-                hint: '<picture><source srcset="mission_cards/M02_Map_Reward.webp" type="image/webp"><img src="mission_cards/M02_Map_Reward.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M02_Map_Reward.webp" type="image/webp"><img src="mission_cards/M02_Map_Reward.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '03': {
                 title: 'M03: Mineshaft Explorer',
-                hint: '<picture><source srcset="mission_cards/M03_Mineshaft_Explorers.webp" type="image/webp"><img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M03_Mineshaft_Explorers.webp" type="image/webp"><img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '04': {
                 title: 'M04: Careful Recovery',
-                hint: '<picture><source srcset="mission_cards/M04_Careful_Recovery.webp" type="image/webp"><img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M04_Careful_Recovery.webp" type="image/webp"><img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '05': {
                 title: 'M05: Who Lived Here?',
-                hint: '<picture><source srcset="mission_cards/M05_Who_Lived_Here.webp" type="image/webp"><img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M05_Who_Lived_Here.webp" type="image/webp"><img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '06': {
                 title: 'M06: Forge',
-                hint: '<picture><source srcset="mission_cards/M06_Forge.webp" type="image/webp"><img src="mission_cards/M06_Forge.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M06_Forge.webp" type="image/webp"><img src="mission_cards/M06_Forge.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '07': {
                 title: 'M07: Heavy Lifting',
-                hint: '<picture><source srcset="mission_cards/M07_Heavy_Lifting.webp" type="image/webp"><img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M07_Heavy_Lifting.webp" type="image/webp"><img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '08': {
                 title: 'M08: Silo',
-                hint: '<picture><source srcset="mission_cards/M08_Silo.webp" type="image/webp"><img src="mission_cards/M08_Silo.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M08_Silo.webp" type="image/webp"><img src="mission_cards/M08_Silo.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '09': {
                 title: 'M09: What\'s on Sale?',
-                hint: '<picture><source srcset="mission_cards/M09_Rock_on_Slab.webp" type="image/webp"><img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M09_Rock_on_Slab.webp" type="image/webp"><img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '10': {
                 title: 'M10: Tip the Scales',
-                hint: '<picture><source srcset="mission_cards/M10_Tip_the_Scales.webp" type="image/webp"><img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M10_Tip_the_Scales.webp" type="image/webp"><img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '11': {
                 title: 'M11: Angler Artifacts',
-                hint: '<picture><source srcset="mission_cards/M11_Angler_Artifacts.webp" type="image/webp"><img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M11_Angler_Artifacts.webp" type="image/webp"><img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '12': {
                 title: 'M12: Salvage Operation',
-                hint: '<picture><source srcset="mission_cards/M12_Salvage_Operation.webp" type="image/webp"><img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M12_Salvage_Operation.webp" type="image/webp"><img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '13': {
                 title: 'M13: Statue Rebuild',
-                hint: '<picture><source srcset="mission_cards/M13_Statue_Rebuild.webp" type="image/webp"><img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M13_Statue_Rebuild.webp" type="image/webp"><img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '14': {
                 title: 'M14: Forum',
-                hint: '<picture><source srcset="mission_cards/M14_Forum.webp" type="image/webp"><img src="mission_cards/M14_Forum.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M14_Forum.webp" type="image/webp"><img src="mission_cards/M14_Forum.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             '15': {
                 title: 'M15: Site Marking',
-                hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             },
             'PT': {
                 title: 'Precision Tokens',
-                hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; border-radius: 5px;"></picture>'
+                hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
             }
         };
 
