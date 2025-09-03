@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pybricks Adventure - Learn Robot Programming!</title>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* Page-specific styles only - common styles are in shared-styles.css */
+        :root {
+            --green: #22c55e;
+            --green-light: #4ade80;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --gradient-fun: linear-gradient(135deg, var(--gold), var(--gold-light));
+        }
+
+        body {
+            padding-top: 70px;
+        }
+
+        /* Robot Mascot */
+        .robot-guide {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .robot-guide:hover {
+            transform: scale(1.1);
+        }
+
+        .robot-message {
+            position: fixed;
+            bottom: 130px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            font-size: 0.9rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .robot-message.show {
+            display: block;
+        }
+
+        .robot-message::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 40px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--border);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Container styles enhanced for tutorial layout */
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            padding: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background: var(--card);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px var(--gold)); }
+            to { filter: drop-shadow(0 0 20px var(--gold-light)); }
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            background: var(--card);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .filter-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+        }
+
+
+        .filter-btn {
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 0.82rem;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+
+        .main-content {
+            display: grid;
+            gap: 25px;
+        }
+
+        .section {
+            background: var(--card);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            scroll-margin-top: 80px; /* Offset for fixed header */
+        }
+
+        .section:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .section-header {
+            background: var(--card);
+            border-left: 4px solid var(--gold);
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .section-content {
+            padding: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .visual-explainer {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .visual-explainer img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .visual-explainer .caption {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid var(--gold);
+        }
+
+        .concept-box h4 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(34,197,94,0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--green);
+        }
+
+        .analogy-box::before {
+            content: '💡 ';
+            font-size: 1.5rem;
+        }
+
+        .try-this {
+            background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--purple);
+        }
+
+        .try-this h4 {
+            color: var(--purple);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .try-this .challenges {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .try-this .challenges li {
+            padding: 10px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .try-this .challenges li:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .try-this .challenges li input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkpoint {
+            background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--gold);
+            text-align: center;
+        }
+
+        .checkpoint h4 {
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .checkpoint-tasks {
+            display: grid;
+            gap: 10px;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .experiment-box {
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--blue);
+        }
+
+        .experiment-box h4 {
+            color: var(--blue);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .experiment-box details {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .experiment-box summary {
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .code-block {
+            position: relative;
+            background: #1a202c;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .code-header {
+            background: #2d3748;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        .copy-btn {
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--green-light);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: var(--gold);
+        }
+
+        .achievement {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: #333;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: right 0.5s ease;
+            z-index: 2000;
+        }
+
+        .achievement.show {
+            right: 20px;
+        }
+
+        .achievement::before {
+            content: '🏆 ';
+            font-size: 1.5rem;
+        }
+
+        .mission-complete {
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.3rem;
+            animation: celebrate 1s ease;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .mission-complete h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .bg-animation::before,
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .bg-animation::before {
+            background: var(--gold);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-animation::after {
+            background: var(--red);
+            bottom: -200px;
+            left: -200px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Responsive Design */
+        
+        /* Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+                gap: 20px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .visual-explainer {
+                padding: 15px;
+            }
+            
+            .code-content pre {
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Responsive improvements for inline grids */
+        @media (max-width: 768px) {
+            /* Force all inline grid styles to stack vertically */
+            div[style*="grid"], 
+            div[style*="display: grid"],
+            div[style*="display:grid"] {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+            }
+            
+            /* Force all inline flex to wrap on mobile */
+            div[style*="display: flex"],
+            div[style*="display:flex"] {
+                flex-wrap: wrap !important;
+            }
+        }
+        
+        /* Collapsible sidebar for mobile */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--gold);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            z-index: 1001;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        /* Mobile (max-width: 768px) */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 85%;
+                max-width: 300px;
+                height: calc(100vh - 60px);
+                background: var(--bg-dark);
+                z-index: 1000;
+                transition: left 0.3s ease;
+                padding: 15px;
+                overflow-y: auto;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            .filter-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 8px 6px;
+                text-align: center;
+                gap: 4px;
+            }
+            
+            .header {
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .code-block {
+                margin: 10px 0;
+            }
+            
+            .code-content {
+                padding: 10px;
+                overflow-x: auto;
+            }
+            
+            .code-content pre {
+                font-size: 0.8rem;
+                line-height: 1.4;
+                word-break: break-word; /* Allow breaking long lines */
+                white-space: pre-wrap; /* Wrap long lines on mobile */
+            }
+            
+            .copy-btn {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            
+            .robot-guide {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 70px; /* Move up to avoid nav overlap */
+                right: 10px;
+                z-index: 100; /* Lower z-index to prevent blocking */
+            }
+            
+            .robot-message {
+                bottom: 130px; /* Adjust for new robot position */
+                right: 10px;
+                max-width: 200px;
+                font-size: 0.8rem;
+                padding: 10px 15px;
+                z-index: 99; /* Ensure it doesn't block content */
+            }
+            
+            .achievement {
+                top: 70px; /* Move below header */
+                right: 10px;
+                left: 10px; /* Full width on mobile */
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+            
+            .visual-explainer {
+                padding: 10px;
+            }
+            
+            .visual-explainer .caption {
+                font-size: 0.9rem;
+            }
+            
+            .try-this .challenges {
+                font-size: 0.9rem;
+            }
+            
+            .checkpoint h4 {
+                font-size: 1.2rem;
+            }
+            
+            .subsection {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .concept-box,
+            .analogy-box,
+            .experiment-box,
+            .try-this {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            /* Mobile navigation hamburger is already handled */
+            nav {
+                padding: 10px 15px;
+            }
+            
+            .nav-links {
+                font-size: 0.9rem;
+            }
+            
+            /* Stack visual elements vertically on mobile */
+            .visual-explainer div[style*="grid"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Adjust animated background for mobile */
+            .bg-animation::before,
+            .bg-animation::after {
+                width: 200px;
+                height: 200px;
+                filter: blur(60px);
+            }
+        }
+        
+        /* Very small screens - hide robot guide to maximize space */
+        @media (max-width: 380px) {
+            .robot-guide,
+            .robot-message {
+                display: none !important;
+            }
+        }
+        
+        /* Small mobile devices (max-width: 480px) */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .filter-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-btn {
+                font-size: 0.85rem;
+                padding: 12px 10px;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .code-content pre {
+                font-size: 0.75rem;
+                padding: 8px;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            
+            .visual-explainer div[style*="font-size: 3rem"] {
+                font-size: 1.8rem !important;
+            }
+            
+            .visual-explainer div[style*="font-size: 4rem"] {
+                font-size: 2.5rem !important;
+            }
+            
+            .visual-explainer div[style*="font-size: 2rem"] {
+                font-size: 1.3rem !important;
+            }
+            
+            .visual-explainer div[style*="font-size: 1.5rem"] {
+                font-size: 1.1rem !important;
+            }
+            
+            .mission-complete {
+                padding: 20px;
+            }
+            
+            .mission-complete h3 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            /* Make all interactive elements larger for touch */
+            .filter-btn,
+            .copy-btn,
+            button,
+            input[type="checkbox"] {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .nav-link {
+                padding: 12px 16px;
+            }
+            
+            /* Increase clickable area for checkboxes */
+            .challenges li {
+                min-height: 48px;
+                display: flex;
+                align-items: center;
+            }
+            
+            /* Ensure details/summary elements are touch-friendly */
+            details summary {
+                padding: 12px;
+                cursor: pointer;
+            }
+        }
+        
+        /* Landscape orientation adjustments */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding-top: 10px;
+            }
+            
+            .robot-guide {
+                display: none; /* Hide on landscape mobile to save space */
+            }
+        }
+        
+        /* Large screens (min-width: 1440px) */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1600px;
+                grid-template-columns: 350px 1fr;
+            }
+            
+            .header h1 {
+                font-size: 3.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .code-content pre {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Ultra-wide screens */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+            }
+            
+            .main-content {
+                max-width: 1200px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .robot-guide,
+            .robot-message,
+            .achievement,
+            .bg-animation,
+            .mobile-menu-toggle,
+            .copy-btn {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding-top: 0;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+            
+            .code-block {
+                border: 1px solid #ddd;
+                background: #f5f5f5;
+            }
+            
+            .code-content pre {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Robot Guide Mascot -->
+    <div class="robot-guide" onclick="toggleRobotMessage()">
+        🤖
+    </div>
+    <div class="robot-message" id="robotMessage">
+        Hi! I'm Pybot, your coding buddy! Click on me anytime for help! 🚀
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement" id="achievement"></div>
+
+    <!-- Navigation -->
+    <header id="header">
+        <nav>
+            <a href="index.html" class="logo">
+                <span>🏛️</span>
+                <span>History Hackers #71494</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="missions.html" class="nav-link">Missions</a></li>
+                <li><a href="pybricks_tutorial.html" class="nav-link active">Tutorial</a></li>
+                <li><a href="pybricks_cheatsheet.html" class="nav-link">Cheat Sheet</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+    
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        ☰
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Pybricks Adventure</h1>
+            <p class="subtitle">Learn to Program Robots Like a Pro!</p>
+        </div>
+
+
+        <div class="sidebar" id="sidebar">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">📖 All Sections</button>
+                <button class="filter-btn" data-category="start">🚀 Getting Started</button>
+                <button class="filter-btn" data-category="first">👶 First Program</button>
+                <button class="filter-btn" data-category="variables">📦 Variables</button>
+                <button class="filter-btn" data-category="loops">🔄 Loops</button>
+                <button class="filter-btn" data-category="decisions">🤔 If Statements</button>
+                <button class="filter-btn" data-category="hub">🎯 Working with Hub</button>
+                <button class="filter-btn" data-category="motors">⚙️ Motors</button>
+                <button class="filter-btn" data-category="sensors">📡 Sensors</button>
+                <button class="filter-btn" data-category="robot">🤖 Building Robot</button>
+                <button class="filter-btn" data-category="async">⚡ Async/Await</button>
+                <button class="filter-btn" data-category="drivebase">🎮 DriveBase Pro</button>
+                <button class="filter-btn" data-category="debug">📊 Data & Debug</button>
+                <button class="filter-btn" data-category="projects">💡 Fun Projects</button>
+                <button class="filter-btn" data-category="tips">📚 Tips & Success</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- SECTION 1: Welcome to Robot Programming! -->
+            <section class="section" data-category="start">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🎮 Welcome to Robot Programming!
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>What is Pybricks?</h4>
+                        <p>Imagine you have a robot friend who only understands a special language called Python. Pybricks is like a translator that helps you talk to your SPIKE Prime robot using Python!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="font-size: 4rem; margin: 20px;">
+                            👤 ➡️ 💻 ➡️ 🤖
+                        </div>
+                        <p class="caption">You write code → Computer translates → Robot moves!</p>
+                    </div>
+
+                    <div class="analogy-box">
+                        Think of programming like writing a recipe for your robot. Just like a recipe tells you step-by-step how to make cookies, your code tells the robot step-by-step what to do!
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Let's Get Started!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="setup1">
+                                <label for="setup1">Open your web browser and go to code.pybricks.com</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="setup2">
+                                <label for="setup2">Connect your SPIKE Prime hub (ask for help if needed!)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="setup3">
+                                <label for="setup3">Say "Hello Robot!" out loud - you're about to become a programmer!</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>✨ Ready to Code?</h4>
+                        <div class="checkpoint-tasks">
+                            <p>Before moving on, make sure:</p>
+                            <p>✅ Your hub is connected</p>
+                            <p>✅ You can see the code editor</p>
+                            <p>✅ You're excited to learn!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Your First Robot Program -->
+            <section class="section" data-category="first">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🌟 Your First Robot Program
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Let's Make Something Happen!</h4>
+                        <p>We're going to make your robot's light turn on! It's like teaching your robot to turn on a flashlight.</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🎨 Make the Light Red</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># This is your first program!
+# Lines with # are comments - notes for humans
+
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+
+# Create your robot brain
+hub = PrimeHub()
+
+# Turn on the light (like a red stop light!)
+hub.light.on(Color.RED)
+
+# Wait 2 seconds (2000 milliseconds)
+wait(2000)
+
+# Turn off the light
+hub.light.off()
+
+print("Great job! You just programmed a robot!")</pre>
+                        </div>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="font-size: 3rem; margin: 20px;">
+                            💡 Off → 🔴 Red (2 seconds) → 💡 Off
+                        </div>
+                        <p class="caption">Your robot's light will do this!</p>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Experiment Time!</h4>
+                        <p>What happens if you change <code>Color.RED</code> to <code>Color.BLUE</code>?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>The light will turn blue instead of red! Try <code>Color.GREEN</code> and <code>Color.YELLOW</code> too!</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Try These Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="first1">
+                                <label for="first1">Make the light blink 3 times</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="first2">
+                                <label for="first2">Create a traffic light pattern (red → yellow → green)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="first3">
+                                <label for="first3">Make the light stay on for 5 seconds</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mission-complete">
+                        <h3>🎉 Mission Complete!</h3>
+                        <p>You just wrote your first robot program! You're officially a robot programmer!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Understanding Variables -->
+            <section class="section" data-category="variables">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        📦 Variables - Robot Memory Boxes
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>What are Variables?</h4>
+                        <p>Variables are like labeled boxes where your robot stores information. Just like you might have a toy box labeled "LEGOS", your robot has memory boxes with names!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap;" class="responsive-flex">
+                            <div style="border: 3px solid var(--gold); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 1.2rem; color: var(--gold);">my_speed</div>
+                                <div style="font-size: 2rem;">500</div>
+                            </div>
+                            <div style="border: 3px solid var(--green); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 1.2rem; color: var(--green);">robot_name</div>
+                                <div style="font-size: 2rem;">"Speedy"</div>
+                            </div>
+                            <div style="border: 3px solid var(--blue); padding: 15px; border-radius: 10px;">
+                                <div style="font-size: 1.2rem; color: var(--blue);">distance</div>
+                                <div style="font-size: 2rem;">100</div>
+                            </div>
+                        </div>
+                        <p class="caption">Each box has a name and stores something inside!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>📦 Creating Variables</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Store numbers
+my_age = 12
+robot_speed = 500
+
+# Store words (called "strings")
+robot_name = "Bolt"
+favorite_color = "blue"
+
+# Store yes/no values (called "booleans")
+is_moving = True
+lights_on = False
+
+# Use your variables!
+print("My robot's name is", robot_name)
+print("It moves at speed", robot_speed)</pre>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        Variables are like your backpack pockets! You put your pencil in the "pencil pocket" and your snack in the "snack pocket". Later, you know exactly where to find them!
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Variable Math!</h4>
+                        <p>What will this print: <code>speed = 100</code> then <code>speed = speed + 50</code>?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>It will print 150! The robot takes the old value (100) and adds 50 to it!</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Variable Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="var1">
+                                <label for="var1">Create a variable for your age and print it</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="var2">
+                                <label for="var2">Make a countdown from 10 to 1 using variables</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="var3">
+                                <label for="var3">Store 3 different colors and use them for the hub light</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Loops - Repeat, Repeat, Repeat! -->
+            <section class="section" data-category="loops">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🔄 Loops - Teaching Robots to Repeat
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Why Use Loops?</h4>
+                        <p>Imagine you want your robot to blink its light 100 times. You could write the same code 100 times... or use a loop to do it automatically!</p>
+                    </div>
+
+                    <div class="analogy-box">
+                        Loops are like instructions for brushing your teeth: "Move the brush up and down 20 times." You don't need 20 separate instructions - just one instruction to repeat!
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="font-size: 2rem; margin: 20px; text-align: center;">
+                            <div>Without Loop: 📝📝📝📝📝 (Write 5 times)</div>
+                            <div style="margin-top: 20px;">With Loop: 🔄 × 5 (Write once, repeat 5 times!)</div>
+                        </div>
+                        <p class="caption">Loops save time and make code cleaner!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🔄 For Loop - Count to 5</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Count from 1 to 5
+for number in range(1, 6):
+    print("Count:", number)
+    hub.display.number(number)
+    wait(1000)
+
+print("Counting complete!")
+
+# Blink the light 3 times
+for i in range(3):
+    hub.light.on(Color.GREEN)
+    wait(500)
+    hub.light.off()
+    wait(500)</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🔄 While Loop - Keep Going Until...</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Import Button from parameters first
+from pybricks.parameters import Button
+
+# Keep blinking until button is pressed
+while Button.CENTER not in hub.buttons.pressed():
+    hub.light.on(Color.BLUE)
+    wait(200)
+    hub.light.off()
+    wait(200)
+
+print("Button pressed - stopping!")</pre>
+                        </div>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Loop Detective!</h4>
+                        <p>How many times will this loop run: <code>for i in range(10)</code>?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>10 times! When you use range(10), it counts from 0 to 9 (that's 10 numbers total).</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Loop Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="loop1">
+                                <label for="loop1">Make a rainbow light show (cycle through all colors)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="loop2">
+                                <label for="loop2">Count down from 10 to 0 (like a rocket launch!)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="loop3">
+                                <label for="loop3">Make an alarm that gets faster each time</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Making Decisions with If -->
+            <section class="section" data-category="decisions">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🤔 If Statements - Robot Decisions
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Teaching Robots to Think!</h4>
+                        <p>Your robot needs to make decisions, just like you do! If it's raining, take an umbrella. If there's a wall, stop moving. Let's teach your robot to think!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="text-align: center; margin: 20px;">
+                            <div style="font-size: 1.5rem; margin: 10px;">
+                                Distance to wall? 
+                            </div>
+                            <div style="display: flex; justify-content: center; gap: 30px; margin: 20px; flex-wrap: wrap;" class="responsive-flex">
+                                <div style="padding: 15px; background: var(--red); border-radius: 10px;">
+                                    < 10cm<br>🛑 STOP!
+                                </div>
+                                <div style="padding: 15px; background: var(--gold); border-radius: 10px;">
+                                    10-30cm<br>⚠️ Slow Down
+                                </div>
+                                <div style="padding: 15px; background: var(--green); border-radius: 10px;">
+                                    > 30cm<br>✅ Full Speed!
+                                </div>
+                            </div>
+                        </div>
+                        <p class="caption">Your robot makes different choices based on sensor readings!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🤔 Simple Decision</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Check the distance
+distance = 25  # Pretend we measured this
+
+if distance < 10:
+    print("Too close! Stopping!")
+    hub.light.on(Color.RED)
+elif distance < 30:
+    print("Getting close, be careful!")
+    hub.light.on(Color.YELLOW)
+else:
+    print("All clear!")
+    hub.light.on(Color.GREEN)</pre>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        If statements are like a choose-your-own-adventure book! "If you want to explore the cave, turn to page 23. If you want to climb the mountain, turn to page 45."
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Decision Detective!</h4>
+                        <p>What color will show if <code>speed = 150</code> and we check <code>if speed > 200</code>?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>The else block will run because 150 is NOT greater than 200. The condition is False!</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Decision Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="if1">
+                                <label for="if1">Make a "hot or cold" game with colors</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="if2">
+                                <label for="if2">Create a password checker (if password == "robot123")</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="if3">
+                                <label for="if3">Make different sounds based on button presses</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: Working with the Hub -->
+            <section class="section" data-category="hub">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🎯 Working with the Hub
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>The Light Matrix</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Hub Lights and Display</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                            </div>
+                            <div class="code-content">
+                                <pre>from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color, Icon
+from pybricks.tools import wait
+
+hub = PrimeHub()
+
+# Control the status light
+hub.light.on(Color.RED)
+wait(1000)
+hub.light.blink(Color.BLUE, [500, 500])  # On 500ms, off 500ms
+wait(3000)
+
+# Display icons
+hub.display.icon(Icon.HAPPY)
+wait(1000)
+hub.display.icon(Icon.HEART)
+
+# Display numbers and text
+hub.display.number(42)
+wait(1000)
+hub.display.char('A')
+wait(1000)
+hub.display.text('GO!')  # Scrolls across display
+
+# Custom pixel art
+hub.display.off()
+hub.display.pixel(2, 2, 100)  # Center pixel at full brightness</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>Buttons and Speaker</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Interactive Hub Features</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                            </div>
+                            <div class="code-content">
+                                <pre>from pybricks.parameters import Button
+
+# Check button presses
+while True:
+    pressed = hub.buttons.pressed()
+    
+    if Button.LEFT in pressed:
+        hub.speaker.beep(frequency=500)
+    elif Button.RIGHT in pressed:
+        hub.speaker.beep(frequency=1000)
+    elif Button.CENTER in pressed:
+        break  # Exit loop
+    
+    wait(100)
+
+# Play musical notes
+notes = ["C4/4", "D4/4", "E4/4", "F4/4", "G4/2"]
+hub.speaker.play_notes(notes, tempo=120)</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Motors - Making Things Move! -->
+            <section class="section" data-category="motors">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        ⚙️ Motors - Bringing Robots to Life!
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>What are Motors?</h4>
+                        <p>Motors are like the muscles of your robot! Just like your muscles help you move your arms and legs, motors help your robot move its parts.</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="text-align: center; margin: 20px;">
+                            <div style="font-size: 3rem; margin: 20px;">
+                                🔄 Motor = Robot Muscle! 💪
+                            </div>
+                            <div style="display: flex; justify-content: center; gap: 20px; margin: 20px;">
+                                <div>⬅️ Backward</div>
+                                <div>⏸️ Stop</div>
+                                <div>➡️ Forward</div>
+                            </div>
+                        </div>
+                        <p class="caption">Motors can spin forward, backward, or stop!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>⚙️ Basic Motor Control</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.pupdevices import Motor
+from pybricks.parameters import Port
+
+# Connect your motor to Port A
+my_motor = Motor(Port.A)
+
+# Make it spin forward (positive number)
+my_motor.run(500)  # 500 degrees per second
+wait(2000)  # Keep spinning for 2 seconds
+
+# Make it spin backward (negative number)
+my_motor.run(-500)
+wait(2000)
+
+# Stop the motor
+my_motor.stop()
+
+# Spin exactly 3 times (3 × 360 degrees)
+my_motor.run_angle(500, 1080)  # Speed: 500 deg/s, Angle: 1080 degrees
+
+# Wait for the motor to finish
+while not my_motor.done():
+    wait(10)</pre>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        Think of motor speed like a bicycle: The bigger the number, the faster you pedal. Positive numbers = forward, negative numbers = backward!
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Motor Math!</h4>
+                        <p>If a wheel does one full spin (360°), how many degrees for 5 spins?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>5 × 360 = 1800 degrees! Use <code>motor.run_angle(500, 1800)</code> to spin exactly 5 times!</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Motor Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="motor1">
+                                <label for="motor1">Make a motor dance (forward-backward-forward)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="motor2">
+                                <label for="motor2">Create a speed test (slow to fast)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="motor3">
+                                <label for="motor3">Make a clock hand (turn 30° twelve times)</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>🎯 Motor Mastery Check!</h4>
+                        <div class="checkpoint-tasks">
+                            <p>Can you:</p>
+                            <p>✅ Make a motor spin forward?</p>
+                            <p>✅ Control the speed?</p>
+                            <p>✅ Spin an exact number of degrees?</p>
+                            <p>✅ Stop the motor?</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Sensors - Robot Senses -->
+            <section class="section" data-category="sensors">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        👁️ Sensors - Giving Robots Senses!
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Sensors = Robot Senses!</h4>
+                        <p>Just like you have eyes to see and ears to hear, robots have sensors to understand the world around them!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 20px 0;" class="responsive-grid">
+                            <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                <div style="font-size: 2rem;">👁️</div>
+                                <div>Color Sensor</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Like eyes for colors</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                <div style="font-size: 2rem;">📏</div>
+                                <div>Distance Sensor</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Like a ruler for space</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                <div style="font-size: 2rem;">👆</div>
+                                <div>Force Sensor</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Like touch feeling</div>
+                            </div>
+                        </div>
+                        <p class="caption">Each sensor gives your robot a different superpower!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>👁️ Color Sensor Magic</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.pupdevices import ColorSensor
+from pybricks.parameters import Color
+
+# Connect color sensor to Port C
+color_sensor = ColorSensor(Port.C)
+
+# Check what color it sees
+detected_color = color_sensor.color()
+
+if detected_color == Color.RED:
+    print("I see a red apple! 🍎")
+    hub.light.on(Color.RED)
+elif detected_color == Color.GREEN:
+    print("I see green grass! 🌱")
+    hub.light.on(Color.GREEN)
+elif detected_color == Color.BLUE:
+    print("I see the blue sky! ☁️")
+    hub.light.on(Color.BLUE)
+else:
+    print("Hmm, interesting color!")
+
+# Check reflection (0 = dark, 100 = bright)
+# This measures reflected light from the sensor's own light
+reflection = color_sensor.reflection()
+if reflection < 30:
+    print("Dark surface detected! 🌙")
+else:
+    print("Light surface detected! ☀️")</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>📏 Distance Sensor</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.pupdevices import UltrasonicSensor
+
+# Connect distance sensor to Port D
+distance_sensor = UltrasonicSensor(Port.D)
+
+# Measure distance in millimeters
+distance = distance_sensor.distance()
+
+# Convert to centimeters for easier understanding
+if distance is not None:  # Check if reading is valid
+    distance_cm = distance / 10
+    print(f"Object is {distance_cm} cm away!")
+else:
+    print("No object detected!")
+
+if distance_cm < 5:
+    print("SUPER CLOSE! 🛑")
+    hub.speaker.beep(1000, 500)  # High beep
+elif distance_cm < 20:
+    print("Getting closer! ⚠️")
+    hub.speaker.beep(500, 500)  # Medium beep
+else:
+    print("Lots of room! ✅")
+    hub.speaker.beep(200, 500)  # Low beep</pre>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        The distance sensor is like playing "Hot and Cold"! It tells you how close you are to something. The closer you get, the smaller the number!
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Sensor Science!</h4>
+                        <p>If the color sensor sees a black line on white paper, which has higher reflection?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>White paper has higher reflection (maybe 70-90)! Black absorbs light, so it has low reflection (maybe 10-20).</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Sensor Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="sensor1">
+                                <label for="sensor1">Make a color sorter (different beeps for different colors)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="sensor2">
+                                <label for="sensor2">Create a parking sensor (beeps faster when closer)</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="sensor3">
+                                <label for="sensor3">Build a security alarm (detects when something moves close)</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 8: Building Your First Robot! -->
+            <section class="section" data-category="robot">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🤖 Build Your First Moving Robot!
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Time to Build a Real Robot!</h4>
+                        <p>Let's combine everything you've learned to make a robot that can move around and avoid obstacles!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="text-align: center; margin: 20px;">
+                            <div style="font-size: 2rem; margin: 20px;">
+                                🤖 Your Robot Setup
+                            </div>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                                <div>⚙️ Left Motor (Port A)</div>
+                                <div style="font-size: 2rem;">🤖</div>
+                                <div>⚙️ Right Motor (Port B)</div>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                📏 Distance Sensor (Port D)
+                            </div>
+                        </div>
+                        <p class="caption">Two motors for movement, one sensor for seeing!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🤖 Simple Drive Base</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.robotics import DriveBase
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Port, Direction
+
+# Set up your robot's motors
+left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+
+# Create a DriveBase - this makes driving easy!
+# wheel_diameter: How big your wheels are (in mm)
+# axle_track: Distance between wheels (in mm)
+robot = DriveBase(
+    left_motor, 
+    right_motor, 
+    wheel_diameter=56,  # Standard LEGO wheel
+    axle_track=112      # Measure your robot!
+)
+
+# Now driving is super easy!
+robot.straight(200)    # Drive forward 200mm
+robot.turn(90)         # Turn right 90 degrees
+robot.straight(200)    # Drive forward again
+robot.turn(90)         # Turn right again
+
+print("I just drove in an L shape!")</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🚗 Obstacle Avoiding Robot!</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Complete obstacle avoiding robot
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, UltrasonicSensor
+from pybricks.parameters import Port, Direction, Color, Button
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
+# Initialize everything
+hub = PrimeHub()
+left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+eyes = UltrasonicSensor(Port.D)  # The robot's "eyes"
+
+# Create the robot
+robot = DriveBase(left_motor, right_motor, 56, 112)
+
+print("Press center button to start!")
+print("I'll avoid obstacles automatically!")
+
+# Wait for button press to start
+while Button.CENTER not in hub.buttons.pressed():
+    wait(10)
+
+# Main robot brain loop
+while True:
+    # Check if we should stop
+    if Button.CENTER in hub.buttons.pressed():
+        print("Stopping robot!")
+        break
+    
+    # Look ahead
+    distance = eyes.distance()
+    
+    # Check if reading is valid
+    if distance is not None and distance < 200:  # Something is close (200mm = 20cm)
+        # Oh no! Obstacle detected!
+        hub.light.on(Color.RED)
+        robot.stop()
+        
+        # Back up a bit
+        robot.straight(-100)
+        
+        # Look for a clear path
+        robot.turn(45)  # Try turning right
+        wait(500)
+        
+        if eyes.distance() < 200:  # Still blocked?
+            robot.turn(-90)  # Try left instead
+    else:
+        # Path is clear - full speed ahead!
+        hub.light.on(Color.GREEN)
+        robot.drive(150, 0)  # Drive at 150 mm/s
+    
+    wait(100)  # Small pause to not overwhelm the robot
+
+robot.stop()
+hub.light.off()
+print("Adventure complete!")</pre>
+                        </div>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Robot Behavior!</h4>
+                        <p>What happens if you change the obstacle distance from 200 to 500?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>The robot will be more careful! It will stop and turn when objects are farther away (50cm instead of 20cm).</p>
+                        </details>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Robot Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="robot1">
+                                <label for="robot1">Make your robot drive in a square pattern</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="robot2">
+                                <label for="robot2">Add sounds when obstacles are detected</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="robot3">
+                                <label for="robot3">Create a "follow the wall" behavior</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mission-complete">
+                        <h3>🏆 Amazing Work!</h3>
+                        <p>You've built and programmed a real robot! You're ready for any robotics challenge!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 9: Async/Await - Running Things in Parallel -->
+            <section class="section" data-category="async">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        ⚡ Async/Await - Parallel Robot Powers!
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>What is Async/Await?</h4>
+                        <p>Imagine you're juggling - you don't wait for one ball to come down before throwing the next! Async/await lets your robot do multiple things at once, like moving forward WHILE scanning for obstacles!</p>
+                    </div>
+
+                    <div class="visual-explainer">
+                        <div style="text-align: center; margin: 20px;">
+                            <div style="font-size: 1.5rem; margin-bottom: 20px;">Normal vs Async</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                                <div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                    <div style="color: var(--red); font-weight: bold;">❌ Normal (Sequential)</div>
+                                    <div style="margin: 15px 0;">
+                                        1️⃣ Move forward<br>
+                                        2️⃣ THEN scan<br>
+                                        3️⃣ THEN turn<br>
+                                        ⏱️ Total: 6 seconds
+                                    </div>
+                                </div>
+                                <div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                    <div style="color: var(--green); font-weight: bold;">✅ Async (Parallel)</div>
+                                    <div style="margin: 15px 0;">
+                                        🔄 Move forward<br>
+                                        + Scan WHILE moving<br>
+                                        + Update display<br>
+                                        ⏱️ Total: 2 seconds!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="caption">Async makes your robot faster and smarter!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>⚡ Basic Async Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.tools import multitask, run_task
+
+# Define async functions with 'async def'
+async def blink_lights():
+    """Blink lights continuously"""
+    for i in range(10):
+        hub.light.on(Color.RED)
+        await wait(250)  # 'await' = can do other things
+        hub.light.on(Color.GREEN)
+        await wait(250)
+
+async def drive_forward():
+    """Drive forward for 3 seconds"""
+    robot.drive(200, 0)
+    await wait(3000)
+    robot.stop()
+
+async def make_sounds():
+    """Beep every second"""
+    for i in range(3):
+        hub.speaker.beep()
+        await wait(1000)
+
+# Run all three at the same time!
+async def main():
+    print("Starting multi-tasking robot!")
+    await multitask(
+        blink_lights(),
+        drive_forward(),
+        make_sounds()
+    )
+    print("All tasks complete!")
+
+# Start the async program
+run_task(main())</pre>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        Think of async like a chef cooking: You don't wait for water to boil before chopping vegetables. You start the water heating, THEN chop while it heats. That's multitasking!
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🤖 Real FLL Example - Attachment Control</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.tools import multitask, run_task
+
+# Motors for different parts
+drive_base = DriveBase(left_motor, right_motor, 56, 112)
+arm_motor = Motor(Port.C)
+claw_motor = Motor(Port.D)
+
+async def drive_to_mission():
+    """Drive to the mission model"""
+    await drive_base.straight(500)  # 500mm forward
+    await drive_base.turn(90)       # Turn right
+    await drive_base.straight(300)  # 300mm forward
+
+async def prepare_arm():
+    """Get arm ready while driving"""
+    await arm_motor.run_target(500, 90)  # Lift arm to 90 degrees
+    
+async def open_claw():
+    """Open claw to grab object"""
+    await claw_motor.run_angle(200, -45)  # Open claw
+
+# Main mission - do multiple things at once!
+async def complete_mission():
+    # Drive and prepare arm AT THE SAME TIME
+    await multitask(
+        drive_to_mission(),
+        prepare_arm()
+    )
+    
+    # Now grab the object
+    await open_claw()
+    await claw_motor.run_angle(200, 45)  # Close claw
+    
+    # Drive back with object
+    await drive_base.straight(-800)
+    
+    print("Mission complete in record time!")
+
+# Run the mission
+run_task(complete_mission())</pre>
+                        </div>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Async Speed Test!</h4>
+                        <p>If driving takes 3 seconds and lifting arm takes 2 seconds, how long does it take with multitask?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>Only 3 seconds! Both happen at the same time, so it takes as long as the longest task (driving). You saved 2 seconds!</p>
+                        </details>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🏁 Racing Tasks - First One Wins!</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Sometimes you want to stop when ANY condition is met
+from pybricks.tools import multitask, run_task
+
+async def wait_for_touch():
+    """Wait for force sensor to be pressed"""
+    force = ForceSensor(Port.E)
+    while not force.pressed():
+        await wait(50)
+    return "Touch detected!"
+
+async def wait_for_color():
+    """Wait for red color"""
+    color = ColorSensor(Port.F)
+    while color.color() != Color.RED:
+        await wait(50)
+    return "Red detected!"
+
+async def wait_for_timeout():
+    """Maximum 10 second timeout"""
+    await wait(10000)
+    return "Time's up!"
+
+async def main():
+    print("Waiting for: touch, red color, or 10 seconds...")
+    
+    # race=True means stop when FIRST task finishes
+    winner = await multitask(
+        wait_for_touch(),
+        wait_for_color(),
+        wait_for_timeout(),
+        race=True
+    )
+    
+    # See which one finished first
+    print(f"Winner: {winner}")
+    hub.speaker.beep()
+
+run_task(main())</pre>
+                        </div>
+                    </div>
+
+                    <div class="try-this">
+                        <h4>🎯 Async Challenges!</h4>
+                        <ul class="challenges">
+                            <li>
+                                <input type="checkbox" id="async1">
+                                <label for="async1">Make robot drive in square while playing music</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="async2">
+                                <label for="async2">Create a dance with 3 motors moving together</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="async3">
+                                <label for="async3">Build a scanner that checks colors while driving</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="checkpoint">
+                        <h4>⚡ Async Mastery Check!</h4>
+                        <div class="checkpoint-tasks">
+                            <p>Can you:</p>
+                            <p>✅ Use async def to define parallel functions?</p>
+                            <p>✅ Use await with motor commands?</p>
+                            <p>✅ Run multiple tasks with multitask()?</p>
+                            <p>✅ Use race=True for first-wins scenarios?</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 10: Advanced DriveBase Features -->
+            <section class="section" data-category="drivebase">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🎮 DriveBase Pro Features
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>DriveBase Settings & Tuning</h4>
+                        <p>Your DriveBase is like a race car - you can tune it for speed, accuracy, or smoothness! Let's unlock its full potential!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🏎️ Speed & Acceleration Settings</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.robotics import DriveBase
+
+# Create your drive base
+robot = DriveBase(left_motor, right_motor, 56, 112)
+
+# Get current settings
+print("Default settings:", robot.settings())
+
+# Customize for SPEED!
+robot.settings(
+    straight_speed=500,     # Max speed for straight (mm/s)
+    straight_acceleration=1000,  # How fast to reach max speed
+    turn_rate=200,         # Max turn speed (deg/s)
+    turn_acceleration=500   # How fast to reach max turn speed
+)
+
+# Customize for PRECISION (FLL missions!)
+robot.settings(
+    straight_speed=200,     # Slower = more accurate
+    straight_acceleration=100,   # Gentle acceleration
+    turn_rate=90,          # Careful turns
+    turn_acceleration=200
+)
+
+# Different speeds for different missions
+def speed_mode(mode):
+    if mode == "FAST":
+        robot.settings(500, 1000, 200, 500)
+        hub.light.on(Color.RED)
+    elif mode == "PRECISE":
+        robot.settings(150, 100, 60, 150)
+        hub.light.on(Color.GREEN)
+    elif mode == "NORMAL":
+        robot.settings(300, 500, 120, 300)
+        hub.light.on(Color.BLUE)</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🎯 Use Gyro for Accurate Turns</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># The hub has a built-in gyro (IMU)!
+from pybricks.robotics import DriveBase
+
+# Create drive base with use_gyro=True for better accuracy
+robot = DriveBase(
+    left_motor, 
+    right_motor, 
+    wheel_diameter=56,
+    axle_track=112,
+    use_gyro=True  # Uses hub's gyro for straight driving!
+)
+
+# Reset the gyro angle
+robot.reset()
+
+# Super accurate driving - gyro keeps it straight!
+robot.straight(1000)  # Will stay perfectly straight
+
+# Check how far you've driven
+distance_traveled = robot.distance()
+angle_turned = robot.angle()
+print(f"Traveled: {distance_traveled}mm")
+print(f"Turned: {angle_turned} degrees")
+
+# Drive until you've gone exactly 1 meter
+while robot.distance() < 1000:
+    robot.drive(200, 0)
+robot.stop()</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🔄 Curve Driving</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Drive in curves and arcs!
+from pybricks.tools import wait
+
+# Drive in a circle (speed, turn_rate)
+robot.drive(200, 50)  # Forward while turning
+wait(4000)  # Complete a circle
+robot.stop()
+
+# Drive in figure-8 pattern
+async def figure_eight():
+    # First circle
+    robot.drive(200, 45)
+    await wait(4000)
+    
+    # Second circle (opposite direction)
+    robot.drive(200, -45)
+    await wait(4000)
+    
+    robot.stop()
+
+# Arc to a specific point
+def arc_turn(radius, angle):
+    """Drive in an arc with specific radius"""
+    # Calculate turn rate based on radius
+    speed = 200
+    turn_rate = speed / radius
+    
+    # Calculate time needed
+    arc_length = radius * angle * 3.14159 / 180
+    time_ms = int(arc_length / speed * 1000)
+    
+    robot.drive(speed, turn_rate)
+    wait(time_ms)
+    robot.stop()
+
+# Example: 500mm radius, 90 degree arc
+arc_turn(500, 90)</pre>
+                        </div>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 DriveBase Physics!</h4>
+                        <p>If you double the acceleration setting, what happens to your robot?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>It reaches top speed twice as fast! But be careful - too much acceleration can make wheels slip or the robot tip!</p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 12: Data Logging and Debugging -->
+            <section class="section" data-category="debug">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        📊 Data Logging & Debugging
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="concept-box">
+                        <h4>Become a Robot Detective!</h4>
+                        <p>When your robot isn't working right, data logging helps you see what's really happening. It's like a flight recorder for your robot!</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>📝 Basic Data Logging</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>from pybricks.tools import DataLog, StopWatch
+
+# Create a data log with column names
+data = DataLog("time", "distance", "reflection", "speed")
+
+# Create a timer
+timer = StopWatch()
+
+# Collect data while driving
+color_sensor = ColorSensor(Port.C)
+
+for i in range(100):  # Collect 100 samples
+    # Log current values
+    data.log(
+        timer.time(),
+        robot.distance(),
+        color_sensor.reflection(),
+        left_motor.speed()
+    )
+    
+    # Drive forward
+    robot.drive(200, 0)
+    wait(100)  # Log every 100ms
+
+robot.stop()
+
+# Data is automatically saved!
+print("Data logged! Check the Pybricks app to download.")</pre>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>🐛 Debug Helper Functions</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                        </div>
+                        <div class="code-content">
+                            <pre># Useful debugging helpers
+def debug_print(message, value=None):
+    """Print with timestamp"""
+    time = timer.time() / 1000.0
+    if value is not None:
+        print(f"[{time:.2f}s] {message}: {value}")
+    else:
+        print(f"[{time:.2f}s] {message}")
+
+def check_sensors():
+    """Print all sensor values"""
+    print("=== SENSOR CHECK ===")
+    print(f"Color: {color_sensor.color()}")
+    print(f"Reflection: {color_sensor.reflection()}")
+    print(f"Distance: {distance_sensor.distance()}")
+    print(f"Left motor angle: {left_motor.angle()}")
+    print(f"Right motor angle: {right_motor.angle()}")
+    print("==================")
+
+def beep_error(error_code):
+    """Different beep patterns for different errors"""
+    if error_code == 1:  # Sensor error
+        hub.speaker.beep(1000, 100)
+        wait(100)
+        hub.speaker.beep(1000, 100)
+    elif error_code == 2:  # Motor stall
+        hub.speaker.beep(500, 500)
+    elif error_code == 3:  # Mission fail
+        hub.speaker.beep(200, 1000)
+
+# Use in your code
+debug_print("Starting mission")
+check_sensors()
+
+if color_sensor.reflection() < 10:
+    debug_print("ERROR: Too dark", color_sensor.reflection())
+    beep_error(1)</pre>
+                        </div>
+                    </div>
+
+                    <div class="experiment-box">
+                        <h4>🔬 Debug Detective!</h4>
+                        <p>Your robot turns left instead of right. What's the first thing to check?</p>
+                        <details>
+                            <summary>Click to see the answer!</summary>
+                            <p>Check if motors are in correct ports and direction! Use debug_print to show motor.angle() values when turning. Maybe Port.A and Port.B are swapped!</p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 13: Fun Projects -->
+            <section class="section" data-category="projects">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        💡 Fun Projects to Try
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>Project 1: Dancing Robot</h4>
+                        <p>Make your robot dance to a beat!</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>🕺 Robot Dance Party</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                            </div>
+                            <div class="code-content">
+                                <pre>from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Port, Direction, Color, Icon
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
+hub = PrimeHub()
+left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+robot = DriveBase(left_motor, right_motor, wheel_diameter=56, axle_track=112)
+
+# Dance moves
+def spin():
+    robot.turn(360)
+
+def wiggle():
+    for i in range(3):
+        robot.turn(30)
+        robot.turn(-30)
+
+def forward_back():
+    robot.straight(100)
+    robot.straight(-100)
+
+# Dance routine
+dance_moves = [spin, wiggle, forward_back, wiggle, spin]
+
+for move in dance_moves:
+    hub.light.on(Color.BLUE)
+    move()
+    hub.light.on(Color.RED)
+    wait(500)
+
+# Take a bow
+hub.display.icon(Icon.HAPPY)
+hub.speaker.beep()</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>Project 2: Color Memory Game</h4>
+                        <p>Create a Simon Says style memory game!</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>🎮 Memory Challenge</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                            </div>
+                            <div class="code-content">
+                                <pre>from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color, Button
+from pybricks.tools import wait
+import random
+
+hub = PrimeHub()
+
+# Game settings
+colors = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW]
+sequence = []
+player_input = []
+
+def show_sequence():
+    """Display the color sequence"""
+    for color in sequence:
+        hub.light.on(color)
+        hub.speaker.beep(frequency=colors.index(color) * 200 + 400)
+        wait(600)
+        hub.light.off()
+        wait(200)
+
+def add_to_sequence():
+    """Add random color to sequence"""
+    sequence.append(random.choice(colors))
+
+# Main game
+print("Watch the sequence and repeat it!")
+for round in range(5):
+    add_to_sequence()
+    show_sequence()
+    print(f"Round {round + 1}: Remember {len(sequence)} colors!")
+    wait(2000)
+
+print("Great memory skills!")</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 14: Tips for Success -->
+            <section class="section" data-category="tips">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        📚 Tips for Success
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🎯 FLL Competition Tips</h4>
+                        <ul>
+                            <li><strong>Test Everything:</strong> Run your programs multiple times from different starting positions</li>
+                            <li><strong>Use Constants:</strong> Define wheel size, axle track, and speeds at the top of your program</li>
+                            <li><strong>Battery Matters:</strong> Low battery = slower motors. Test with different battery levels</li>
+                            <li><strong>Modular Code:</strong> Write functions for each mission so you can test them separately</li>
+                            <li><strong>Document Everything:</strong> Comment your code so teammates understand it</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>🐛 Debugging Like a Pro</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Debug Template</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                            </div>
+                            <div class="code-content">
+                                <pre># Debug mode flag
+DEBUG = True
+
+def debug_print(message):
+    if DEBUG:
+        print(f"[DEBUG] {message}")
+
+# Use throughout your code
+debug_print("Starting mission")
+debug_print(f"Sensor reading: {color_sensor.reflection()}")
+debug_print(f"Motor angle: {motor.angle()}")</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>⚡ Performance Optimization</h4>
+                        <p><strong>Speed vs Accuracy Trade-offs:</strong></p>
+                        <ul>
+                            <li>Fast for long distances between missions</li>
+                            <li>Slow and precise when approaching mission models</li>
+                            <li>Use async for parallel operations (saves precious seconds!)</li>
+                            <li>Pre-position attachments while driving</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>📋 Competition Day Checklist</h4>
+                        <div class="checkpoint">
+                            <h4>Before Each Run:</h4>
+                            <div class="checkpoint-tasks">
+                                <p>✅ Fresh battery installed</p>
+                                <p>✅ Robot in correct starting position</p>
+                                <p>✅ Attachments secure</p>
+                                <p>✅ Program selected</p>
+                                <p>✅ Team knows their roles</p>
+                                <p>✅ Deep breath, you've got this!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final Celebration Section -->
+            <section class="section" data-category="all">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">
+                        🎉 You're a Robot Programmer!
+                        
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="mission-complete">
+                        <h3>🌟 Look What You've Learned!</h3>
+                        <p>✅ How to write Python code</p>
+                        <p>✅ Control lights and displays</p>
+                        <p>✅ Use variables and loops</p>
+                        <p>✅ Make decisions with if statements</p>
+                        <p>✅ Control motors</p>
+                        <p>✅ Read sensors</p>
+                        <p>✅ Build complete robots!</p>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>What's Next?</h4>
+                        <p>🚀 Join your school's robotics club!</p>
+                        <p>🏆 Compete in FIRST LEGO League!</p>
+                        <p>💡 Create your own robot inventions!</p>
+                        <p>📚 Keep learning and exploring!</p>
+                    </div>
+
+                    <div style="text-align: center; font-size: 1.5rem; margin: 30px 0; color: var(--gold);">
+                        <p>Remember: Every expert was once a beginner.</p>
+                        <p>Keep coding, keep building, keep learning!</p>
+                        <p style="font-size: 3rem; margin-top: 20px;">🤖❤️👨‍💻</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Robot Guide Messages
+        const robotMessages = [
+            "Great job! Keep going! 🚀",
+            "Try changing the numbers in your code!",
+            "Remember: mistakes help us learn!",
+            "You're doing amazing! 🌟",
+            "Stuck? Try breaking the problem into smaller steps!",
+            "Every programmer started where you are now!",
+            "Don't forget to test your code often!",
+            "Debugging is like being a detective! 🔍"
+        ];
+
+        let messageIndex = 0;
+
+        function toggleRobotMessage() {
+            const message = document.getElementById('robotMessage');
+            if (message.classList.contains('show')) {
+                message.classList.remove('show');
+            } else {
+                message.textContent = robotMessages[messageIndex % robotMessages.length];
+                message.classList.add('show');
+                messageIndex++;
+                setTimeout(() => {
+                    message.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Progress Tracking
+        let completedSections = 0;
+        const totalSections = document.querySelectorAll('.section').length;
+
+        function updateProgress() {
+            const percentage = Math.round((completedSections / totalSections) * 100);
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.querySelector('span').textContent = percentage + '% Complete';
+            
+            // Show achievement for milestones
+            if (percentage === 25 || percentage === 50 || percentage === 75 || percentage === 100) {
+                showAchievement(`${percentage}% Complete! Keep going!`);
+            }
+        }
+
+        // Achievement System
+        function showAchievement(text) {
+            const achievement = document.getElementById('achievement');
+            achievement.textContent = text;
+            achievement.classList.add('show');
+            setTimeout(() => {
+                achievement.classList.remove('show');
+            }, 3000);
+        }
+
+        // Copy Code Function
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied! ✅';
+                button.classList.add('copied');
+                showAchievement('Code copied! Now paste it in your editor!');
+                setTimeout(() => {
+                    button.textContent = 'Copy Code';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Section Toggle
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const isCollapsed = section.classList.contains('collapsed');
+            
+            section.classList.toggle('collapsed');
+            
+            if (!isCollapsed && !section.dataset.completed) {
+                section.dataset.completed = 'true';
+                completedSections++;
+                updateProgress();
+            }
+        }
+
+        // Filter functionality with smooth scrolling
+        const sections = document.querySelectorAll('.section');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show/hide sections and find first visible
+                let firstVisibleSection = null;
+                sections.forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.style.display = 'block';
+                        if (!firstVisibleSection) {
+                            firstVisibleSection = section;
+                        }
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                // Scroll to the first visible section with offset for fixed header
+                if (firstVisibleSection && category !== 'all') {
+                    setTimeout(() => {
+                        const headerOffset = 80; // Account for fixed header
+                        const elementPosition = firstVisibleSection.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+            });
+        });
+
+
+        // Challenge Checkboxes
+        document.querySelectorAll('.challenges input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    showAchievement('Challenge completed! Well done! 🎯');
+                    // Add a small celebration animation
+                    this.parentElement.style.background = 'rgba(34,197,94,0.3)';
+                    setTimeout(() => {
+                        this.parentElement.style.background = 'rgba(255,255,255,0.1)';
+                    }, 1000);
+                }
+            });
+        });
+
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Change button icon
+            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '✕' : '☰';
+        }
+        
+        // Close sidebar when clicking a filter button on mobile
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        const sidebar = document.getElementById('sidebar');
+                        const overlay = document.getElementById('sidebarOverlay');
+                        const toggleBtn = document.getElementById('sidebarToggle');
+                        
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                        toggleBtn.innerHTML = '☰';
+                    }, 300);
+                }
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show welcome message
+            setTimeout(() => {
+                toggleRobotMessage();
+            }, 1000);
+            
+            // Periodic helpful messages
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    toggleRobotMessage();
+                }
+            }, 30000);
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileToggle && navLinks) {
+            mobileToggle.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

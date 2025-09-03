@@ -3,705 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History Hackers 2025-2026</title>
+    <title>History Hackers - FLL Team #71494</title>
+    <link rel="stylesheet" href="shared-styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Page-specific styles only - common styles are in shared-styles.css */
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #4a4a4a 0%, #1a1a1a 50%, #2c2c2c 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 3.5em;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ff6b00, #ffd700);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: goldShine 3s ease-in-out infinite;
-            font-weight: 900;
-            position: relative;
-            filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.6));
-        }
-        
-        @keyframes goldShine {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #888;
-            font-size: 1.2em;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            font-weight: 300;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 1.5s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .map-container {
-            position: relative;
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .map-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        /* Grid overlay for positioning */
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            display: none;
-        }
-
-        .grid-overlay.show {
-            display: block;
-        }
-
-        .grid-line-h {
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: rgba(0, 255, 0, 0.3);
-            left: 0;
-        }
-
-        .grid-line-v {
-            position: absolute;
-            height: 100%;
-            width: 1px;
-            background: rgba(0, 255, 0, 0.3);
-            top: 0;
-        }
-
-        .grid-label {
-            position: absolute;
-            color: lime;
-            font-size: 10px;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-
-        .controls {
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .toggle-grid {
-            background: #ff0000;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .toggle-grid:hover {
-            background: #cc0000;
-        }
-
-        .coord-display {
-            display: inline-block;
-            background: #333;
-            color: #0f0;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-family: monospace;
-            margin-left: 10px;
-        }
-
-        .map-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 10px;
-        }
-
-        .marker {
-            position: absolute;
-            width: 80px;
-            height: auto;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transform: translate(-50%, -50%);
-        }
-
-        .marker-label {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #ff0000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            color: white;
-            font-size: 32px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            z-index: 1;
-        }
-
-        .marker-name {
-            margin-top: 5px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 3px 8px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-
-        .marker:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .marker:hover .marker-label {
-            background: #cc0000;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 1);
-        }
-
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
-            }
-        }
-
-        /* Mobile responsive styles */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-                letter-spacing: 2px;
-            }
-            .subtitle {
-                font-size: 0.9rem;
-                letter-spacing: 1px;
-                margin-bottom: 20px;
-            }
-
-            .marker-label {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-            }
-
-            .marker-name {
-                font-size: 8px;
-                padding: 1px 3px;
-            }
-
-            .hint-popup {
-                min-width: 200px;
-                padding: 10px;
-            }
-
-            .hint-popup h3 {
-                font-size: 1rem;
-            }
-
-            .hint-popup p {
-                font-size: 0.85rem;
-            }
-
-            @keyframes pulse {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
-                }
-                70% {
-                    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0);
-                }
-                100% {
-                    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
-                }
-            }
-        }
-
-        /* Extra small devices (phones in portrait) */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.2rem;
-                margin-bottom: 15px;
-            }
-
-            .marker {
-                transform: translate(-50%, calc(-50% + 5%));
-            }
-
-            .marker:hover {
-                transform: translate(-50%, calc(-50% + 5%)) scale(1.1);
-            }
-
-            .marker-label {
-                width: 25px;
-                height: 25px;
-                font-size: 10px;
-            }
-
-            .marker-name {
-                font-size: 7px;
-                padding: 1px 2px;
-                position: relative !important;
-                left: auto !important;
-                right: auto !important;
-                top: auto !important;
-                transform: none !important;
-                margin-top: 5px !important;
-            }
-
-            .map-container {
-                padding: 10px;
-            }
-
-            body {
-                padding: 10px;
-            }
-
-            .controls {
-                margin: 10px 0;
-            }
-
-            .toggle-grid {
-                padding: 8px 15px;
-                font-size: 12px;
-            }
-
-            .coord-display {
-                font-size: 12px;
-                padding: 8px 10px;
-            }
-        }
-
-        /* Mobile landscape mode */
-        @media (max-width: 896px) and (orientation: landscape) {
-            h1 {
-                font-size: 1.3rem;
-                margin-bottom: 10px;
-            }
-
-            .marker-label {
-                width: 31px;
-                height: 31px;
-                font-size: 13px;
-            }
-
-            .marker-name {
-                font-size: 8px;
-                padding: 1px 3px;
-            }
-
-            .map-container {
-                padding: 5px;
-            }
-
-            body {
-                padding: 5px;
-            }
-        }
-
-        /* Mission Table Styles */
-        .mission-table-container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .mission-table-container h2 {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .mission-table {
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            border-collapse: collapse;
-        }
-
-        .mission-table thead {
-            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
-            color: white;
-        }
-
-        .mission-table th {
-            padding: 15px;
-            text-align: left;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-bottom: 3px solid #aa0000;
-        }
-
-        .mission-table th:nth-child(1) {
-            width: 8%;
-        }
-
-        .mission-table th:nth-child(2) {
-            width: 18%;
-        }
-
-        .mission-table th:nth-child(3) {
-            width: 35%;
-        }
-
-        .mission-table th:nth-child(4) {
-            width: 25%;
-        }
-
-        .mission-table th:nth-child(5) {
-            width: 14%;
-        }
-
-        .mission-table tbody tr {
-            transition: background-color 0.3s ease;
-        }
-
-        .mission-table tbody tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .mission-table tbody tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-
-        .mission-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .mission-number {
-            font-weight: bold;
-            color: #ff0000;
-            font-size: 1rem;
-        }
-
-        .mission-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .mission-link {
-            color: #ff0000;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .mission-link:hover {
-            color: #cc0000;
-            text-decoration: underline;
-        }
-
-        .mission-desc {
-            color: #666;
-            line-height: 1.4;
-        }
-
-        .mission-points {
-            font-weight: 600;
-            color: #333;
-            text-align: left;
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        .mission-video {
-            text-align: center;
-        }
-
-        .video-link {
-            display: inline-block;
-            padding: 6px 12px;
-            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .video-link:hover {
-            background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .video-placeholder {
-            color: #999;
-            font-style: italic;
-            font-size: 0.85rem;
-        }
-
-        /* Video Modal Styles */
-        .video-modal {
-            display: none;
+        /* Animated Background */
+        .bg-animation {
             position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
         }
 
-        .video-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            width: 90%;
-            max-width: 800px;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        .video-close-btn {
+        .bg-animation::before,
+        .bg-animation::after {
+            content: '';
             position: absolute;
-            right: 10px;
-            top: 10px;
-            background: #ff0000;
-            color: white;
-            border: none;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            font-size: 20px;
-            line-height: 1;
-            transition: all 0.3s ease;
+            filter: blur(100px);
         }
 
-        .video-close-btn:hover {
-            background: #cc0000;
-            transform: scale(1.1);
+        .bg-animation::before {
+            background: var(--gold);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
         }
 
-        #videoTitle {
-            color: #ff0000;
-            margin-bottom: 15px;
-            text-align: center;
+        .bg-animation::after {
+            background: var(--red);
+            bottom: -200px;
+            left: -200px;
+            animation: float 25s ease-in-out infinite reverse;
         }
 
-        .video-container {
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Navigation styles are in shared-styles.css */
+
+        /* Hero Section with Parallax */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: calc(10vh - 2rem) 2rem 4rem;
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            overflow: hidden;
         }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 10px;
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            animation: heroEntry 1s ease-out;
         }
 
-        /* Responsive table for tablets */
-        @media (max-width: 768px) {
-            .mission-table-container h2 {
-                font-size: 1.5rem;
-            }
-
-            .mission-table th {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-
-            .mission-table td {
-                padding: 8px 10px;
-                font-size: 0.85rem;
-            }
-
-            .mission-table th:nth-child(3),
-            .mission-table td:nth-child(3) {
-                display: none;
-            }
-        }
-
-        /* Responsive table for mobile */
-        @media (max-width: 480px) {
-            .mission-table-container {
-                padding: 0 10px;
-                margin: 20px auto;
-            }
-
-            .mission-table {
-                font-size: 0.8rem;
-            }
-
-            .mission-table thead {
-                display: none;
-            }
-
-            .mission-table tbody tr {
-                display: block;
-                margin-bottom: 15px;
-                border: 2px solid #ff0000;
-                border-radius: 10px;
-                padding: 10px;
-            }
-
-            .mission-table td {
-                display: block;
-                text-align: left;
-                padding: 5px 10px;
-                border: none;
-                position: relative;
-                padding-left: 40%;
-            }
-
-            .mission-table td:before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                width: 35%;
-                font-weight: bold;
-                color: #ff0000;
-            }
-
-            .mission-table td:nth-child(1):before { content: "Mission:"; }
-            .mission-table td:nth-child(2):before { content: "Name:"; }
-            .mission-table td:nth-child(3):before { content: "Desc:"; display: none; }
-            .mission-table td:nth-child(4):before { content: "Points:"; }
-
-            .mission-table td:nth-child(3) {
-                display: none;
-            }
-        }
-
-        .hint-popup {
-            position: absolute;
-            background: white;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            padding: 15px;
-            min-width: 300px;
-            max-width: 350px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .hint-popup.active {
-            display: block;
-        }
-
-        .hint-popup h3 {
-            color: #ff0000;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .hint-popup p {
-            color: #333;
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .hint-popup .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .hint-popup .close-btn:hover {
-            color: #ff0000;
-        }
-
-        @keyframes fadeIn {
+        @keyframes heroEntry {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -709,582 +78,509 @@
             }
         }
 
-        .legend {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #ff0000;
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1;
         }
 
-        .legend h3 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .legend-item {
+        .hero-title span {
             display: inline-block;
-            margin: 5px 15px 5px 0;
-            color: #666;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
         }
 
-        .legend-marker {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ff0000;
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Button styles now in shared-styles.css */
+
+        /* Feature Cards with Glass Effect */
+        .features {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+            transform-origin: left;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            background: var(--card-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .feature-description {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(255,0,0,0.05) 100%);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            display: block;
+            animation: countUp 1s ease-out;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+        }
+
+        /* Interactive Mission Preview */
+        .mission-preview {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mission-carousel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .mission-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .mission-item:hover {
+            background: var(--card-hover);
+            transform: scale(1.05);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .mission-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .mission-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: rgba(255, 0, 0, 0.3);
-            vertical-align: middle;
-            margin-right: 5px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
         }
 
+        .social-link:hover {
+            background: var(--gradient-gold);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
+            .mobile-menu-toggle {
+                display: flex;
             }
-            
-            .marker {
-                width: 25px;
-                height: 25px;
+
+            /* Mobile nav styles in shared-styles.css */
+
+            .hero-title {
+                font-size: 3rem;
             }
-            
-            .hint-popup {
-                min-width: 200px;
-                max-width: 90vw;
+
+            .feature-grid {
+                grid-template-columns: 1fr;
             }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>History Hackers 2025-2026</h1>
-        <div class="subtitle">FLL UNEARTHED • TEAM #71494 • DIGGING INTO THE PAST</div>
-        
-        <div class="map-container">
-            <div class="controls">
-                <button class="toggle-grid" onclick="toggleGrid()">Toggle Grid</button>
-                <span class="coord-display">X: <span id="xCoord">0</span>% | Y: <span id="yCoord">0</span>%</span>
-            </div>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <header id="header">
+        <nav>
+            <a href="modern_home.html" class="logo">
+                <span>🏛️</span>
+                <span>History Hackers #71494</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="missions.html" class="nav-link">Missions</a></li>
+                <li><a href="pybricks_tutorial.html" class="nav-link">Tutorial</a></li>
+                <li><a href="pybricks_cheatsheet.html" class="nav-link">Cheat Sheet</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span>History Hackers</span>
+            </h1>
+            <p class="hero-tagline" style="font-size: 1.5rem; color: var(--gold-light); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: 2px;">DIGGING INTO THE PAST</p>
+            <p class="hero-subtitle">FLL UNEARTHED 2025-2026 • Team #71494</p>
             
-            <div class="map-wrapper" id="mapWrapper">
-                <picture>
-                    <source srcset="images/FLL_Unearthed_SETUP.webp" type="image/webp">
-                    <img src="images/FLL_Unearthed_SETUP.png" alt="FLL Unearthed Game Field" class="map-image" id="fieldImage">
-                </picture>
-                
-                <!-- Grid Overlay -->
-                <div class="grid-overlay" id="gridOverlay"></div>
-                
-                <!-- Mission Markers - Positioned over green squares -->
-                <!-- M01 -->
-                <div class="marker" style="left: 16%; top: 45%;" data-mission="01">
-                    <span class="marker-label">01</span>
-                    <span class="marker-name">Surface Brushing</span>
-                </div>
-                
-                <!-- M02 -->
-                <div class="marker" style="left: 19%; top: 17%;" data-mission="02">
-                    <span class="marker-label">02</span>
-                    <span class="marker-name">Map Reveal</span>
-                </div>
-                
-                <!-- M03 -->
-                <div class="marker" style="left: 37.5%; top: 14%;" data-mission="03">
-                    <span class="marker-label">03</span>
-                    <span class="marker-name" style="position: absolute; left: 85px; top: 50%; transform: translateY(-50%); margin-top: 0;">Mineshaft Explorer</span>
-                </div>
-                
-                <!-- M04 -->
-                <div class="marker" style="left: 34%; top: 25%;" data-mission="04">
-                    <span class="marker-label">04</span>
-                    <span class="marker-name">Careful Recovery</span>
-                </div>
-                
-                <!-- M05 -->
-                <div class="marker" style="left: 73.5%; top: 14.9%;" data-mission="05">
-                    <span class="marker-label">05</span>
-                    <span class="marker-name" style="position: absolute; right: 75px; top: 50%; transform: translateY(-50%); margin-top: 0;">Who Lived Here?</span>
-                </div>
-                
-                <!-- M06 -->
-                <div class="marker" style="left: 79%; top: 26.7%;" data-mission="06">
-                    <span class="marker-label">06</span>
-                    <span class="marker-name">Forge</span>
-                </div>
-                
-                <!-- M07 -->
-                <div class="marker" style="left: 84.2%; top: 15%;" data-mission="07">
-                    <span class="marker-label">07</span>
-                    <span class="marker-name">Heavy Lifting</span>
-                </div>
-                
-                <!-- M08 -->
-                <div class="marker" style="left: 83.6%; top: 44.5%;" data-mission="08">
-                    <span class="marker-label">08</span>
-                    <span class="marker-name">Silo</span>
-                </div>
-                
-                <!-- M09 -->
-                <div class="marker" style="left: 65.7%; top: 47.7%;" data-mission="09">
-                    <span class="marker-label">09</span>
-                    <span class="marker-name">What's on Sale?</span>
-                </div>
-                
-                <!-- M10 -->
-                <div class="marker" style="left: 58.2%; top: 51.8%;" data-mission="10">
-                    <span class="marker-label">10</span>
-                    <span class="marker-name">Tip the Scales</span>
-                </div>
-                
-                <!-- M11 -->
-                <div class="marker" style="left: 58.1%; top: 92.9%;" data-mission="11">
-                    <span class="marker-label">11</span>
-                    <span class="marker-name">Angler Artifacts</span>
-                </div>
-                
-                <!-- M12 -->
-                <div class="marker" style="left: 46.8%; top: 93%;" data-mission="12">
-                    <span class="marker-label">12</span>
-                    <span class="marker-name">Salvage Operation</span>
-                </div>
-                
-                <!-- M13 -->
-                <div class="marker" style="left: 44.2%; top: 46.5%;" data-mission="13">
-                    <span class="marker-label">13</span>
-                    <span class="marker-name">Statue Rebuild</span>
-                </div>
-                
-                <!-- M14 -->
-                <div class="marker" style="left: 38%; top: 50%;" data-mission="14">
-                    <span class="marker-label">14</span>
-                    <span class="marker-name">Forum</span>
+            <!-- Features -->
+            <div class="features" style="padding: 3rem 0 0; max-width: 100%;">
+                <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 2rem;">Our Resources</h2>
+                <div class="feature-grid" style="max-width: 1200px; margin: 0 auto;">
+                    <div class="feature-card" onclick="location.href='missions.html'">
+                        <span class="feature-icon" style="color: var(--gold)">🗺️</span>
+                        <h3 class="feature-title">Mission Guide</h3>
+                        <p class="feature-description">Interactive map with all 15 FLL UNEARTHED missions, complete with scoring details and video solutions.</p>
+                    </div>
+                    <div class="feature-card" onclick="location.href='pybricks_tutorial.html'">
+                        <span class="feature-icon" style="color: var(--red)">📚</span>
+                        <h3 class="feature-title">Pybricks Tutorial</h3>
+                        <p class="feature-description">Comprehensive Python programming guide for SPIKE Prime with hands-on examples.</p>
+                    </div>
+                    <div class="feature-card" onclick="location.href='pybricks_cheatsheet.html'">
+                        <span class="feature-icon" style="color: var(--gold)">⚡</span>
+                        <h3 class="feature-title">Quick Reference</h3>
+                        <p class="feature-description">Essential Pybricks commands and syntax at your fingertips for rapid development.</p>
+                    </div>
                 </div>
             </div>
             
-            <div class="legend">
-                <h3>Mission Markers</h3>
-                <div class="legend-item">
-                    <span class="legend-marker"></span>
-                    Click on any red marker to view mission hints and strategies
+            <!-- Stats -->
+            <div class="stats" style="padding: 3rem 0 0; background: transparent; border: none;">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">15</span>
+                        <span class="stat-label">Missions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">370</span>
+                        <span class="stat-label">Max Points</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2:30</span>
+                        <span class="stat-label">Match Time</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">#1</span>
+                        <span class="stat-label">Team Spirit</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Mission Information Table -->
-    <div class="mission-table-container">
-        <h2>Mission Information</h2>
-        <table class="mission-table">
-            <thead>
-                <tr>
-                    <th>M#</th>
-                    <th>Mission Name</th>
-                    <th>Description</th>
-                    <th>Points Scoring</th>
-                    <th>Video</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="mission-number">M01</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="01">Surface Brushing</a></td>
-                    <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
-                    <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('OUHg0bMwHtM', 'M01: Surface Brushing')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M02</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="02">Map Reveal</a></td>
-                    <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
-                    <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('b-7zkBkgNUw', 'M02: Map Reveal')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M03</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="03">Mineshaft Explorer</a></td>
-                    <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
-                    <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('y6RxJpgBOQM', 'M03: Mineshaft Explorer')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M04</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="04">Careful Recovery</a></td>
-                    <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
-                    <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('MX2WMQ4vN0g', 'M04: Careful Recovery')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M05</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="05">Who Lived Here?</a></td>
-                    <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
-                    <td class="mission-points">• Structure floor completely upright: 30 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('JmYsPn4cig8', 'M05: Who Lived Here?')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M06</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="06">Forge</a></td>
-                    <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
-                    <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('szFSKDQCFFw', 'M06: Forge')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M07</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="07">Heavy Lifting</a></td>
-                    <td class="mission-desc">Move the millstone that was used to process grain.</td>
-                    <td class="mission-points">• Millstone not touching base: 30 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('6xcrIo-2WJ8', 'M07: Heavy Lifting')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M08</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="08">Silo</a></td>
-                    <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
-                    <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('MbvDiuorKsc', 'M08: Silo')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M09</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="09">What's on Sale?</a></td>
-                    <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
-                    <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('yymtNugu4V4', 'M09: What\'s on Sale?')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M10</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="10">Tip the Scales</a></td>
-                    <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
-                    <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('RX8MMw_MJ9g', 'M10: Tip the Scales')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M11</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="11">Angler Artifacts</a></td>
-                    <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
-                    <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('qVrT1DH4Zh8', 'M11: Angler Artifacts')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M12</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="12">Salvage Operation</a></td>
-                    <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
-                    <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('hFzNIv1NBzg', 'M12: Salvage Operation')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M13</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="13">Statue Rebuild</a></td>
-                    <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
-                    <td class="mission-points">• Statue completely raised: 30 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('1yyh08hg398', 'M13: Statue Rebuild')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M14</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="14">Forum</a></td>
-                    <td class="mission-desc">Deliver artifacts to the forum and choose significant items to display.</td>
-                    <td class="mission-points">• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('Pq9d-23TMos', 'M14: Forum')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">M15</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="15">Site Marking</a></td>
-                    <td class="mission-desc">Place flags to mark locations for further study.</td>
-                    <td class="mission-points">• Each site with flag: 10 pts</td>
-                    <td class="mission-video"><button class="video-link" onclick="playVideo('d6cNKGmYxh4', 'M15: Site Marking')">Watch Video 🎬</button></td>
-                </tr>
-                <tr>
-                    <td class="mission-number">PT</td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="PT">Precision Tokens</a></td>
-                    <td class="mission-desc">Start with 6 tokens. Lose one for each robot interruption outside home.</td>
-                    <td class="mission-points">1 token: 10 pts<br>2 tokens: 15 pts<br>3 tokens: 25 pts<br>4 tokens: 35 pts<br>5-6 tokens: 50 pts</td>
-                    <td class="mission-video"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Hint Popup -->
-    <div class="hint-popup" id="hintPopup">
-        <button class="close-btn" onclick="closeHint()">&times;</button>
-        <h3 id="hintTitle">Mission Title</h3>
-        <p id="hintContent">Mission hint content will appear here.</p>
-    </div>
-
-    <!-- Video Modal -->
-    <div class="video-modal" id="videoModal">
-        <div class="video-modal-content">
-            <button class="video-close-btn" onclick="closeVideo()">&times;</button>
-            <h3 id="videoTitle">Mission Video</h3>
-            <div class="video-container" id="videoContainer">
-                <!-- YouTube iframe will be inserted here -->
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 History Hackers - Team #71494</p>
+            <p>Digging into the past, building for the future</p>
+            <div class="social-links">
+                <a href="#" class="social-link">📧</a>
+                <a href="#" class="social-link">🔗</a>
+                <a href="#" class="social-link">📱</a>
             </div>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // Create grid overlay
-        function createGrid() {
-            const gridOverlay = document.getElementById('gridOverlay');
-            gridOverlay.innerHTML = '';
-            
-            // Create horizontal lines every 10%
-            for (let i = 0; i <= 100; i += 10) {
-                const line = document.createElement('div');
-                line.className = 'grid-line-h';
-                line.style.top = i + '%';
-                
-                const label = document.createElement('div');
-                label.className = 'grid-label';
-                label.style.top = i + '%';
-                label.style.left = '5px';
-                label.textContent = i + '%';
-                
-                gridOverlay.appendChild(line);
-                gridOverlay.appendChild(label);
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-            
-            // Create vertical lines every 10%
-            for (let i = 0; i <= 100; i += 10) {
-                const line = document.createElement('div');
-                line.className = 'grid-line-v';
-                line.style.left = i + '%';
-                
-                const label = document.createElement('div');
-                label.className = 'grid-label';
-                label.style.left = i + '%';
-                label.style.top = '5px';
-                label.textContent = i + '%';
-                
-                gridOverlay.appendChild(line);
-                gridOverlay.appendChild(label);
-            }
-        }
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
         
-        // Toggle grid visibility
-        function toggleGrid() {
-            const gridOverlay = document.getElementById('gridOverlay');
-            gridOverlay.classList.toggle('show');
-        }
-        
-        // Track mouse coordinates
-        document.addEventListener('DOMContentLoaded', function() {
-            createGrid();
-            
-            const mapWrapper = document.getElementById('mapWrapper');
-            const xCoord = document.getElementById('xCoord');
-            const yCoord = document.getElementById('yCoord');
-            
-            mapWrapper.addEventListener('mousemove', function(e) {
-                const rect = mapWrapper.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-                const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-                
-                xCoord.textContent = x;
-                yCoord.textContent = y;
-            });
-            
-            // Click to log coordinates
-            mapWrapper.addEventListener('click', function(e) {
-                if (e.target.closest('.marker')) return;
-                
-                const rect = mapWrapper.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-                const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-                
-                console.log(`Clicked at: X: ${x}%, Y: ${y}%`);
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
-        
-        // Mission data with scoring information
-        const missionData = {
-            '01': {
-                title: 'M01: Surface Brushing',
-                hint: '<picture><source srcset="mission_cards/M01_Surface_Brushing.webp" type="image/webp"><img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '02': {
-                title: 'M02: Map Reveal',
-                hint: '<picture><source srcset="mission_cards/M02_Map_Reward.webp" type="image/webp"><img src="mission_cards/M02_Map_Reward.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '03': {
-                title: 'M03: Mineshaft Explorer',
-                hint: '<picture><source srcset="mission_cards/M03_Mineshaft_Explorers.webp" type="image/webp"><img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '04': {
-                title: 'M04: Careful Recovery',
-                hint: '<picture><source srcset="mission_cards/M04_Careful_Recovery.webp" type="image/webp"><img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '05': {
-                title: 'M05: Who Lived Here?',
-                hint: '<picture><source srcset="mission_cards/M05_Who_Lived_Here.webp" type="image/webp"><img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '06': {
-                title: 'M06: Forge',
-                hint: '<picture><source srcset="mission_cards/M06_Forge.webp" type="image/webp"><img src="mission_cards/M06_Forge.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '07': {
-                title: 'M07: Heavy Lifting',
-                hint: '<picture><source srcset="mission_cards/M07_Heavy_Lifting.webp" type="image/webp"><img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '08': {
-                title: 'M08: Silo',
-                hint: '<picture><source srcset="mission_cards/M08_Silo.webp" type="image/webp"><img src="mission_cards/M08_Silo.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '09': {
-                title: 'M09: What\'s on Sale?',
-                hint: '<picture><source srcset="mission_cards/M09_Rock_on_Slab.webp" type="image/webp"><img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '10': {
-                title: 'M10: Tip the Scales',
-                hint: '<picture><source srcset="mission_cards/M10_Tip_the_Scales.webp" type="image/webp"><img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '11': {
-                title: 'M11: Angler Artifacts',
-                hint: '<picture><source srcset="mission_cards/M11_Angler_Artifacts.webp" type="image/webp"><img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '12': {
-                title: 'M12: Salvage Operation',
-                hint: '<picture><source srcset="mission_cards/M12_Salvage_Operation.webp" type="image/webp"><img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '13': {
-                title: 'M13: Statue Rebuild',
-                hint: '<picture><source srcset="mission_cards/M13_Statue_Rebuild.webp" type="image/webp"><img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '14': {
-                title: 'M14: Forum',
-                hint: '<picture><source srcset="mission_cards/M14_Forum.webp" type="image/webp"><img src="mission_cards/M14_Forum.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            '15': {
-                title: 'M15: Site Marking',
-                hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; border-radius: 5px;"></picture>'
-            },
-            'PT': {
-                title: 'Precision Tokens',
-                hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; border-radius: 5px;"></picture>'
-            }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        // Get all markers
-        const markers = document.querySelectorAll('.marker');
-        const hintPopup = document.getElementById('hintPopup');
-        const hintTitle = document.getElementById('hintTitle');
-        const hintContent = document.getElementById('hintContent');
-
-        // Add hover events to each marker
-        markers.forEach(marker => {
-            marker.addEventListener('mouseenter', function(e) {
-                const missionId = this.getAttribute('data-mission');
-                const mission = missionData[missionId];
-                
-                if (mission) {
-                    showHint(mission, this);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
                 }
             });
-            
-            marker.addEventListener('mouseleave', function(e) {
-                // Hide hint when mouse leaves, unless hovering over the hint itself
-                setTimeout(() => {
-                    if (!hintPopup.matches(':hover')) {
-                        closeHint();
-                    }
-                }, 100);
-            });
-        });
-        
-        // Keep hint open when hovering over it
-        hintPopup.addEventListener('mouseenter', function() {
-            hintPopup.classList.add('active');
-        });
-        
-        hintPopup.addEventListener('mouseleave', function() {
-            closeHint();
+        }, observerOptions);
+
+        // Observe all feature cards and stat items
+        document.querySelectorAll('.feature-card, .stat-item').forEach(el => {
+            observer.observe(el);
         });
 
-        // Add hover events to table mission links
-        const missionLinks = document.querySelectorAll('.mission-link');
-        missionLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent default link behavior
-            });
-            
-            link.addEventListener('mouseenter', function(e) {
-                const missionId = this.getAttribute('data-mission');
-                const mission = missionData[missionId];
-                
-                if (mission) {
-                    showHint(mission, this);
+        // Add fadeInUp animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
                 }
-            });
-            
-            link.addEventListener('mouseleave', function(e) {
-                // Hide hint when mouse leaves, unless hovering over the hint itself
-                setTimeout(() => {
-                    if (!hintPopup.matches(':hover')) {
-                        closeHint();
-                    }
-                }, 100);
-            });
-        });
-
-        function showHint(mission, markerElement) {
-            hintTitle.textContent = mission.title;
-            hintContent.innerHTML = mission.hint;
-            
-            // Position the popup near the marker
-            const rect = markerElement.getBoundingClientRect();
-            const popupWidth = 250;
-            
-            let left = rect.left + window.scrollX + 40;
-            let top = rect.top + window.scrollY;
-            
-            // Adjust if popup would go off screen
-            if (left + popupWidth > window.innerWidth) {
-                left = rect.left + window.scrollX - popupWidth - 10;
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
-            
-            hintPopup.style.left = left + 'px';
-            hintPopup.style.top = top + 'px';
-            hintPopup.classList.add('active');
-        }
-
-        function closeHint() {
-            hintPopup.classList.remove('active');
-        }
-
-        // Close popup when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.marker') && !e.target.closest('.hint-popup')) {
-                closeHint();
-            }
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            closeHint();
-        });
-        
-        // Video modal functions
-        function playVideo(videoId, title) {
-            const modal = document.getElementById('videoModal');
-            const videoContainer = document.getElementById('videoContainer');
-            const videoTitle = document.getElementById('videoTitle');
-            
-            videoTitle.textContent = title;
-            videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            modal.classList.add('active');
-        }
-        
-        function closeVideo() {
-            const modal = document.getElementById('videoModal');
-            const videoContainer = document.getElementById('videoContainer');
-            modal.classList.remove('active');
-            videoContainer.innerHTML = ''; // Stop video playback
-        }
-        
-        // Close modal when clicking outside the video
-        document.getElementById('videoModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeVideo();
-            }
-        });
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

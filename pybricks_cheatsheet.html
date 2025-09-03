@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pybricks SPIKE Prime Complete Cheatsheet</title>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* Page-specific styles only - common styles are in shared-styles.css */
+        body {
+            padding-top: 70px; /* Account for fixed header */
+        }
+
+        /* Container styles enhanced for cheatsheet layout */
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 90px; /* Account for header */
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            background: var(--card);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-buttons {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+
+        .main-content {
+            display: grid;
+            gap: 25px;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .section {
+            background: var(--card);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .section-header {
+            background: var(--card);
+            border-left: 4px solid var(--gold);
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s;
+        }
+
+        .section-header:hover {
+            background: var(--card-hover);
+            border-left-color: var(--gold-light);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--gold);
+        }
+
+        .section.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section.collapsed .section-content {
+            max-height: 0;
+            padding: 0 25px;
+        }
+
+        .subsection {
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subsection h4 {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-block {
+            position: relative;
+            background: #1a202c;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .code-header {
+            background: #2d3748;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .highlight {
+            background-color: #ffd700;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .tip-card h5 {
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .value-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .colors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .color-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+
+        .pattern-example {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pattern-example h5 {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Tablet view (769px - 1024px) */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+                gap: 20px;
+                max-width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tips-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .values-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+        
+        /* Mobile view (max-width: 768px) */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 15px;
+                max-width: 100%;
+            }
+            
+            .sidebar {
+                position: static;
+                order: -1; /* Move to top on mobile */
+                padding: 15px;
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            
+            .filter-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            
+            .filter-btn {
+                font-size: 0.85rem;
+                padding: 10px 8px;
+                min-height: 44px; /* Touch-friendly size */
+            }
+            
+            .header {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .section-header {
+                padding: 15px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.15rem;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .subsection {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .subsection h4 {
+                font-size: 1.1rem;
+            }
+            
+            /* Code blocks responsive */
+            .code-block {
+                margin: 10px 0;
+            }
+            
+            .code-content {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            
+            .code-content pre {
+                font-size: 0.8rem;
+                line-height: 1.3;
+                overflow-x: auto;
+                white-space: pre;
+            }
+            
+            .copy-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                min-height: 36px;
+                min-width: 60px;
+            }
+            
+            /* Grid adjustments */
+            .tips-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .colors-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .tip-card {
+                padding: 12px;
+            }
+            
+            .value-item {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .color-item {
+                padding: 6px;
+                font-size: 0.75rem;
+            }
+            
+            /* Animation adjustments */
+            .bg-animation::before,
+            .bg-animation::after {
+                width: 200px;
+                height: 200px;
+                filter: blur(60px);
+            }
+        }
+        
+        /* Small mobile (max-width: 480px) */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .filter-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-btn {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+            
+            .section-title {
+                font-size: 1.05rem;
+            }
+            
+            .code-content pre {
+                font-size: 0.7rem;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            
+            .colors-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Hide background animation on very small screens */
+            .bg-animation {
+                display: none;
+            }
+        }
+        
+        /* Landscape mode adjustments */
+        @media (orientation: landscape) and (max-height: 600px) {
+            body {
+                padding-top: 50px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .sidebar {
+                max-height: 250px;
+            }
+            
+            .filter-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Large screens (min-width: 1440px) */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1600px;
+                grid-template-columns: 350px 1fr;
+            }
+            
+            .header h1 {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .code-content pre {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Ultra-wide screens (min-width: 1920px) */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+                grid-template-columns: 350px 1fr;
+            }
+            
+            .main-content {
+                max-width: 100%;
+            }
+        }
+        
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-btn,
+            .copy-btn,
+            button {
+                min-height: 44px;
+                cursor: pointer;
+            }
+            
+            .section-header {
+                min-height: 60px;
+                cursor: pointer;
+            }
+            
+            /* Increase clickable area */
+            .toggle-icon {
+                padding: 10px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .sidebar,
+            .bg-animation,
+            .mobile-menu-toggle,
+            .copy-btn,
+            nav {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+            
+            .code-block {
+                border: 1px solid #ddd;
+                background: #f5f5f5;
+            }
+            
+            .code-content pre {
+                background: white;
+                color: black;
+            }
+        }
+    /* Animated Background */
+    .bg-animation {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        opacity: 0.3;
+    }
+
+    .bg-animation::before,
+    .bg-animation::after {
+        content: '';
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        filter: blur(100px);
+    }
+
+    .bg-animation::before {
+        background: var(--gold);
+        top: -200px;
+        right: -200px;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .bg-animation::after {
+        background: var(--red);
+        bottom: -200px;
+        left: -200px;
+        animation: float 25s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -30px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="bg-animation"></div>
+    
+    <header id="header">
+        <nav>
+            <a href="index.html" class="logo">
+                <span>🏛️</span>
+                <span>History Hackers #71494</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="missions.html" class="nav-link">Missions</a></li>
+                <li><a href="pybricks_tutorial.html" class="nav-link">Tutorial</a></li>
+                <li><a href="pybricks_cheatsheet.html" class="nav-link active">Cheat Sheet</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Pybricks SPIKE Prime Complete Cheatsheet</h1>
+            <p>Interactive Quick Reference for FLL Programming</p>
+        </div>
+
+        <div class="sidebar">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">All Categories</button>
+                <button class="filter-btn" data-category="basic">Basic Structure</button>
+                <button class="filter-btn" data-category="hub">Hub Commands</button>
+                <button class="filter-btn" data-category="motors">Motors</button>
+                <button class="filter-btn" data-category="drivebase">DriveBase</button>
+                <button class="filter-btn" data-category="sensors">Sensors</button>
+                <button class="filter-btn" data-category="loops">Loops & Logic</button>
+                <button class="filter-btn" data-category="parallel">Parallel</button>
+                <button class="filter-btn" data-category="references">References</button>
+                <button class="filter-btn" data-category="patterns">Patterns</button>
+                <button class="filter-btn" data-category="tips">Tips & Tricks</button>
+                <button class="filter-btn" data-category="error">Error Handling</button>
+                <button class="filter-btn" data-category="datalog">Data Logging</button>
+            </div>
+
+        </div>
+
+        <div class="main-content">
+            <!-- Basic Program Structure -->
+            <section class="section" id="basic" data-category="basic">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🚀 Basic Program Structure</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>Essential Imports</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Port, Direction, Color, Button, Stop, Icon
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>Initialize Hub</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Initialize hub
+hub = PrimeHub()
+# Your code here</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hub Commands -->
+            <section class="section" id="hub" data-category="hub">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🎯 Hub Commands</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>💡 Lights</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>hub.light.on(Color.RED)           # Turn on light
+hub.light.off()                   # Turn off light
+hub.light.blink(Color.BLUE, [500, 500])  # Blink pattern</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>📺 Display</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>hub.display.number(42)            # Show number (0-99)
+hub.display.char("A")             # Show character
+hub.display.text("Hi!")           # Scroll text
+hub.display.icon(Icon.HAPPY)      # Show icon
+hub.display.pixel(row, col, 100)  # Light pixel (0-4, 0-4, brightness%)
+hub.display.off()                 # Clear display</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔊 Sound</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>hub.speaker.beep()                # Simple beep
+hub.speaker.beep(500, 1000)       # Frequency (Hz), Duration (ms)
+hub.speaker.volume(50)            # Set volume (0-100)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔘 Buttons</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>pressed = hub.buttons.pressed()
+if Button.CENTER in pressed:
+    # Do something</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎯 IMU (Motion Sensor)</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>up_side = hub.imu.up()            # Which side is up?
+pitch, roll = hub.imu.tilt()      # Get tilt angles</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Motor Commands -->
+            <section class="section" id="motors" data-category="motors">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">⚙️ Motor Commands</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🔧 Setup</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>motor = Motor(Port.A)                              # Basic
+motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)  # Reversed</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🏃 Basic Movement</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>motor.run(500)              # Run at 500 deg/s
+motor.stop()                # Coast to stop
+motor.brake()               # Brake to stop
+motor.hold()                # Hold position
+motor.dc(50)                # Run at 50% power</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎯 Precise Movement</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>motor.run_time(500, 2000)   # Speed (deg/s), Time (ms)
+motor.run_angle(500, 360)   # Speed (deg/s), Angle (deg)
+motor.run_target(500, 90)   # Speed (deg/s), Target position (deg)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>📊 Reading Motor Data</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>angle = motor.angle()       # Current angle
+speed = motor.speed()       # Current speed
+motor.reset_angle(0)        # Reset angle to 0
+if motor.stalled():         # Check if stuck
+    print("Motor stuck!")</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DriveBase -->
+            <section class="section" id="drivebase" data-category="drivebase">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🚗 DriveBase (Robot Movement)</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🔧 Setup</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+# Basic setup
+robot = DriveBase(left_motor, right_motor, wheel_diameter=56, axle_track=112)
+
+# With gyro for better turning accuracy (recommended for FLL)
+robot = DriveBase(left_motor, right_motor, wheel_diameter=56, axle_track=112)
+robot.use_gyro(True)  # Enable gyro for more accurate turns
+
+# Configure DriveBase settings
+robot.settings(
+    straight_speed=200,     # mm/s for straight driving
+    straight_acceleration=100,  # mm/s² acceleration
+    turn_rate=90,          # deg/s for turning
+    turn_acceleration=200   # deg/s² turn acceleration
+)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎮 Commands</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>robot.straight(200)         # Drive 200mm forward
+robot.turn(90)              # Turn 90° right
+robot.drive(100, 30)        # Speed (mm/s), Turn rate (deg/s)
+robot.stop()                # Stop driving
+
+# Advanced DriveBase commands
+robot.curve(radius=200, angle=90)  # Drive in arc (radius in mm)
+robot.drive_time(100, 0, 2000)     # Drive for specific time (2 seconds)
+
+# Get current state
+distance = robot.distance()        # Total distance traveled
+angle = robot.angle()              # Total angle turned
+state = robot.state()              # Current driving state (tuple)
+
+# Reset measurements
+robot.reset()                      # Reset distance and angle to 0
+
+# Non-blocking movements (for parallel tasks)
+robot.straight(200, wait=False)    # Start moving, don't wait
+while not robot.done():            # Check if movement complete
+    # Do other things while moving
+    pass</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sensors -->
+            <section class="section" id="sensors" data-category="sensors">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">📡 Sensors</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🌈 Color Sensor</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>sensor = ColorSensor(Port.C)
+color = sensor.color()              # Detect color
+reflection = sensor.reflection()    # Light reflection (0-100%)
+ambient = sensor.ambient()          # Room brightness (0-100%)
+h, s, v = sensor.hsv()              # Get HSV values
+
+# Check specific color
+if sensor.color() == Color.RED:
+    print("Red detected!")</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>📏 Ultrasonic Sensor</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>sensor = UltrasonicSensor(Port.D)
+distance = sensor.distance()        # Distance in mm
+if sensor.presence():               # Other ultrasonic nearby?
+    print("Another sensor detected")
+sensor.lights.on(100)               # Control lights (0-100%)
+sensor.lights.off()</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>👆 Force Sensor</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>sensor = ForceSensor(Port.E)
+if sensor.pressed():                # Is it pressed?
+    print("Pressed!")
+if sensor.touched():                # Even light touch
+    print("Touched!")
+    
+force = sensor.force()              # Force in Newtons
+distance = sensor.distance()        # Button travel in mm</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loops & Logic -->
+            <section class="section" id="loops" data-category="loops">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🔄 Loops & Conditions</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🔁 While Loop</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>while True:                         # Forever
+    # Your code
+    if Button.CENTER in hub.buttons.pressed():
+        break                       # Exit loop</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔢 For Loop</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>for i in range(5):                  # Repeat 5 times
+    print(i)                        # Prints 0,1,2,3,4</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>❓ If Statements</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>if distance < 100:
+    print("Too close!")
+elif distance < 200:
+    print("Getting close")
+else:
+    print("All clear")</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Parallel Programming -->
+            <section class="section" id="parallel" data-category="parallel">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">⚡ Parallel Programming</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>⚡ Quick Parallel (Simple)</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Run two motors together
+left_motor.run_angle(500, 360, wait=False)
+right_motor.run_angle(500, 360)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔀 Async/Await (Advanced)</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>from pybricks.tools import multitask, run_task, wait
+
+# Basic parallel tasks
+async def move_arm():
+    await arm_motor.run_angle(500, 360)
+
+async def drive_forward():
+    await robot.straight(200)
+
+async def main():
+    # Run multiple tasks simultaneously
+    await multitask(move_arm(), drive_forward())
+
+# DriveBase with async movements
+async def complex_movement():
+    # These can be awaited for async operation
+    await robot.straight(200, wait=False)  # Start moving
+    await arm_motor.run_angle(300, 90)     # Move arm while driving
+    await robot.turn(90)                   # Turn after both complete
+
+# Parallel sensor monitoring
+async def monitor_color():
+    while True:
+        if color_sensor.color() == Color.RED:
+            hub.light.on(Color.RED)
+        await wait(10)
+
+async def drive_mission():
+    await robot.straight(500)
+    await robot.turn(90)
+
+# Run driving while monitoring sensors
+async def mission():
+    await multitask(
+        monitor_color(),
+        drive_mission()
+    )
+
+run_task(main())</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- References -->
+            <section class="section" id="references" data-category="references">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🎨 References</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🎨 Colors</h4>
+                        <div class="colors-grid">
+                            <div class="color-item">Color.BLACK</div>
+                            <div class="color-item">Color.VIOLET</div>
+                            <div class="color-item">Color.BLUE</div>
+                            <div class="color-item">Color.CYAN</div>
+                            <div class="color-item">Color.GREEN</div>
+                            <div class="color-item">Color.YELLOW</div>
+                            <div class="color-item">Color.ORANGE</div>
+                            <div class="color-item">Color.RED</div>
+                            <div class="color-item">Color.WHITE</div>
+                            <div class="color-item">Color.NONE</div>
+                            <div class="color-item">Color.BROWN</div>
+                            <div class="color-item">Color.MAGENTA</div>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Custom color
+my_color = Color(h=120, s=100, v=50)  # Hue, Saturation, Value</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎭 Icons</h4>
+                        <div class="colors-grid">
+                            <div class="color-item">Icon.ARROW_UP</div>
+                            <div class="color-item">Icon.ARROW_DOWN</div>
+                            <div class="color-item">Icon.ARROW_LEFT</div>
+                            <div class="color-item">Icon.ARROW_RIGHT</div>
+                            <div class="color-item">Icon.HAPPY</div>
+                            <div class="color-item">Icon.SAD</div>
+                            <div class="color-item">Icon.HEART</div>
+                            <div class="color-item">Icon.SQUARE</div>
+                            <div class="color-item">Icon.CIRCLE</div>
+                            <div class="color-item">Icon.TRIANGLE</div>
+                            <div class="color-item">Icon.DIAMOND</div>
+                            <div class="color-item">Icon.UP</div>
+                            <div class="color-item">Icon.DOWN</div>
+                            <div class="color-item">Icon.LEFT</div>
+                            <div class="color-item">Icon.RIGHT</div>
+                            <div class="color-item">Icon.NO</div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>⏱️ Timing</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>wait(1000)                          # Wait 1 second (1000ms)
+
+from pybricks.tools import StopWatch
+timer = StopWatch()
+timer.time()                        # Get elapsed time
+timer.pause()                       # Pause timer
+timer.resume()                      # Resume timer
+timer.reset()                       # Reset to 0</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Patterns -->
+            <section class="section" id="patterns" data-category="patterns">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">🔧 Common Patterns</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>📏 Line Following</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>while True:
+    if color_sensor.reflection() < 30:  # On black line
+        robot.drive(100, -30)            # Turn left
+    else:                                # On white
+        robot.drive(100, 30)             # Turn right</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🚧 Obstacle Avoidance</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>while True:
+    if distance_sensor.distance() < 200:
+        robot.stop()
+        robot.turn(90)
+    else:
+        robot.drive(150, 0)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔘 Button Control</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>while True:
+    pressed = hub.buttons.pressed()
+    
+    if Button.LEFT in pressed:
+        motor.run(-500)
+    elif Button.RIGHT in pressed:
+        motor.run(500)
+    elif Button.CENTER in pressed:
+        break
+    else:
+        motor.stop()</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>📐 Square to Wall (FLL Alignment)</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Square up against a wall for consistent positioning
+robot.drive(-50, 0)  # Drive backward slowly
+wait(2000)           # Push against wall for 2 seconds
+robot.stop()         # Now perfectly aligned
+robot.straight(50)   # Back up to starting position</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎯 Proportional Line Following</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Smoother line following with proportional control
+target = 50  # Target reflection value (edge of line)
+kp = 1.5     # Proportional gain
+
+while robot.distance() < 500:  # Follow for 500mm
+    error = color_sensor.reflection() - target
+    turn_rate = kp * error
+    robot.drive(100, turn_rate)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔄 Gyro Turn (Precise Angles)</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Use gyro for accurate turns
+robot.use_gyro(True)  # Enable gyro
+robot.turn(90)        # Precisely 90 degrees
+
+# Or manual gyro control
+hub.imu.reset_heading(0)  # Reset gyro
+while abs(hub.imu.heading()) < 90:
+    robot.drive(0, 50)  # Turn at 50 deg/s
+robot.stop()</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🏁 Mission Template</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>def mission_1():
+    \"\"\"Complete mission 1 and return to base\"\"\"
+    # Navigate to mission
+    robot.straight(300)
+    robot.turn(45)
+    
+    # Complete mission action
+    arm_motor.run_angle(500, 180)
+    
+    # Return to base
+    robot.turn(-45)
+    robot.straight(-300)
+    
+    return True  # Mission success
+
+# Run mission with error handling
+try:
+    success = mission_1()
+    if success:
+        hub.speaker.beep(1000, 100)  # Success sound
+except:
+    hub.light.on(Color.RED)  # Error indicator
+    robot.stop()</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Handling -->
+            <section class="section" id="error" data-category="error">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">⚠️ Error Handling</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>Safe Sensor Reading</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Handle potential None values from sensors
+distance = ultrasonic.distance()
+if distance is not None and distance < 100:
+    robot.stop()
+
+# Try-except for robust code
+try:
+    # Attempt sensor reading
+    color = color_sensor.color()
+    if color == Color.RED:
+        robot.stop()
+except:
+    # Handle sensor disconnection
+    print("Sensor error - continuing")
+    robot.stop()  # Safe default action</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>Motor Stall Detection</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Check if motor is stalled
+if motor.control.stalled():
+    motor.stop()
+    print("Motor stalled!")
+    
+# Safe motor movement with timeout
+try:
+    motor.run_until_stalled(500, Stop.HOLD, duty_limit=50)
+except:
+    print("Motor couldn't complete movement")
+    motor.stop()</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>Button Safety</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Emergency stop with center button
+while True:
+    if Button.CENTER in hub.buttons.pressed():
+        robot.stop()
+        break  # Exit program
+    
+    # Your mission code here
+    robot.straight(100)</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Logging -->
+            <section class="section" id="datalog" data-category="datalog">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">📊 Data Logging</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>DataLog Setup</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>from pybricks.tools import DataLog, StopWatch
+
+# Create data logger
+data = DataLog('time', 'distance', 'color', name='mission_log')
+timer = StopWatch()
+
+# Log data during mission
+while timer.time() < 10000:  # Run for 10 seconds
+    distance = ultrasonic.distance()
+    color = color_sensor.color()
+    
+    # Log the data
+    data.log(timer.time(), distance, color)
+    
+    # Your mission code
+    robot.drive(100, 0)
+    wait(100)  # Log every 100ms
+
+# Data is saved automatically</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>StopWatch Usage</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>from pybricks.tools import StopWatch
+
+# Create and start timer
+timer = StopWatch()
+
+# Measure operation time
+timer.reset()  # Start timing
+robot.straight(500)
+elapsed = timer.time()  # Get time in milliseconds
+print(f"Movement took {elapsed}ms")
+
+# Pause and resume
+timer.pause()
+# Do something else
+timer.resume()
+
+# Use for timeout
+timer.reset()
+while timer.time() < 5000:  # 5 second timeout
+    if color_sensor.color() == Color.RED:
+        break
+    wait(10)</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>Performance Monitoring</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Monitor battery and performance
+print(f"Battery: {hub.battery.voltage()}mV")
+print(f"Current: {hub.battery.current()}mA")
+
+# Log motor performance
+data = DataLog('time', 'angle', 'speed')
+timer = StopWatch()
+
+while timer.time() < 5000:
+    data.log(
+        timer.time(),
+        motor.angle(),
+        motor.speed()
+    )
+    wait(50)</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tips & Tricks -->
+            <section class="section" id="tips" data-category="tips">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">💡 Tips & Tricks</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🐛 Debug with Print</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>print("Distance:", distance)       # See values in terminal</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>📏 Remember Units</h4>
+                        <div class="values-grid">
+                            <div class="value-item"><strong>Angles:</strong> degrees (360° = full rotation)</div>
+                            <div class="value-item"><strong>Speed:</strong> deg/s for motors, mm/s for DriveBase</div>
+                            <div class="value-item"><strong>Time:</strong> milliseconds (1000ms = 1 second)</div>
+                            <div class="value-item"><strong>Distance:</strong> millimeters (10mm = 1cm)</div>
+                            <div class="value-item"><strong>Force:</strong> Newtons</div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔢 Common Values</h4>
+                        <div class="values-grid">
+                            <div class="value-item"><strong>Wheel diameter:</strong> Usually 56mm or 88mm</div>
+                            <div class="value-item"><strong>Axle track:</strong> Measure between wheel centers</div>
+                            <div class="value-item"><strong>Motor speed:</strong> 100-1000 deg/s typical</div>
+                            <div class="value-item"><strong>Drive speed:</strong> 50-300 mm/s typical</div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🔧 Quick Fixes</h4>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <h5>Motor runs wrong way</h5>
+                                <p>Add Direction.COUNTERCLOCKWISE</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>Robot turns wrong way</h5>
+                                <p>Swap motor ports or directions</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>Nothing happens</h5>
+                                <p>Check port connections</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>Program won't stop</h5>
+                                <p>Hold CENTER button 3 seconds</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>Can't connect</h5>
+                                <p>Check Bluetooth is on</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>🎯 FLL Competition Tips</h4>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <h5>1. Test values</h5>
+                                <p>Colors and distances change with lighting</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>2. Calibrate</h5>
+                                <p>Test sensor values at competition table</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>3. Battery</h5>
+                                <p>Low battery = slower motors</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>4. Attachments</h5>
+                                <p>Test with wait=False or async</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>5. Reliability</h5>
+                                <p>Add error handling for sensors</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>6. Speed</h5>
+                                <p>Balance speed vs accuracy</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>7. Gyro Drift</h5>
+                                <p>Reset hub.imu before each run</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>8. Start Position</h5>
+                                <p>Use jigs for consistent placement</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>9. Mission Functions</h5>
+                                <p>Modular code = easier debugging</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>10. Time Management</h5>
+                                <p>2.5 min matches - plan wisely</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>11. use_gyro(True)</h5>
+                                <p>Enable for accurate turns</p>
+                            </div>
+                            <div class="tip-card">
+                                <h5>12. Data Logging</h5>
+                                <p>Record runs to find issues</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection">
+                        <h4>⚡ Performance Optimizations</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre># Faster acceleration for time-critical missions
+robot.settings(
+    straight_acceleration=500,  # Faster acceleration
+    turn_acceleration=500       # Faster turn acceleration
+)
+
+# Pre-compile functions for speed
+def fast_grab():
+    claw_motor.run_target(1000, 0, Stop.HOLD, wait=False)
+    
+# Use constants instead of calculations
+MISSION_1_DISTANCE = 456  # Pre-measured
+TURN_ANGLE = 87           # Fine-tuned
+
+# Parallel operations save time
+async def quick_mission():
+    await multitask(
+        robot.straight(MISSION_1_DISTANCE, wait=False),
+        arm_motor.run_angle(500, 180, wait=False)
+    )</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Template -->
+            <section class="section" id="template" data-category="templates">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h3 class="section-title">📝 Program Template</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="subsection">
+                        <h4>🚀 Complete Template</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            <div class="code-content">
+                                <pre>from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.parameters import Port, Direction, Button
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
+# Initialize
+hub = PrimeHub()
+left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+robot = DriveBase(left_motor, right_motor, 56, 112)
+robot.use_gyro(True)  # Enable gyro for accurate turns
+color_sensor = ColorSensor(Port.C)
+
+# Main program
+def main():
+    while True:
+        # Your code here
+        
+        # Exit on center button
+        if Button.CENTER in hub.buttons.pressed():
+            break
+    
+    # Cleanup
+    robot.stop()
+    hub.light.off()
+
+# Run
+main()</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 20px; font-size: 1.2rem; color: #ffd700;">
+                        Remember: Start simple, test often, and have fun! 🚀
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        const sections = document.querySelectorAll('.section');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // Category filtering
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Filter sections
+                sections.forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Toggle sections
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('collapsed');
+        }
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+
+        // Initialize - expand all sections by default
+        document.addEventListener('DOMContentLoaded', () => {
+            sections.forEach(section => {
+                section.classList.remove('collapsed');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileToggle && navLinks) {
+            mobileToggle.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>
