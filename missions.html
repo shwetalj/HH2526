@@ -1735,7 +1735,7 @@
         function scheduleClose() {
             cancelCloseTimeout();
             closeTimeout = setTimeout(() => {
-                // Check if mouse is not over any marker or the popup itself
+                // Check if mouse is not over any marker, link, or the popup itself
                 const isOverMarker = Array.from(markers).some(m => m.matches(':hover'));
                 const isOverPopup = hintPopup.matches(':hover');
                 const isOverLink = Array.from(document.querySelectorAll('.mission-link')).some(l => l.matches(':hover'));
