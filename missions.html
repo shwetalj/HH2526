@@ -824,6 +824,259 @@
         33% { transform: translate(30px, -30px) scale(1.1); }
         66% { transform: translate(-20px, 20px) scale(0.9); }
     }
+    
+    /* Custom End Screen Styles */
+    .custom-end-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            rgba(26, 26, 26, 0.95) 0%, 
+            rgba(0, 0, 0, 0.98) 100%);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .custom-end-screen.active {
+        display: flex;
+    }
+    
+    .end-screen-content {
+        text-align: center;
+        color: white;
+        padding: 20px;
+        max-width: 600px;
+    }
+    
+    .end-screen-content h3 {
+        color: var(--gold);
+        font-size: 2rem;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .mission-score {
+        font-size: 1.2rem;
+        color: var(--gold-dark);
+        margin-bottom: 20px;
+    }
+    
+    .next-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .next-options button {
+        padding: 12px 20px;
+        background: var(--gradient-gold);
+        color: var(--bg-dark);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .next-options button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    /* Video Controls Styles */
+    .video-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 8px;
+    }
+    
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .speed-control label {
+        color: var(--gold);
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .speed-control select {
+        background: #1a1a1a;
+        color: #ffd700;
+        border: 1px solid #ffd700;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        min-width: 80px;
+    }
+    
+    .speed-control select option {
+        background: #1a1a1a;
+        color: #ffd700;
+        padding: 5px;
+    }
+    
+    /* Playlist Controls */
+    .playlist-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--card);
+        border: 2px solid var(--gold);
+        border-radius: 15px;
+        padding: 15px;
+        max-width: 350px;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .playlist-controls.active {
+        display: block;
+    }
+    
+    .playlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .playlist-header h4 {
+        color: var(--gold);
+        margin: 0;
+    }
+    
+    .playlist-close {
+        background: none;
+        border: none;
+        color: #999;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+    .playlist-close:hover {
+        color: var(--gold);
+    }
+    
+    .playlist-items {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .playlist-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        margin: 5px 0;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    
+    .playlist-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+    }
+    
+    .playlist-item.active {
+        background: rgba(255, 215, 0, 0.2);
+        border-left: 3px solid var(--gold);
+    }
+    
+    .playlist-item.completed {
+        opacity: 0.7;
+    }
+    
+    .playlist-item-number {
+        width: 30px;
+        font-weight: bold;
+        color: var(--gold);
+    }
+    
+    .playlist-item-name {
+        flex: 1;
+        color: #333;
+        font-size: 14px;
+    }
+    
+    .playlist-item-status {
+        width: 20px;
+        color: #4CAF50;
+    }
+    
+    .playlist-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .playlist-actions button {
+        flex: 1;
+        padding: 8px;
+        background: var(--gradient-gold);
+        color: var(--bg-dark);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .playlist-actions button:hover {
+        transform: scale(1.05);
+    }
+    
+    .playlist-trigger {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: var(--gradient-gold);
+        color: var(--bg-dark);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+    
+    .playlist-trigger:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .next-options {
+            grid-template-columns: 1fr;
+        }
+        
+        .playlist-controls {
+            right: 10px;
+            bottom: 10px;
+            max-width: 90%;
+        }
+        
+        .custom-end-screen h3 {
+            font-size: 1.5rem;
+        }
+    }
     </style>
 </head>
 <body>
@@ -1114,11 +1367,73 @@
             <div class="video-container" id="videoContainer">
                 <!-- YouTube iframe will be inserted here -->
             </div>
+            <!-- Custom End Screen -->
+            <div class="custom-end-screen" id="customEndScreen">
+                <div class="end-screen-content">
+                    <h3 id="endScreenTitle">Mission Complete!</h3>
+                    <div class="mission-score" id="endScreenScore">Points Earned</div>
+                    <div class="next-options" id="nextOptions">
+                        <!-- Buttons will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+            <!-- Video Controls -->
+            <div class="video-controls">
+                <div class="speed-control">
+                    <label for="speedSelect">Speed:</label>
+                    <select id="speedSelect" name="speedSelect" onchange="changePlaybackSpeed(this.value)">
+                        <option value="0.25">0.25x</option>
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected="selected">1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    <button onclick="testPlayerAPI()" style="margin-left: 10px; background: #333; color: #ffd700; border: 1px solid #ffd700; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px;">Test API</button>
+                </div>
+                <button onclick="togglePlaylist()" style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #1a1a1a; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📋 Playlist</button>
+            </div>
         </div>
     </div>
+    
+    <!-- Playlist Controls -->
+    <div class="playlist-controls" id="playlistControls">
+        <div class="playlist-header">
+            <h4>Mission Playlist</h4>
+            <button class="playlist-close" onclick="togglePlaylist()">&times;</button>
+        </div>
+        <div class="playlist-items" id="playlistItems">
+            <!-- Playlist items will be dynamically added -->
+        </div>
+        <div class="playlist-actions">
+            <button onclick="playAllMissions()">▶ Play All</button>
+            <button onclick="shufflePlaylist()">🔀 Shuffle</button>
+            <button onclick="clearPlaylist()">🗑️ Clear</button>
+        </div>
+    </div>
+    
+    <!-- Playlist Trigger Button -->
+    <button class="playlist-trigger" onclick="togglePlaylist()">📋 Mission Playlist</button>
     </div>
 
     <script>
+        // Load YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        // YouTube player variable
+        var player;
+        var playerReady = false;
+        
+        // This function creates an <iframe> (and YouTube player) after the API code downloads
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API ready');
+            playerReady = true;
+        }
+        
         // Create grid overlay
         function createGrid() {
             const gridOverlay = document.getElementById('gridOverlay');
@@ -1359,31 +1674,488 @@
             closeHint();
         });
         
-        // Video modal functions
+        // Mission data for playlist and end screens
+        const allMissions = [
+            {id: 'M01', videoId: 'OUHg0bMwHtM', name: 'Surface Brushing', points: '30', start: 6, end: 126},
+            {id: 'M02', videoId: 'b-7zkBkgNUw', name: 'Map Reveal', points: '40', start: 6, end: 126},
+            {id: 'M03', videoId: 'y6RxJpgBOQM', name: 'Mineshaft Explorer', points: '40', start: 6, end: 126},
+            {id: 'M04', videoId: 'MX2WMQ4vN0g', name: 'Careful Recovery', points: '40', start: 6, end: 126},
+            {id: 'M05', videoId: 'JmYsPn4cig8', name: 'Who Lived Here?', points: '30', start: 6, end: 126},
+            {id: 'M06', videoId: 'szFSKDQCFFw', name: 'Forge', points: '30', start: 6, end: 126},
+            {id: 'M07', videoId: '6xcrIo-2WJ8', name: 'Heavy Lifting', points: '30', start: 6, end: 126},
+            {id: 'M08', videoId: 'MbvDiuorKsc', name: 'Silo', points: '40', start: 6, end: 126},
+            {id: 'M09', videoId: 'yymtNugu4V4', name: "What's on Sale?", points: '30', start: 6, end: 126},
+            {id: 'M10', videoId: 'RX8MMw_MJ9g', name: 'Tip the Scales', points: '30', start: 6, end: 126},
+            {id: 'M11', videoId: 'qVrT1DH4Zh8', name: 'Angler Artifacts', points: '30', start: 6, end: 126},
+            {id: 'M12', videoId: 'hFzNIv1NBzg', name: 'Salvage Operation', points: '30', start: 6, end: 126},
+            {id: 'M13', videoId: '1yyh08hg398', name: 'Statue Rebuild', points: '30', start: 6, end: 126},
+            {id: 'M14', videoId: 'Pq9d-23TMos', name: 'Forum', points: '35', start: 6, end: 126},
+            {id: 'M15', videoId: 'd6cNKGmYxh4', name: 'Site Marking', points: '40', start: 6, end: 126}
+        ];
+        
+        let currentMissionIndex = -1;
+        let playlist = [];
+        let playlistMode = false;
+        let completedMissions = [];
+        let currentPlayer = null;
+        let checkEndInterval = null;
+        
+        // Initialize playlist display
+        function initializePlaylist() {
+            const playlistItems = document.getElementById('playlistItems');
+            playlistItems.innerHTML = '';
+            
+            allMissions.forEach((mission, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                item.dataset.index = index;
+                item.onclick = () => playMissionFromPlaylist(index);
+                
+                item.innerHTML = `
+                    <span class="playlist-item-number">${mission.id}</span>
+                    <span class="playlist-item-name">${mission.name}</span>
+                    <span class="playlist-item-status" id="status-${mission.id}"></span>
+                `;
+                
+                playlistItems.appendChild(item);
+            });
+        }
+        
+        // Store current video details for replay
+        let currentVideoDetails = null;
+        
+        // Video modal functions with enhanced features
         function playVideo(videoId, title, startTime = null, endTime = null) {
             const modal = document.getElementById('videoModal');
             const videoContainer = document.getElementById('videoContainer');
             const videoTitle = document.getElementById('videoTitle');
             
-            let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
-            if (startTime !== null) {
-                embedUrl += `&start=${startTime}`;
-            }
-            if (endTime !== null) {
-                embedUrl += `&end=${endTime}`;
+            // Store video details for potential replay
+            currentVideoDetails = { videoId, title, startTime, endTime };
+            
+            // Find mission details
+            const missionIndex = allMissions.findIndex(m => m.videoId === videoId);
+            if (missionIndex !== -1) {
+                currentMissionIndex = missionIndex;
             }
             
             videoTitle.textContent = title;
-            videoContainer.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            
+            // Clear existing player
+            if (window.player && typeof window.player.destroy === 'function') {
+                try {
+                    window.player.destroy();
+                    window.player = null;
+                } catch(e) {
+                    console.error('Error destroying player:', e);
+                }
+            }
+            
             modal.classList.add('active');
+            
+            // Reset end screen and speed selector
+            document.getElementById('customEndScreen').classList.remove('active');
+            document.getElementById('speedSelect').value = '1';
+            
+            // Update playlist UI
+            updatePlaylistUI();
+            
+            // Create player container
+            videoContainer.innerHTML = '<div id="ytplayer" style="width: 100%; height: 100%;"></div>';
+            
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                createYouTubePlayer(videoId, startTime, endTime);
+            }, 100);
+        }
+        
+        // Separate function to create YouTube player
+        function createYouTubePlayer(videoId, startTime, endTime) {
+            // Check if API is loaded
+            if (typeof YT !== 'undefined' && YT.Player) {
+                console.log('Creating YouTube player with API');
+                
+                window.player = new YT.Player('ytplayer', {
+                    width: '100%',
+                    height: '100%',
+                    videoId: videoId,
+                    playerVars: {
+                        'autoplay': 1,
+                        'controls': 1,
+                        'modestbranding': 1,
+                        'rel': 0,
+                        'loop': 1,
+                        'playlist': videoId,
+                        'start': startTime || 0,
+                        'end': endTime || undefined,
+                        'enablejsapi': 1,
+                        'origin': window.location.origin,
+                        'playsinline': 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError
+                    }
+                });
+                
+                // Store player globally
+                player = window.player;
+            } else {
+                console.log('YouTube API not loaded, using iframe fallback');
+                // Fallback to iframe
+                const videoContainer = document.getElementById('videoContainer');
+                let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&enablejsapi=1&modestbranding=1&rel=0&origin=${window.location.origin}`;
+                if (startTime !== null) {
+                    embedUrl += `&start=${startTime}`;
+                }
+                if (endTime !== null) {
+                    embedUrl += `&end=${endTime}`;
+                }
+                
+                videoContainer.innerHTML = `<iframe id="ytplayer" src="${embedUrl}" style="width: 100%; height: 100%;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                
+                // Try to get iframe reference for postMessage API
+                setTimeout(() => {
+                    const iframe = document.getElementById('ytplayer');
+                    if (iframe) {
+                        window.playerIframe = iframe;
+                    }
+                }, 500);
+            }
+        }
+        
+        // YouTube player event handlers
+        function onPlayerReady(event) {
+            console.log('Player ready - speed control enabled');
+            // Store player reference
+            window.player = event.target;
+            player = event.target;
+            
+            // Set default playback rate
+            try {
+                event.target.setPlaybackRate(1);
+                
+                // Get available playback rates
+                const rates = event.target.getAvailablePlaybackRates();
+                console.log('Available playback rates:', rates);
+            } catch(e) {
+                console.error('Error setting initial playback rate:', e);
+            }
+        }
+        
+        function onPlayerStateChange(event) {
+            // Check if video ended
+            if (event.data == YT.PlayerState.ENDED) {
+                console.log('Video ended');
+                // Show custom end screen
+                setTimeout(() => {
+                    showEndScreen();
+                }, 500);
+            } else if (event.data == YT.PlayerState.PLAYING) {
+                console.log('Video playing');
+                // Ensure player reference is set
+                if (event.target) {
+                    window.player = event.target;
+                    player = event.target;
+                }
+            }
+        }
+        
+        function onPlayerError(event) {
+            console.error('Player error:', event.data);
         }
         
         function closeVideo() {
             const modal = document.getElementById('videoModal');
             const videoContainer = document.getElementById('videoContainer');
+            
+            // Destroy YouTube player properly
+            if (player && player.destroy) {
+                try {
+                    player.destroy();
+                    player = null;
+                } catch (e) {
+                    console.error('Error destroying player:', e);
+                }
+            }
+            
             modal.classList.remove('active');
-            videoContainer.innerHTML = ''; // Stop video playback
+            videoContainer.innerHTML = ''; // Clear container
+            clearInterval(checkEndInterval);
+            
+            // Hide end screen
+            document.getElementById('customEndScreen').classList.remove('active');
         }
+        
+        // Custom End Screen Functions
+        function showEndScreen() {
+            const endScreen = document.getElementById('customEndScreen');
+            const mission = allMissions[currentMissionIndex];
+            
+            if (!mission) return;
+            
+            document.getElementById('endScreenTitle').textContent = `${mission.id}: ${mission.name} Complete!`;
+            document.getElementById('endScreenScore').textContent = `Maximum Points: ${mission.points}`;
+            
+            const nextOptions = document.getElementById('nextOptions');
+            nextOptions.innerHTML = '';
+            
+            // Replay button
+            const replayBtn = document.createElement('button');
+            replayBtn.textContent = '🔄 Replay Mission';
+            replayBtn.onclick = () => {
+                document.getElementById('customEndScreen').classList.remove('active');
+                playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.start, mission.end);
+            };
+            nextOptions.appendChild(replayBtn);
+            
+            // Next mission button
+            if (currentMissionIndex < allMissions.length - 1) {
+                const nextBtn = document.createElement('button');
+                const nextMission = allMissions[currentMissionIndex + 1];
+                nextBtn.textContent = `➡️ Next: ${nextMission.id}`;
+                nextBtn.onclick = () => {
+                    document.getElementById('customEndScreen').classList.remove('active');
+                    playVideo(nextMission.videoId, `${nextMission.id}: ${nextMission.name}`, nextMission.start, nextMission.end);
+                };
+                nextOptions.appendChild(nextBtn);
+            }
+            
+            // View scoring details button
+            const detailsBtn = document.createElement('button');
+            detailsBtn.textContent = '📋 View Scoring';
+            detailsBtn.onclick = () => {
+                // Scroll to mission in table
+                const missionRow = document.querySelector(`a[data-mission="${mission.id.substring(1)}"]`);
+                if (missionRow) {
+                    closeVideo();
+                    missionRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            nextOptions.appendChild(detailsBtn);
+            
+            // Back to playlist button
+            const playlistBtn = document.createElement('button');
+            playlistBtn.textContent = '📋 Back to Playlist';
+            playlistBtn.onclick = () => {
+                closeVideo();
+                togglePlaylist();
+            };
+            nextOptions.appendChild(playlistBtn);
+            
+            // Mark as completed
+            if (!completedMissions.includes(mission.id)) {
+                completedMissions.push(mission.id);
+                document.getElementById(`status-${mission.id}`).textContent = '✓';
+            }
+            
+            endScreen.classList.add('active');
+            
+            // Auto-play next if in playlist mode
+            if (playlistMode && playlist.length > 0) {
+                const currentInPlaylist = playlist.findIndex(m => m.id === mission.id);
+                if (currentInPlaylist !== -1 && currentInPlaylist < playlist.length - 1) {
+                    setTimeout(() => {
+                        const nextInPlaylist = playlist[currentInPlaylist + 1];
+                        document.getElementById('customEndScreen').classList.remove('active');
+                        playVideo(nextInPlaylist.videoId, `${nextInPlaylist.id}: ${nextInPlaylist.name}`, nextInPlaylist.start, nextInPlaylist.end);
+                    }, 5000); // Auto-advance after 5 seconds
+                }
+            }
+        }
+        
+        // Playback Speed Control
+        function changePlaybackSpeed(speed) {
+            const speedValue = parseFloat(speed);
+            console.log(`Attempting to change speed to ${speedValue}x`);
+            
+            // Try multiple methods to change speed
+            
+            // Method 1: Use player API if available
+            if (window.player && typeof window.player.setPlaybackRate === 'function') {
+                try {
+                    window.player.setPlaybackRate(speedValue);
+                    console.log(`Speed changed to ${speedValue}x via API`);
+                    return;
+                } catch (e) {
+                    console.error('Error with API method:', e);
+                }
+            }
+            
+            // Method 2: Try postMessage to iframe
+            const iframe = document.getElementById('ytplayer');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    const message = JSON.stringify({
+                        event: 'command',
+                        func: 'setPlaybackRate',
+                        args: [speedValue]
+                    });
+                    iframe.contentWindow.postMessage(message, 'https://www.youtube.com');
+                    console.log(`Speed change command sent via postMessage to ${speedValue}x`);
+                    return;
+                } catch (e) {
+                    console.error('Error with postMessage method:', e);
+                }
+            }
+            
+            // Method 3: If all else fails, recreate player with new speed
+            if (currentVideoDetails) {
+                console.log('Attempting to reload video with new speed setting');
+                // Store the current time if possible
+                let currentTime = 0;
+                if (window.player && typeof window.player.getCurrentTime === 'function') {
+                    try {
+                        currentTime = window.player.getCurrentTime();
+                    } catch(e) {}
+                }
+                
+                // Note: This would require modifying the player creation to accept speed parameter
+                console.log('Speed control requires API. Please ensure YouTube IFrame API is loaded.');
+            }
+            
+            console.log('Unable to change playback speed. Check console for details.');
+        }
+        
+        // Playlist Functions
+        function togglePlaylist() {
+            const controls = document.getElementById('playlistControls');
+            controls.classList.toggle('active');
+            
+            if (controls.classList.contains('active')) {
+                initializePlaylist();
+                updatePlaylistUI();
+            }
+        }
+        
+        function updatePlaylistUI() {
+            const items = document.querySelectorAll('.playlist-item');
+            items.forEach(item => {
+                const index = parseInt(item.dataset.index);
+                item.classList.remove('active');
+                if (index === currentMissionIndex) {
+                    item.classList.add('active');
+                }
+                if (completedMissions.includes(allMissions[index].id)) {
+                    item.classList.add('completed');
+                }
+            });
+        }
+        
+        function playMissionFromPlaylist(index) {
+            const mission = allMissions[index];
+            playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.start, mission.end);
+            document.getElementById('playlistControls').classList.remove('active');
+        }
+        
+        function playAllMissions() {
+            playlist = [...allMissions];
+            playlistMode = true;
+            completedMissions = [];
+            
+            // Start with first mission
+            if (playlist.length > 0) {
+                const firstMission = playlist[0];
+                playVideo(firstMission.videoId, `${firstMission.id}: ${firstMission.name}`, firstMission.start, firstMission.end);
+                document.getElementById('playlistControls').classList.remove('active');
+            }
+        }
+        
+        function shufflePlaylist() {
+            // Fisher-Yates shuffle
+            const shuffled = [...allMissions];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            playlist = shuffled;
+            playlistMode = true;
+            completedMissions = [];
+            
+            // Start with first shuffled mission
+            if (playlist.length > 0) {
+                const firstMission = playlist[0];
+                playVideo(firstMission.videoId, `${firstMission.id}: ${firstMission.name}`, firstMission.start, firstMission.end);
+                document.getElementById('playlistControls').classList.remove('active');
+            }
+        }
+        
+        function clearPlaylist() {
+            playlist = [];
+            playlistMode = false;
+            completedMissions = [];
+            
+            // Clear all checkmarks
+            allMissions.forEach(mission => {
+                const status = document.getElementById(`status-${mission.id}`);
+                if (status) status.textContent = '';
+            });
+            
+            // Reset UI
+            updatePlaylistUI();
+        }
+        
+        // Test function to debug player API
+        function testPlayerAPI() {
+            console.log('=== Testing Player API ===');
+            console.log('1. window.player exists?', !!window.player);
+            console.log('2. player variable exists?', !!player);
+            console.log('3. YT API loaded?', typeof YT !== 'undefined');
+            console.log('4. YT.Player exists?', typeof YT !== 'undefined' && !!YT.Player);
+            
+            if (window.player) {
+                console.log('5. Player methods available:');
+                console.log('   - setPlaybackRate?', typeof window.player.setPlaybackRate === 'function');
+                console.log('   - getPlaybackRate?', typeof window.player.getPlaybackRate === 'function');
+                console.log('   - getAvailablePlaybackRates?', typeof window.player.getAvailablePlaybackRates === 'function');
+                
+                try {
+                    const currentRate = window.player.getPlaybackRate();
+                    console.log('6. Current playback rate:', currentRate);
+                    
+                    const availableRates = window.player.getAvailablePlaybackRates();
+                    console.log('7. Available rates:', availableRates);
+                    
+                    // Try setting rate to 1.5
+                    console.log('8. Attempting to set rate to 1.5x...');
+                    window.player.setPlaybackRate(1.5);
+                    
+                    setTimeout(() => {
+                        const newRate = window.player.getPlaybackRate();
+                        console.log('9. New rate after change:', newRate);
+                        if (newRate === 1.5) {
+                            console.log('✅ Speed control is working!');
+                            alert('Speed control is working! Changed to 1.5x');
+                        } else {
+                            console.log('❌ Speed did not change');
+                            alert('Speed control not working - check console');
+                        }
+                    }, 500);
+                } catch(e) {
+                    console.error('Error during API test:', e);
+                }
+            } else {
+                console.log('❌ No player object found');
+                
+                // Check for iframe
+                const iframe = document.getElementById('ytplayer');
+                console.log('10. iframe exists?', !!iframe);
+                if (iframe) {
+                    console.log('11. iframe src:', iframe.src);
+                }
+            }
+            console.log('=== End Test ===');
+        }
+        
+        // Add manual end screen trigger for testing
+        // Since we don't have full YouTube API integration, add a button to manually trigger end screen
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'e' && document.getElementById('videoModal').classList.contains('active')) {
+                showEndScreen();
+            }
+        });
         
         // Close modal when clicking outside the video
         document.getElementById('videoModal').addEventListener('click', function(e) {
