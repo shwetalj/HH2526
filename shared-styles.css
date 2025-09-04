@@ -37,6 +37,18 @@
     --sidebar-width: 300px;
     --gap-default: 30px;
     --header-height: 70px;
+    
+    /* Responsive Typography with clamp() */
+    --fs-hero: clamp(2.5rem, 8vw, 6rem);
+    --fs-h1: clamp(2rem, 5vw, 3.5rem);
+    --fs-h2: clamp(1.5rem, 4vw, 2.5rem);
+    --fs-h3: clamp(1.25rem, 3vw, 1.75rem);
+    --fs-body: clamp(1rem, 2.5vw, 1.125rem);
+    --fs-small: clamp(0.875rem, 2vw, 1rem);
+    
+    /* Touch Target Sizing */
+    --touch-target: 44px;
+    --touch-padding: 12px;
 }
 
 /* ==== Base Styles ==== */
@@ -44,10 +56,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Mobile-first optimizations */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 html {
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 body {
@@ -59,6 +75,14 @@ body {
     line-height: 1.6;
     padding-top: var(--header-height);
     min-height: 100vh;
+    width: 100%; /* Prevent horizontal scroll on mobile */
+}
+
+/* Prevent iOS zoom on form inputs */
+input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    width: 100%;
+    max-width: 100%;
 }
 
 /* ==== Animated Background ==== */
@@ -227,6 +251,8 @@ nav {
     max-width: var(--container-max);
     margin: 0 auto;
     padding: 20px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
     width: 100%;
     box-sizing: border-box;
 }
@@ -404,7 +430,7 @@ nav {
 
 /* ==== Typography ==== */
 h1 {
-    font-size: 2.5rem;
+    font-size: var(--fs-h1);
     font-weight: 900;
     margin-bottom: 1.5rem;
     text-align: center;
@@ -429,15 +455,19 @@ h1 span.gradient-text {
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: var(--fs-h2);
     color: var(--gold);
     margin-bottom: 1rem;
 }
 
 h3 {
-    font-size: 1.4rem;
+    font-size: var(--fs-h3);
     color: var(--gold-light);
     margin-bottom: 1rem;
+}
+
+p, li {
+    font-size: var(--fs-body);
 }
 
 .subtitle {
@@ -457,10 +487,14 @@ h3 {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
     font-family: inherit;
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
 }
 
 .btn-primary {
@@ -690,6 +724,10 @@ h3 {
     
     .mobile-menu-toggle {
         display: flex;
+        min-width: var(--touch-target);
+        min-height: var(--touch-target);
+        align-items: center;
+        justify-content: center;
     }
 
     .nav-links {
@@ -697,14 +735,17 @@ h3 {
         top: 60px;
         left: 0;
         right: 0;
+        bottom: 0;
         background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
         flex-direction: column;
         padding: 2rem;
+        gap: 1.5rem;
         transform: translateY(-100%);
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s;
-        border-bottom: 1px solid var(--border);
+        overflow-y: auto;
         z-index: 999;
     }
 
@@ -712,6 +753,31 @@ h3 {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
+    }
+    
+    .nav-link {
+        padding: 1rem;
+        min-height: var(--touch-target);
+        width: 100%;
+        text-align: center;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--fs-body);
+    }
+    
+    .nav-link:hover {
+        background: var(--card-hover);
+    }
+    
+    .nav-link.active {
+        background: var(--gradient-gold);
+        color: var(--bg-dark);
+        font-weight: bold;
+        border-color: var(--gold);
     }
     
     .logo {

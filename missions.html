@@ -633,54 +633,141 @@
             }
         }
 
-        /* Responsive table for mobile */
-        @media (max-width: 480px) {
+        /* Enhanced Mobile Card Layout */
+        @media (max-width: 768px) {
             .mission-table-container {
                 padding: 0 10px;
                 margin: 20px auto;
             }
 
             .mission-table {
-                font-size: 0.8rem;
+                display: block;
+                width: 100%;
             }
 
             .mission-table thead {
                 display: none;
             }
 
+            .mission-table tbody {
+                display: block;
+            }
+
             .mission-table tbody tr {
                 display: block;
-                margin-bottom: 15px;
-                border: 2px solid var(--gold);
-                border-radius: 10px;
-                padding: 10px;
+                margin-bottom: 1.5rem;
+                background: var(--card, rgba(255,255,255,0.02));
+                border: 1px solid var(--border, rgba(255,255,255,0.08));
+                border-left: 3px solid var(--gold);
+                border-radius: 12px;
+                padding: 1rem;
+                position: relative;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            }
+
+            .mission-table tbody tr:hover {
+                background: var(--card-hover, rgba(255,255,255,0.04));
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
             }
 
             .mission-table td {
                 display: block;
-                text-align: left;
-                padding: 5px 10px;
                 border: none;
-                position: relative;
-                padding-left: 40%;
+                padding: 0.5rem 0;
+                text-align: left;
             }
 
-            .mission-table td:before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                width: 35%;
-                font-weight: bold;
+            /* Mission Number and Name as Header */
+            .mission-table td.mission-number {
+                display: inline-block;
                 color: var(--gold);
+                font-weight: 900;
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
             }
 
-            .mission-table td:nth-child(1):before { content: "Mission:"; }
-            .mission-table td:nth-child(2):before { content: "Name:"; }
-            .mission-table td:nth-child(3):before { content: "Desc:"; display: none; }
-            .mission-table td:nth-child(4):before { content: "Points:"; }
+            .mission-table td.mission-name {
+                display: inline-block;
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: #ffffff;
+            }
 
-            .mission-table td:nth-child(3) {
-                display: none;
+            /* Description */
+            .mission-table td.mission-desc {
+                color: var(--text-muted, #999999);
+                margin-top: 0.5rem;
+                line-height: 1.5;
+                font-size: 0.95rem;
+            }
+
+            /* Points */
+            .mission-table td.mission-points {
+                background: rgba(255, 215, 0, 0.05);
+                border-radius: 8px;
+                padding: 0.75rem;
+                margin: 0.75rem 0;
+                border-left: 2px solid var(--gold);
+                font-size: 0.9rem;
+            }
+
+            .mission-table td.mission-points::before {
+                content: "📊 Points: ";
+                color: var(--gold);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            /* Video Button */
+            .mission-table td.mission-video {
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+
+            .mission-table td.mission-video .video-link {
+                width: 100%;
+                min-height: 44px;
+                background: var(--gradient-gold, linear-gradient(135deg, #ffd700, #ffed4e));
+                color: var(--bg-dark, #0a0a0a);
+                border: none;
+                border-radius: 8px;
+                padding: 0.75rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .mission-table td.mission-video .video-link:hover {
+                transform: scale(1.02);
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .mission-table tbody tr {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+            }
+
+            .mission-table td.mission-number {
+                font-size: 1rem;
+            }
+
+            .mission-table td.mission-name {
+                font-size: 0.95rem;
+            }
+
+            .mission-table td.mission-desc {
+                font-size: 0.85rem;
+            }
+
+            .mission-table td.mission-points {
+                font-size: 0.85rem;
+                padding: 0.5rem;
             }
         }
 
