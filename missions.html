@@ -245,18 +245,7 @@
                 padding: 1px 3px;
             }
 
-            .hint-popup {
-                min-width: 200px;
-                padding: 10px;
-            }
-
-            .hint-popup h3 {
-                font-size: 1rem;
-            }
-
-            .hint-popup p {
-                font-size: 0.85rem;
-            }
+            /* Hint popup styles moved to main CSS block */
 
             @keyframes pulse {
                 0% {
@@ -274,20 +263,10 @@
         /* Extra small devices (phones in portrait) */
         @media (max-width: 480px) {
             .hint-popup {
-                min-width: 150px;
-                max-width: 280px; /* Fixed max width instead of viewport percentage */
+                width: 90vw;
+                max-width: 300px;
                 padding: 10px;
-                max-height: 400px; /* Fixed max height */
-                left: 50% !important;
-                transform: translateX(-50%);
-                margin: 0 auto;
-            }
-            
-            .hint-popup img {
-                max-width: 260px; /* Constrain image width */
-                width: 100%;
-                height: auto;
-                object-fit: contain;
+                max-height: 60vh;
             }
             
             .hint-popup h3 {
@@ -774,18 +753,18 @@
         }
 
         .hint-popup {
-            position: absolute;
+            position: fixed;
             background: white;
             border: 2px solid var(--gold);
             border-radius: 10px;
             padding: 15px;
-            min-width: 300px;
-            max-width: 350px;
+            width: 320px;
+            max-height: 80vh;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 1000;
             display: none;
             animation: fadeIn 0.3s ease;
-            overflow: hidden;
+            overflow-y: auto;
         }
         
         .hint-popup img {
@@ -824,6 +803,13 @@
 
         .hint-popup .close-btn:hover {
             color: var(--gold);
+        }
+        
+        /* Responsive styles for hint popup */
+        @media (max-width: 768px) {
+            .hint-popup {
+                width: 280px;
+            }
         }
 
         @keyframes fadeIn {
@@ -881,18 +867,7 @@
                 height: 25px;
             }
             
-            .hint-popup {
-                min-width: 200px;
-                max-width: 90vw;
-                max-height: 80vh;
-                overflow-y: auto;
-            }
-            
-            .hint-popup img {
-                max-width: 100%;
-                height: auto;
-                display: block;
-            }
+            /* Hint popup styles handled in main CSS block */
         }
     /* Animated Background */
     .bg-animation {
@@ -1744,10 +1719,37 @@
         const hintPopup = document.getElementById('hintPopup');
         const hintTitle = document.getElementById('hintTitle');
         const hintContent = document.getElementById('hintContent');
+        
+        // Track closing timeout
+        let closeTimeout = null;
+        
+        // Function to cancel close timeout
+        function cancelCloseTimeout() {
+            if (closeTimeout) {
+                clearTimeout(closeTimeout);
+                closeTimeout = null;
+            }
+        }
+        
+        // Function to schedule popup close
+        function scheduleClose() {
+            cancelCloseTimeout();
+            closeTimeout = setTimeout(() => {
+                // Check if mouse is not over any marker or the popup itself
+                const isOverMarker = Array.from(markers).some(m => m.matches(':hover'));
+                const isOverPopup = hintPopup.matches(':hover');
+                const isOverLink = Array.from(document.querySelectorAll('.mission-link')).some(l => l.matches(':hover'));
+                
+                if (!isOverMarker && !isOverPopup && !isOverLink) {
+                    closeHint();
+                }
+            }, 300); // Increased delay to 300ms for better tolerance
+        }
 
         // Add hover events to each marker
         markers.forEach(marker => {
             marker.addEventListener('mouseenter', function(e) {
+                cancelCloseTimeout(); // Cancel any pending close
                 const missionId = this.getAttribute('data-mission');
                 const mission = missionData[missionId];
                 
@@ -1757,22 +1759,18 @@
             });
             
             marker.addEventListener('mouseleave', function(e) {
-                // Hide hint when mouse leaves, unless hovering over the hint itself
-                setTimeout(() => {
-                    if (!hintPopup.matches(':hover')) {
-                        closeHint();
-                    }
-                }, 100);
+                scheduleClose(); // Schedule close with delay
             });
         });
         
         // Keep hint open when hovering over it
         hintPopup.addEventListener('mouseenter', function() {
+            cancelCloseTimeout(); // Cancel close when entering popup
             hintPopup.classList.add('active');
         });
         
         hintPopup.addEventListener('mouseleave', function() {
-            closeHint();
+            scheduleClose(); // Schedule close when leaving popup
         });
 
         // Add hover events to table mission links
@@ -1783,6 +1781,7 @@
             });
             
             link.addEventListener('mouseenter', function(e) {
+                cancelCloseTimeout(); // Cancel any pending close
                 const missionId = this.getAttribute('data-mission');
                 const mission = missionData[missionId];
                 
@@ -1792,12 +1791,7 @@
             });
             
             link.addEventListener('mouseleave', function(e) {
-                // Hide hint when mouse leaves, unless hovering over the hint itself
-                setTimeout(() => {
-                    if (!hintPopup.matches(':hover')) {
-                        closeHint();
-                    }
-                }, 100);
+                scheduleClose(); // Schedule close with delay
             });
         });
 
@@ -1805,16 +1799,36 @@
             hintTitle.textContent = mission.title;
             hintContent.innerHTML = mission.hint;
             
-            // Position the popup near the marker
+            // Get marker position and dimensions
             const rect = markerElement.getBoundingClientRect();
-            const popupWidth = 250;
+            const popupWidth = 320;
+            const popupMaxHeight = window.innerHeight * 0.8;
             
-            let left = rect.left + window.scrollX + 40;
-            let top = rect.top + window.scrollY;
+            // Calculate position relative to viewport
+            let left = rect.right + 10; // Default: right of marker
+            let top = rect.top;
             
-            // Adjust if popup would go off screen
+            // Check if popup would go off right edge
             if (left + popupWidth > window.innerWidth) {
-                left = rect.left + window.scrollX - popupWidth - 10;
+                left = rect.left - popupWidth - 10; // Show on left instead
+            }
+            
+            // Check if popup would go off left edge
+            if (left < 10) {
+                // Center horizontally on mobile
+                left = (window.innerWidth - popupWidth) / 2;
+                // Position below marker on mobile
+                top = rect.bottom + 10;
+            }
+            
+            // Check if popup would go off bottom
+            if (top + popupMaxHeight > window.innerHeight) {
+                top = Math.max(10, window.innerHeight - popupMaxHeight - 10);
+            }
+            
+            // Check if popup would go off top
+            if (top < 10) {
+                top = 10;
             }
             
             hintPopup.style.left = left + 'px';
