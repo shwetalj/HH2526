@@ -183,7 +183,7 @@
             color: var(--bg-dark);
             font-size: 32px;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             z-index: 1;
         }
 
@@ -198,6 +198,7 @@
             white-space: nowrap;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             text-align: center;
+            z-index: 2;
         }
 
         .marker:hover {
@@ -206,6 +207,7 @@
 
         .marker:hover .marker-label {
             background: var(--gold-dark);
+            color: var(--bg-dark);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
         }
 
@@ -234,15 +236,34 @@
                 margin-bottom: 20px;
             }
 
+            .marker {
+                width: 90px;
+                height: auto;
+            }
+
             .marker-label {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             }
 
             .marker-name {
-                font-size: 8px;
-                padding: 1px 3px;
+                font-size: 9px;
+                padding: 2px 4px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                border-radius: 3px;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 2;
             }
 
             /* Hint popup styles moved to main CSS block */
@@ -286,35 +307,55 @@
 
             .marker {
                 transform: translate(-50%, calc(-50% + 5%));
+                /* Increase touch target area for better mobile accessibility */
+                width: 100px;
+                height: auto;
+                min-height: 50px;
             }
 
             .marker:hover {
-                transform: translate(-50%, calc(-50% + 5%)) scale(1.1);
+                transform: translate(-50%, calc(-50% + 5%)) scale(1.05);
             }
 
             .marker-label {
-                width: 25px;
-                height: 25px;
-                font-size: 10px;
+                width: 44px;  /* Minimum recommended touch target size */
+                height: 44px;
+                font-size: 14px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                border: 2px solid var(--gold-dark);
             }
 
             .marker-name {
-                font-size: 7px;
-                padding: 1px 2px;
-                position: relative !important;
-                left: auto !important;
-                right: auto !important;
-                top: auto !important;
-                transform: none !important;
-                margin-top: 5px !important;
+                font-size: 9px;
+                padding: 2px 4px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                z-index: 2;
+                border-radius: 3px;
+                white-space: nowrap;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             }
 
             .map-container {
-                padding: 10px;
+                padding: 5px;
+                margin: 0;
+            }
+            
+            .map-wrapper {
+                width: 100%;
+                max-width: none;
             }
 
             body {
-                padding: 10px;
+                padding: 5px;
             }
 
             .controls {
@@ -340,14 +381,28 @@
             }
 
             .marker-label {
-                width: 31px;
-                height: 31px;
+                width: 35px;
+                height: 35px;
                 font-size: 13px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             }
 
             .marker-name {
                 font-size: 8px;
-                padding: 1px 3px;
+                padding: 2px 3px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                border-radius: 3px;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 2;
             }
 
             .map-container {
@@ -1269,57 +1324,57 @@
                 
                 <!-- Mission Markers - Positioned over green squares -->
                 <!-- M01 -->
-                <div class="marker" style="left: 16%; top: 45%;" data-mission="01">
+                <div class="marker" style="left: 19%; top: 45%;" data-mission="01">
                     <span class="marker-label">01</span>
-                    <span class="marker-name">Surface Brushing</span>
+                    <span class="marker-name" style="position: absolute; right: 50%; top: 100%; transform: translate(5px, -5px);">Surface Brushing</span>
                 </div>
                 
                 <!-- M02 -->
                 <div class="marker" style="left: 19%; top: 17%;" data-mission="02">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Map Reveal</span>
                     <span class="marker-label">02</span>
-                    <span class="marker-name">Map Reveal</span>
                 </div>
                 
                 <!-- M03 -->
                 <div class="marker" style="left: 37.5%; top: 14%;" data-mission="03">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Mineshaft Explorer</span>
                     <span class="marker-label">03</span>
-                    <span class="marker-name" style="position: absolute; left: 85px; top: 50%; transform: translateY(-50%); margin-top: 0;">Mineshaft Explorer</span>
                 </div>
                 
                 <!-- M04 -->
-                <div class="marker" style="left: 34%; top: 25%;" data-mission="04">
+                <div class="marker" style="left: 34%; top: 23%;" data-mission="04">
                     <span class="marker-label">04</span>
-                    <span class="marker-name">Careful Recovery</span>
+                    <span class="marker-name" style="position: absolute; top: 52%; left: 80%; transform: translate(-50%, -50%);">Careful Recovery</span>
                 </div>
                 
                 <!-- M05 -->
                 <div class="marker" style="left: 73.5%; top: 14.9%;" data-mission="05">
                     <span class="marker-label">05</span>
-                    <span class="marker-name" style="position: absolute; right: 75px; top: 50%; transform: translateY(-50%); margin-top: 0;">Who Lived Here?</span>
+                    <span class="marker-name" style="position: absolute; right: 100%; margin-right: 5px; top: 50%; transform: translateY(-50%);">Who Lived Here?</span>
                 </div>
                 
                 <!-- M06 -->
                 <div class="marker" style="left: 79%; top: 26.7%;" data-mission="06">
                     <span class="marker-label">06</span>
-                    <span class="marker-name">Forge</span>
+                    <span class="marker-name" style="position: absolute; left: 100%; margin-left: 5px; top: 50%; transform: translateY(-50%);">Forge</span>
                 </div>
                 
                 <!-- M07 -->
                 <div class="marker" style="left: 84.2%; top: 15%;" data-mission="07">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Heavy Lifting</span>
                     <span class="marker-label">07</span>
-                    <span class="marker-name">Heavy Lifting</span>
                 </div>
                 
                 <!-- M08 -->
-                <div class="marker" style="left: 83.6%; top: 44.5%;" data-mission="08">
+                <div class="marker" style="left: 83.6%; top: 45.5%;" data-mission="08">
                     <span class="marker-label">08</span>
                     <span class="marker-name">Silo</span>
                 </div>
                 
                 <!-- M09 -->
                 <div class="marker" style="left: 65.7%; top: 47.7%;" data-mission="09">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">What's on Sale?</span>
                     <span class="marker-label">09</span>
-                    <span class="marker-name">What's on Sale?</span>
                 </div>
                 
                 <!-- M10 -->
@@ -1330,8 +1385,8 @@
                 
                 <!-- M11 -->
                 <div class="marker" style="left: 58.1%; top: 92.9%;" data-mission="11">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Angler Artifacts</span>
                     <span class="marker-label">11</span>
-                    <span class="marker-name">Angler Artifacts</span>
                 </div>
                 
                 <!-- M12 -->
@@ -1342,14 +1397,14 @@
                 
                 <!-- M13 -->
                 <div class="marker" style="left: 44.2%; top: 46.5%;" data-mission="13">
+                    <span class="marker-name" style="position: absolute; bottom: 98%; left: 50%; transform: translateX(-50%);">Statue Rebuild</span>
                     <span class="marker-label">13</span>
-                    <span class="marker-name">Statue Rebuild</span>
                 </div>
                 
                 <!-- M14 -->
                 <div class="marker" style="left: 38%; top: 50%;" data-mission="14">
                     <span class="marker-label">14</span>
-                    <span class="marker-name">Forum</span>
+                    <span class="marker-name" style="position: absolute; right: 100%; margin-right: 5px; top: 50%; transform: translateY(-50%);">Forum</span>
                 </div>
             </div>
             
@@ -1746,21 +1801,51 @@
             }, 300); // Increased delay to 300ms for better tolerance
         }
 
+        // Check if device is touch-enabled
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
         // Add hover events to each marker
         markers.forEach(marker => {
-            marker.addEventListener('mouseenter', function(e) {
-                cancelCloseTimeout(); // Cancel any pending close
-                const missionId = this.getAttribute('data-mission');
-                const mission = missionData[missionId];
+            if (isTouchDevice) {
+                // For touch devices, use click/tap
+                marker.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const missionId = this.getAttribute('data-mission');
+                    const mission = missionData[missionId];
+                    
+                    if (mission) {
+                        // Close any open popup first
+                        if (hintPopup.classList.contains('active')) {
+                            closeHint();
+                            // If clicking the same marker, just close
+                            if (hintPopup.dataset.currentMission === missionId) {
+                                delete hintPopup.dataset.currentMission;
+                                return;
+                            }
+                        }
+                        // Show the new popup
+                        hintPopup.dataset.currentMission = missionId;
+                        showHint(mission, this);
+                    }
+                });
+            } else {
+                // For non-touch devices, use hover
+                marker.addEventListener('mouseenter', function(e) {
+                    cancelCloseTimeout(); // Cancel any pending close
+                    const missionId = this.getAttribute('data-mission');
+                    const mission = missionData[missionId];
+                    
+                    if (mission) {
+                        showHint(mission, this);
+                    }
+                });
                 
-                if (mission) {
-                    showHint(mission, this);
-                }
-            });
-            
-            marker.addEventListener('mouseleave', function(e) {
-                scheduleClose(); // Schedule close with delay
-            });
+                marker.addEventListener('mouseleave', function(e) {
+                    scheduleClose(); // Schedule close with delay
+                });
+            }
         });
         
         // Keep hint open when hovering over it
@@ -1840,10 +1925,18 @@
             hintPopup.classList.remove('active');
         }
 
-        // Close popup when clicking outside
+        // Close popup when clicking outside (especially for touch devices)
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.marker') && !e.target.closest('.hint-popup')) {
-                closeHint();
+            // Only close if it's a touch device or clicking outside marker/popup
+            if (isTouchDevice) {
+                if (!e.target.closest('.marker') && !e.target.closest('.hint-popup')) {
+                    closeHint();
+                    delete hintPopup.dataset.currentMission;
+                }
+            } else {
+                if (!e.target.closest('.marker') && !e.target.closest('.hint-popup') && !e.target.closest('.mission-link')) {
+                    closeHint();
+                }
             }
         });
 
