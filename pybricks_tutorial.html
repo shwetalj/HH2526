@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="shared-styles.css">
     <style>
         /* Page-specific styles only - common styles are in shared-styles.css */
+        
+        /* Page-specific styles only - mobile menu styles are in shared-styles.css */
+        
         :root {
             --green: #22c55e;
             --green-light: #4ade80;
@@ -951,6 +954,11 @@
     </style>
 </head>
 <body>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
     <!-- Animated Background -->
     <div class="bg-animation"></div>
     
@@ -978,7 +986,7 @@
                 <li><a href="pybricks_tutorial.html" class="nav-link active">Tutorial</a></li>
                 <li><a href="pybricks_cheatsheet.html" class="nav-link">Cheat Sheet</a></li>
             </ul>
-            <button class="mobile-menu-toggle" id="mobileToggle">
+            <button class="mobile-menu-toggle" id="mobileToggle" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -2774,35 +2782,19 @@ debug_print(f"Motor angle: {motor.angle()}")</pre>
             });
         });
 
-        // Sidebar toggle for mobile
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            
-            // Change button icon
-            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '✕' : '☰';
-        }
+        // Sidebar toggle is handled by shared-scripts.js
+        // Filter button auto-close is also handled by shared-scripts.js
         
-        // Close sidebar when clicking a filter button on mobile
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    setTimeout(() => {
-                        const sidebar = document.getElementById('sidebar');
-                        const overlay = document.getElementById('sidebarOverlay');
-                        const toggleBtn = document.getElementById('sidebarToggle');
-                        
-                        sidebar.classList.remove('active');
-                        overlay.classList.remove('active');
-                        toggleBtn.innerHTML = '☰';
-                    }, 300);
-                }
-            });
-        });
+        // Add button icon change on toggle (extends shared functionality)
+        const originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function() {
+            originalToggleSidebar();
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            if (toggleBtn && sidebar) {
+                toggleBtn.innerHTML = sidebar.classList.contains('active') ? '✕' : '☰';
+            }
+        };
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -2819,16 +2811,8 @@ debug_print(f"Motor angle: {motor.angle()}")</pre>
             }, 30000);
         });
 
-        // Mobile menu toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (mobileToggle && navLinks) {
-            mobileToggle.addEventListener('click', () => {
-                mobileToggle.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
-        }
+        // Mobile menu is handled by shared-scripts.js
     </script>
+    <script src="shared-scripts.js"></script>
 </body>
 </html>

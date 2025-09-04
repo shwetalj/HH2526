@@ -132,7 +132,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 10000;
     backdrop-filter: blur(20px) saturate(180%);
     background: rgba(10, 10, 10, 0.85);
     border-bottom: 1px solid var(--border);
@@ -730,54 +730,74 @@ p, li {
         justify-content: center;
     }
 
+    /* Mobile Menu - Slide from Right */
     .nav-links {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(10, 10, 10, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        padding: 2rem;
-        gap: 1.5rem;
-        transform: translateY(-100%);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s;
-        overflow-y: auto;
-        z-index: 999;
+        display: none !important;
     }
 
     .nav-links.active {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
+        display: flex !important;
+        position: fixed !important;
+        top: 60px !important;
+        right: 0 !important;
+        left: auto !important;  /* Ensure it stays on the right */
+        width: 280px !important;
+        max-width: 85vw !important;
+        height: calc(100vh - 60px) !important;
+        background: rgba(10, 10, 10, 0.98) !important;
+        backdrop-filter: blur(20px) !important;
+        flex-direction: column !important;
+        padding: 1.5rem !important;
+        gap: 1rem !important;
+        overflow-y: auto !important;
+        z-index: 99999 !important;
+        list-style: none !important;
+        box-shadow: -2px 0 20px rgba(0,0,0,0.8) !important;
+        border-left: 1px solid rgba(255, 215, 0, 0.2) !important;
+        animation: slideInRight 0.3s ease !important;
+    }
+    
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    
+    /* Dark overlay when menu is open */
+    .nav-links.active::before {
+        content: '' !important;
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        right: 280px !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: -1 !important;
+    }
+    
+    .nav-links li {
+        width: 100%;
     }
     
     .nav-link {
-        padding: 1rem;
-        min-height: var(--touch-target);
-        width: 100%;
-        text-align: center;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: var(--fs-body);
+        display: block !important;
+        width: 100% !important;
+        padding: 1rem !important;
+        text-align: center !important;
+        background: rgba(255,255,255,0.02) !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        border-radius: 12px !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
     }
     
-    .nav-link:hover {
-        background: var(--card-hover);
-    }
-    
+    .nav-link:hover,
     .nav-link.active {
-        background: var(--gradient-gold);
-        color: var(--bg-dark);
-        font-weight: bold;
-        border-color: var(--gold);
+        background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+        color: #0a0a0a !important;
     }
     
     .logo {
