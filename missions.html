@@ -281,6 +281,34 @@
             }
         }
 
+        /* Portrait orientation on mobile devices - ensure consistent circles */
+        @media screen and (orientation: portrait) and (max-width: 768px) {
+            .marker-label {
+                border-radius: 50% !important;  /* Keep perfect circular shape */
+                width: 30px !important;
+                height: 30px !important;  /* Same width and height for perfect circle */
+                min-width: 30px !important;
+                min-height: 30px !important;
+                max-width: 30px !important;
+                max-height: 30px !important;
+                font-size: 11px !important;
+                aspect-ratio: 1/1 !important;  /* Force square aspect ratio */
+            }
+        }
+
+        /* Even smaller circles for very small screens */
+        @media screen and (orientation: portrait) and (max-width: 480px) {
+            .marker-label {
+                width: 28px !important;
+                height: 28px !important;
+                min-width: 28px !important;
+                min-height: 28px !important;
+                max-width: 28px !important;
+                max-height: 28px !important;
+                font-size: 10px !important;
+            }
+        }
+
         /* Extra small devices (phones in portrait) */
         @media (max-width: 480px) {
             .hint-popup {
@@ -1324,7 +1352,7 @@
                 
                 <!-- Mission Markers - Positioned over green squares -->
                 <!-- M01 -->
-                <div class="marker" style="left: 19%; top: 45%;" data-mission="01">
+                <div class="marker" style="left: 15%; top: 42%;" data-mission="01">
                     <span class="marker-label">01</span>
                     <span class="marker-name" style="position: absolute; right: 50%; top: 100%; transform: translate(5px, -5px);">Surface Brushing</span>
                 </div>
@@ -1404,7 +1432,7 @@
                 <!-- M14 -->
                 <div class="marker" style="left: 38%; top: 50%;" data-mission="14">
                     <span class="marker-label">14</span>
-                    <span class="marker-name" style="position: absolute; right: 100%; margin-right: 5px; top: 50%; transform: translateY(-50%);">Forum</span>
+                    <span class="marker-name" style="position: absolute; left: -50%; top: 80%;">Forum</span>
                 </div>
             </div>
             
