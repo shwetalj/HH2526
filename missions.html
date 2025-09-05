@@ -1522,14 +1522,11 @@
         .video-modal-content {
             padding: 10px;
             padding-top: 10px;
-            max-height: 85vh; /* Slightly increase modal height */
-            max-width: 90%; /* Also limit width */
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+            max-height: 90vh;
+            max-width: 90%;
+            overflow: visible; /* Changed from auto to visible */
+            display: block; /* Changed from flex to block */
             margin: auto;
-            top: 8vh; /* Push modal down from top */
-            position: relative;
         }
         
         #videoTitle {
@@ -1538,12 +1535,19 @@
         
         .video-container {
             padding-bottom: 56.25%; /* Standard 16:9 aspect ratio */
-            max-height: 50vh; /* Increase height a bit */
+            height: 0; /* Important for aspect ratio trick */
             position: relative;
-            margin-top: 10px; /* Some margin from top */
-            max-width: 80%; /* Limit width to prevent stretching */
-            margin-left: auto;
-            margin-right: auto;
+            margin-top: 10px;
+            width: 100%; /* Full width of container */
+            overflow: hidden; /* Hide overflow */
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
         
         .video-controls {
@@ -1572,19 +1576,21 @@
         }
         
         .video-close-btn {
-            width: 40px;
-            height: 40px;
-            top: 10px;
-            right: 10px;
-            line-height: 40px;
+            width: 44px;
+            height: 44px;
+            top: 5px;
+            right: 5px;
+            line-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0;
             background: #ffd700;
+            color: #1a1a1a;
             z-index: 2003;
             position: absolute;
             box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            font-size: 24px;
         }
     }
     
