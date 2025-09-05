@@ -1533,10 +1533,10 @@
         }
         
         .video-container {
-            padding-bottom: 35%; /* Much smaller for landscape to leave room for controls */
-            max-height: 50vh; /* Reduce max height further */
+            padding-bottom: 25%; /* Much smaller for landscape */
+            max-height: 40vh; /* Limit height significantly */
             position: relative;
-            margin-top: 20px; /* Push video down more */
+            margin-top: 10px; /* Some margin from top */
         }
         
         .video-controls {
@@ -1567,16 +1567,17 @@
         .video-close-btn {
             width: 40px;
             height: 40px;
-            top: 5px;
-            right: 5px;
+            top: 10px;
+            right: 10px;
             line-height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0;
-            background: rgba(255, 215, 0, 0.95);
+            background: #ffd700;
             z-index: 2003;
-            position: fixed;
+            position: absolute;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
     }
     
