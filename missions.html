@@ -1522,11 +1522,13 @@
         .video-modal-content {
             padding: 10px;
             padding-top: 10px;
-            max-height: 90vh;
+            max-height: 75vh; /* Reduced modal height */
             max-width: 90%;
-            overflow: visible; /* Changed from auto to visible */
-            display: block; /* Changed from flex to block */
+            overflow-y: auto; /* Allow scrolling if needed */
+            overflow-x: hidden;
+            display: block;
             margin: auto;
+            margin-top: 10vh; /* Push down from top */
         }
         
         #videoTitle {
@@ -1534,11 +1536,13 @@
         }
         
         .video-container {
-            padding-bottom: 56.25%; /* Standard 16:9 aspect ratio */
+            padding-bottom: 40%; /* Reduced height for landscape */
             height: 0; /* Important for aspect ratio trick */
             position: relative;
             margin-top: 10px;
-            width: 100%; /* Full width of container */
+            width: 70%; /* Reduce width to maintain proportions */
+            margin-left: auto;
+            margin-right: auto;
             overflow: hidden; /* Hide overflow */
         }
         
