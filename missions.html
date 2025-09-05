@@ -293,6 +293,12 @@
                 max-height: 30px !important;
                 font-size: 11px !important;
                 aspect-ratio: 1/1 !important;  /* Force square aspect ratio */
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                line-height: 1 !important;
+                text-align: center !important;
+                padding: 0 !important;
             }
         }
 
@@ -306,6 +312,12 @@
                 max-width: 28px !important;
                 max-height: 28px !important;
                 font-size: 10px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                line-height: 1 !important;
+                text-align: center !important;
+                padding: 0 !important;
             }
         }
 
@@ -420,6 +432,9 @@
                 align-items: center;
                 justify-content: center;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                line-height: 1;
+                text-align: center;
+                padding: 0;
             }
 
             .marker-name {
@@ -1466,15 +1481,37 @@
     @media (max-width: 768px) and (orientation: landscape) {
         .video-modal-content {
             padding: 10px;
+            max-height: 95vh;
+            overflow-y: auto;
         }
         
         #videoTitle {
             display: none;
         }
         
+        .video-container {
+            padding-bottom: 45%; /* Smaller aspect ratio for landscape */
+        }
+        
         .video-controls {
             padding: 8px;
-            background: rgba(26, 26, 26, 0.9);
+            background: rgba(26, 26, 26, 0.95);
+            position: relative;
+            z-index: 2002;
+            margin-top: 8px;
+        }
+        
+        .speed-control {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .speed-control select {
+            height: 36px;
+            min-width: 100px;
+            font-size: 14px;
         }
         
         .video-close-btn {
