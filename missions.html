@@ -1521,11 +1521,15 @@
     @media (max-width: 896px) and (orientation: landscape) {
         .video-modal-content {
             padding: 10px;
-            padding-top: 60px; /* More space at top for close button */
-            max-height: 90vh;
+            padding-top: 10px;
+            max-height: 80vh; /* Reduce modal height */
+            max-width: 90%; /* Also limit width */
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            margin: auto;
+            top: 10vh; /* Push modal down from top */
+            position: relative;
         }
         
         #videoTitle {
