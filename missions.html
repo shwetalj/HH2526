@@ -1521,6 +1521,7 @@
     @media (max-width: 896px) and (orientation: landscape) {
         .video-modal-content {
             padding: 10px;
+            padding-top: 50px; /* Add space at top for close button */
             max-height: 90vh;
             overflow-y: auto;
             display: flex;
@@ -1535,6 +1536,7 @@
             padding-bottom: 35%; /* Much smaller for landscape to leave room for controls */
             max-height: 60vh;
             position: relative;
+            margin-top: 10px; /* Push video down a bit */
         }
         
         .video-controls {
@@ -3233,6 +3235,25 @@
             if (controls.classList.contains('active')) {
                 initializePlaylist();
                 updatePlaylistUI();
+                // Add click listener to close when clicking outside
+                setTimeout(() => {
+                    document.addEventListener('click', closePlaylistOnOutsideClick);
+                }, 100);
+            } else {
+                // Remove click listener when closing
+                document.removeEventListener('click', closePlaylistOnOutsideClick);
+            }
+        }
+        
+        // Close playlist when clicking outside
+        function closePlaylistOnOutsideClick(event) {
+            const controls = document.getElementById('playlistControls');
+            const trigger = document.querySelector('.playlist-trigger');
+            
+            // Check if click is outside the playlist menu and not on the trigger button
+            if (!controls.contains(event.target) && !trigger.contains(event.target)) {
+                controls.classList.remove('active');
+                document.removeEventListener('click', closePlaylistOnOutsideClick);
             }
         }
         
