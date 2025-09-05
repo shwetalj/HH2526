@@ -1537,10 +1537,13 @@
         }
         
         .video-container {
-            padding-bottom: 30%; /* Slightly bigger video */
+            padding-bottom: 56.25%; /* Standard 16:9 aspect ratio */
             max-height: 50vh; /* Increase height a bit */
             position: relative;
             margin-top: 10px; /* Some margin from top */
+            max-width: 80%; /* Limit width to prevent stretching */
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .video-controls {
