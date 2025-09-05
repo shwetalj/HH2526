@@ -1233,7 +1233,9 @@
         flex: 1;
         color: #ffffff;
         font-size: 14px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8),
+                     1px 1px 2px rgba(0,0,0,0.9);
+        font-weight: 500;
     }
     
     .playlist-item.active .playlist-item-name {
@@ -1293,6 +1295,7 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         z-index: 999;
         transition: all 0.3s ease;
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
     }
     
     .playlist-trigger:hover {
@@ -1310,6 +1313,26 @@
             right: 10px;
             bottom: 10px;
             max-width: 90%;
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+        }
+        
+        .playlist-items {
+            background: #2a2a2a;
+        }
+        
+        .playlist-item {
+            background: linear-gradient(145deg, #3d3d3d, #303030);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .playlist-item-name {
+            color: #ffd700;
+            font-weight: 500;
+        }
+        
+        .playlist-header h4 {
+            color: #ffed4e;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
         }
         
         .custom-end-screen h3 {
@@ -1568,10 +1591,34 @@
             left: 0;
             border-radius: 20px 20px 0 0;
             padding: 20px;
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
         }
         
         .playlist-items {
             max-height: calc(70vh - 150px);
+            background: #2a2a2a;
+        }
+        
+        .playlist-item {
+            background: linear-gradient(145deg, #404040, #333333);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .playlist-item:hover {
+            background: linear-gradient(145deg, #4a4a4a, #3a3a3a);
+        }
+        
+        .playlist-item-name {
+            color: #ffd700;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,1);
+        }
+        
+        .playlist-item-number {
+            color: #ffed4e;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
         
         .toast-container {
