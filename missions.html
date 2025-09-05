@@ -658,7 +658,12 @@
             height: 30px;
             cursor: pointer;
             font-size: 20px;
-            line-height: 1;
+            line-height: 30px;
+            text-align: center;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
@@ -1298,8 +1303,10 @@
     }
     
     .playlist-trigger:hover {
-        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-        background: linear-gradient(135deg, #ffed4e, #ffd700);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        color: #ffd700;
+        border-color: #ffed4e;
     }
     
     @media (max-width: 768px) {
@@ -1469,6 +1476,11 @@
             z-index: 2002;
             top: 15px;
             right: 15px;
+            line-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
         }
         
         #videoTitle {
@@ -1506,11 +1518,13 @@
     }
     
     /* Landscape Mode Optimization */
-    @media (max-width: 768px) and (orientation: landscape) {
+    @media (max-width: 896px) and (orientation: landscape) {
         .video-modal-content {
             padding: 10px;
-            max-height: 95vh;
+            max-height: 90vh;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         #videoTitle {
@@ -1518,7 +1532,9 @@
         }
         
         .video-container {
-            padding-bottom: 45%; /* Smaller aspect ratio for landscape */
+            padding-bottom: 35%; /* Much smaller for landscape to leave room for controls */
+            max-height: 60vh;
+            position: relative;
         }
         
         .video-controls {
@@ -1527,6 +1543,10 @@
             position: relative;
             z-index: 2002;
             margin-top: 8px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .speed-control {
@@ -1543,10 +1563,18 @@
         }
         
         .video-close-btn {
-            width: 36px;
-            height: 36px;
-            top: 10px;
-            right: 10px;
+            width: 40px;
+            height: 40px;
+            top: 5px;
+            right: 5px;
+            line-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: rgba(255, 215, 0, 0.95);
+            z-index: 2003;
+            position: fixed;
         }
     }
     
@@ -1573,8 +1601,9 @@
         }
         
         .playlist-trigger:hover {
-            background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
             color: #ffed4e;
+            border-color: #ffed4e;
         }
         
         .playlist-controls button {
