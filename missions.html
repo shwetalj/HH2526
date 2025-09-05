@@ -5,7 +5,1303 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission Guide - History Hackers #71494</title>
     <link rel="stylesheet" href="shared-styles.css">
-    <link rel="stylesheet" href="missions-styles.css">
+    <style>
+        /* Page-specific styles only - common styles are in shared-styles.css */
+        
+        /* Page-specific styles only - mobile menu styles are in shared-styles.css */
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 3.5em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ff6b00, #ffd700);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 3s ease-in-out infinite;
+            font-weight: 900;
+            position: relative;
+            filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.6));
+        }
+        
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 1.2em;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Container styles in shared-styles.css */
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .map-container {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .map-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Grid overlay for positioning */
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        .grid-overlay.show {
+            display: block;
+        }
+
+        .grid-line-h {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: rgba(0, 255, 0, 0.3);
+            left: 0;
+        }
+
+        .grid-line-v {
+            position: absolute;
+            height: 100%;
+            width: 1px;
+            background: rgba(0, 255, 0, 0.3);
+            top: 0;
+        }
+
+        .grid-label {
+            position: absolute;
+            color: lime;
+            font-size: 10px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .controls {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .toggle-grid {
+            background: var(--gold);
+            color: var(--bg-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .toggle-grid:hover {
+            background: var(--gold-dark);
+        }
+
+        .coord-display {
+            display: inline-block;
+            background: #333;
+            color: #0f0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .marker {
+            position: absolute;
+            width: 80px;
+            height: auto;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+        }
+
+        .marker-label {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            color: var(--bg-dark);
+            font-size: 32px;
+            font-weight: bold;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            z-index: 1;
+        }
+
+        .marker-name {
+            margin-top: 5px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 2;
+        }
+
+        .marker:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .marker:hover .marker-label {
+            background: var(--gold-dark);
+            color: var(--bg-dark);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+            }
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 2px;
+            }
+            .subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+                margin-bottom: 20px;
+            }
+
+            .marker {
+                width: 90px;
+                height: auto;
+            }
+
+            .marker-label {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            }
+
+            .marker-name {
+                font-size: 9px;
+                padding: 2px 4px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                border-radius: 3px;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 2;
+            }
+
+            /* Hint popup styles moved to main CSS block */
+
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+                }
+                70% {
+                    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+                }
+            }
+        }
+
+        /* Portrait orientation on mobile devices - ensure consistent circles */
+        @media screen and (orientation: portrait) and (max-width: 768px) {
+            .marker-label {
+                border-radius: 50% !important;  /* Keep perfect circular shape */
+                width: 30px !important;
+                height: 30px !important;  /* Same width and height for perfect circle */
+                min-width: 30px !important;
+                min-height: 30px !important;
+                max-width: 30px !important;
+                max-height: 30px !important;
+                font-size: 11px !important;
+                aspect-ratio: 1/1 !important;  /* Force square aspect ratio */
+            }
+        }
+
+        /* Even smaller circles for very small screens */
+        @media screen and (orientation: portrait) and (max-width: 480px) {
+            .marker-label {
+                width: 28px !important;
+                height: 28px !important;
+                min-width: 28px !important;
+                min-height: 28px !important;
+                max-width: 28px !important;
+                max-height: 28px !important;
+                font-size: 10px !important;
+            }
+        }
+
+        /* Extra small devices (phones in portrait) */
+        @media (max-width: 480px) {
+            .hint-popup {
+                width: 90vw;
+                max-width: 300px;
+                padding: 10px;
+                max-height: 60vh;
+            }
+            
+            .hint-popup h3 {
+                font-size: 0.95rem;
+            }
+            
+            .hint-popup p {
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            .marker {
+                transform: translate(-50%, calc(-50% + 5%));
+                /* Increase touch target area for better mobile accessibility */
+                width: 100px;
+                height: auto;
+                min-height: 50px;
+            }
+
+            .marker:hover {
+                transform: translate(-50%, calc(-50% + 5%)) scale(1.05);
+            }
+
+            .marker-label {
+                width: 44px;  /* Minimum recommended touch target size */
+                height: 44px;
+                font-size: 14px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                border: 2px solid var(--gold-dark);
+            }
+
+            .marker-name {
+                font-size: 9px;
+                padding: 2px 4px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                z-index: 2;
+                border-radius: 3px;
+                white-space: nowrap;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+
+            .map-container {
+                padding: 5px;
+                margin: 0;
+            }
+            
+            .map-wrapper {
+                width: 100%;
+                max-width: none;
+            }
+
+            body {
+                padding: 5px;
+            }
+
+            .controls {
+                margin: 10px 0;
+            }
+
+            .toggle-grid {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .coord-display {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+
+        /* Mobile landscape mode */
+        @media (max-width: 896px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+
+            .marker-label {
+                width: 35px;
+                height: 35px;
+                font-size: 13px;
+                font-weight: bold;
+                background: var(--gold);
+                color: var(--bg-dark);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            }
+
+            .marker-name {
+                font-size: 8px;
+                padding: 2px 3px;
+                background: rgba(255, 255, 255, 0.95);
+                color: #333;
+                border-radius: 3px;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                z-index: 2;
+            }
+
+            .map-container {
+                padding: 5px;
+            }
+
+            body {
+                padding: 5px;
+            }
+        }
+
+        /* Mission Table Styles */
+        .mission-table-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .mission-table-container h2 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5),
+                         0 0 20px rgba(255, 215, 0, 0.3);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .mission-table {
+            width: 100%;
+            background: var(--card);
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 
+                        0 0 30px rgba(255, 215, 0, 0.3);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .mission-table thead {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            color: var(--bg-dark);
+        }
+
+        .mission-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: 3px solid #d4af37;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+        }
+        
+        .mission-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .mission-table th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .mission-table th:nth-child(1) {
+            width: 8%;
+        }
+
+        .mission-table th:nth-child(2) {
+            width: 18%;
+        }
+
+        .mission-table th:nth-child(3) {
+            width: 35%;
+        }
+
+        .mission-table th:nth-child(4) {
+            width: 25%;
+        }
+
+        .mission-table th:nth-child(5) {
+            width: 14%;
+        }
+
+        .mission-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .mission-table tbody tr:hover {
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+
+        .mission-table tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .mission-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            color: #ffffff;
+        }
+
+        .mission-number {
+            font-weight: bold;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .mission-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .mission-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mission-link:hover {
+            color: var(--gold-dark);
+            text-decoration: underline;
+        }
+
+        .mission-desc {
+            color: #ffffff;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .mission-points {
+            font-weight: 600;
+            color: #ffffff;
+            text-align: left;
+            line-height: 1.5;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .mission-video {
+            text-align: center;
+        }
+
+        .video-link {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--gradient-gold);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-link:hover {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .video-placeholder {
+            color: #999;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* Video Modal Styles */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .video-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal-content {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .video-close-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: var(--gold);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .video-close-btn:hover {
+            background: var(--gold-dark);
+            transform: scale(1.1);
+        }
+
+        #videoTitle {
+            color: var(--gold);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Responsive table for tablets */
+        @media (max-width: 768px) {
+            .mission-table-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .mission-table th {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .mission-table td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+
+            .mission-table th:nth-child(3),
+            .mission-table td:nth-child(3) {
+                display: none;
+            }
+        }
+
+        /* Enhanced Mobile Card Layout */
+        @media (max-width: 768px) {
+            .mission-table-container {
+                padding: 0 10px;
+                margin: 20px auto;
+            }
+
+            .mission-table {
+                display: block;
+                width: 100%;
+            }
+
+            .mission-table thead {
+                display: none;
+            }
+
+            .mission-table tbody {
+                display: block;
+            }
+
+            .mission-table tbody tr {
+                display: block;
+                margin-bottom: 1.5rem;
+                background: var(--card, rgba(255,255,255,0.02));
+                border: 1px solid var(--border, rgba(255,255,255,0.08));
+                border-left: 3px solid var(--gold);
+                border-radius: 12px;
+                padding: 1rem;
+                position: relative;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            }
+
+            .mission-table tbody tr:hover {
+                background: var(--card-hover, rgba(255,255,255,0.04));
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+            }
+
+            .mission-table td {
+                display: block;
+                border: none;
+                padding: 0.5rem 0;
+                text-align: left;
+            }
+
+            /* Mission Number and Name as Header */
+            .mission-table td.mission-number {
+                display: inline-block;
+                color: var(--gold);
+                font-weight: 900;
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
+            }
+
+            .mission-table td.mission-name {
+                display: inline-block;
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: #ffffff;
+            }
+
+            /* Description */
+            .mission-table td.mission-desc {
+                color: var(--text-muted, #999999);
+                margin-top: 0.5rem;
+                line-height: 1.5;
+                font-size: 0.95rem;
+            }
+
+            /* Points */
+            .mission-table td.mission-points {
+                background: rgba(255, 215, 0, 0.05);
+                border-radius: 8px;
+                padding: 0.75rem;
+                margin: 0.75rem 0;
+                border-left: 2px solid var(--gold);
+                font-size: 0.9rem;
+            }
+
+            .mission-table td.mission-points::before {
+                content: "📊 Points: ";
+                color: var(--gold);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            /* Video Button */
+            .mission-table td.mission-video {
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+
+            .mission-table td.mission-video .video-link {
+                width: 100%;
+                min-height: 44px;
+                background: var(--gradient-gold, linear-gradient(135deg, #ffd700, #ffed4e));
+                color: var(--bg-dark, #0a0a0a);
+                border: none;
+                border-radius: 8px;
+                padding: 0.75rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .mission-table td.mission-video .video-link:hover {
+                transform: scale(1.02);
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .mission-table tbody tr {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+            }
+
+            .mission-table td.mission-number {
+                font-size: 1rem;
+            }
+
+            .mission-table td.mission-name {
+                font-size: 0.95rem;
+            }
+
+            .mission-table td.mission-desc {
+                font-size: 0.85rem;
+            }
+
+            .mission-table td.mission-points {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+        }
+
+        .hint-popup {
+            position: fixed;
+            background: white;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 15px;
+            width: 320px;
+            max-height: 80vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .hint-popup img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            display: block;
+        }
+
+        .hint-popup.active {
+            display: block;
+        }
+
+        .hint-popup h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .hint-popup p {
+            color: #333;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .hint-popup .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .hint-popup .close-btn:hover {
+            color: var(--gold);
+        }
+        
+        /* Responsive styles for hint popup */
+        @media (max-width: 768px) {
+            .hint-popup {
+                width: 280px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .legend h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 5px 15px 5px 0;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .legend-marker {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffd700;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            vertical-align: middle;
+            margin-right: 5px;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .marker {
+                width: 25px;
+                height: 25px;
+            }
+            
+            /* Hint popup styles handled in main CSS block */
+        }
+    /* Animated Background */
+    .bg-animation {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        opacity: 0.3;
+    }
+
+    .bg-animation::before,
+    .bg-animation::after {
+        content: '';
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        filter: blur(100px);
+    }
+
+    .bg-animation::before {
+        background: var(--gold);
+        top: -200px;
+        right: -200px;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .bg-animation::after {
+        background: var(--gold-dark);
+        bottom: -200px;
+        left: -200px;
+        animation: float 25s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -30px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+    
+    /* Custom End Screen Styles */
+    .custom-end-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            rgba(26, 26, 26, 0.95) 0%, 
+            rgba(0, 0, 0, 0.98) 100%);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .custom-end-screen.active {
+        display: flex;
+    }
+    
+    .end-screen-content {
+        text-align: center;
+        color: white;
+        padding: 20px;
+        max-width: 600px;
+    }
+    
+    .end-screen-content h3 {
+        color: var(--gold);
+        font-size: 2rem;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .mission-score {
+        font-size: 1.2rem;
+        color: var(--gold-dark);
+        margin-bottom: 20px;
+    }
+    
+    .next-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .next-options button {
+        padding: 12px 20px;
+        background: var(--gradient-gold);
+        color: var(--bg-dark);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .next-options button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+    
+    /* Video Controls Styles */
+    .video-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 8px;
+    }
+    
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .speed-control label {
+        color: var(--gold);
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .speed-control select {
+        background: #1a1a1a;
+        color: #ffd700;
+        border: 1px solid #ffd700;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        min-width: 80px;
+    }
+    
+    .speed-control select option {
+        background: #1a1a1a;
+        color: #ffd700;
+        padding: 5px;
+    }
+    
+    /* Playlist Controls - Dark Metallic Theme */
+    .playlist-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+        border: 2px solid #ffd700;
+        border-radius: 15px;
+        padding: 15px;
+        max-width: 350px;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8), 
+                    inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    
+    .playlist-controls.active {
+        display: block;
+    }
+    
+    .playlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .playlist-header h4 {
+        color: #ffd700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+    
+    .playlist-close {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .playlist-close:hover {
+        color: #ffd700;
+    }
+    
+    .playlist-items {
+        max-height: 300px;
+        overflow-y: auto;
+        background: #1f1f1f;
+        border-radius: 8px;
+        padding: 8px;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+    }
+    
+    /* Custom scrollbar for playlist */
+    .playlist-items::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .playlist-items::-webkit-scrollbar-track {
+        background: #1a1a1a;
+        border-radius: 4px;
+    }
+    
+    .playlist-items::-webkit-scrollbar-thumb {
+        background: #ffd700;
+        border-radius: 4px;
+    }
+    
+    .playlist-items::-webkit-scrollbar-thumb:hover {
+        background: #ffed4e;
+    }
+    
+    .playlist-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        background: linear-gradient(145deg, #2d2d2d, #252525);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .playlist-item:hover {
+        background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+        border-color: rgba(255, 215, 0, 0.5);
+        transform: translateX(5px);
+        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+    }
+    
+    .playlist-item.active {
+        background: linear-gradient(145deg, #3d3d3d, #2d2d2d);
+        border-left: 3px solid #ffd700;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    
+    .playlist-item.completed {
+        background: linear-gradient(145deg, #222, #1a1a1a);
+        opacity: 0.7;
+    }
+    
+    .playlist-item-number {
+        width: 40px;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        font-size: 16px;
+    }
+    
+    .playlist-item-name {
+        flex: 1;
+        color: #ffffff;
+        font-size: 14px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .playlist-item.active .playlist-item-name {
+        color: #ffd700;
+    }
+    
+    .playlist-item-status {
+        width: 20px;
+        color: #4CAF50;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .playlist-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .playlist-actions button {
+        flex: 1;
+        padding: 10px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: #1a1a1a;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        text-shadow: none;
+    }
+    
+    .playlist-actions button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(135deg, #ffed4e, #ffd700);
+    }
+    
+    .playlist-actions button:active {
+        transform: scale(0.98);
+    }
+    
+    .playlist-trigger {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: #1a1a1a;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+    
+    .playlist-trigger:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(135deg, #ffed4e, #ffd700);
+    }
+    
+    @media (max-width: 768px) {
+        .next-options {
+            grid-template-columns: 1fr;
+        }
+        
+        .playlist-controls {
+            right: 10px;
+            bottom: 10px;
+            max-width: 90%;
+        }
+        
+        .custom-end-screen h3 {
+            font-size: 1.5rem;
+        }
+    }
+    </style>
 </head>
 <body>
     <div class="bg-animation"></div>
@@ -54,10 +1350,90 @@
                 <!-- Grid Overlay -->
                 <div class="grid-overlay" id="gridOverlay"></div>
                 
-                <!-- Mission Markers Container -->
-                <div class="markers-container" id="markers-container">
-                    <!-- Markers will be dynamically generated -->
-                </div><!-- End markers-container -->
+                <!-- Mission Markers - Positioned over green squares -->
+                <!-- M01 -->
+                <div class="marker" style="left: 15%; top: 42%;" data-mission="01">
+                    <span class="marker-label">01</span>
+                    <span class="marker-name" style="position: absolute; right: 50%; top: 100%; transform: translate(5px, -5px);">Surface Brushing</span>
+                </div>
+                
+                <!-- M02 -->
+                <div class="marker" style="left: 19%; top: 17%;" data-mission="02">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Map Reveal</span>
+                    <span class="marker-label">02</span>
+                </div>
+                
+                <!-- M03 -->
+                <div class="marker" style="left: 37.5%; top: 14%;" data-mission="03">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Mineshaft Explorer</span>
+                    <span class="marker-label">03</span>
+                </div>
+                
+                <!-- M04 -->
+                <div class="marker" style="left: 34%; top: 23%;" data-mission="04">
+                    <span class="marker-label">04</span>
+                    <span class="marker-name" style="position: absolute; top: 52%; left: 80%; transform: translate(-50%, -50%);">Careful Recovery</span>
+                </div>
+                
+                <!-- M05 -->
+                <div class="marker" style="left: 73.5%; top: 14.9%;" data-mission="05">
+                    <span class="marker-label">05</span>
+                    <span class="marker-name" style="position: absolute; right: 100%; margin-right: 5px; top: 50%; transform: translateY(-50%);">Who Lived Here?</span>
+                </div>
+                
+                <!-- M06 -->
+                <div class="marker" style="left: 79%; top: 26.7%;" data-mission="06">
+                    <span class="marker-label">06</span>
+                    <span class="marker-name" style="position: absolute; left: 100%; margin-left: 5px; top: 50%; transform: translateY(-50%);">Forge</span>
+                </div>
+                
+                <!-- M07 -->
+                <div class="marker" style="left: 84.2%; top: 15%;" data-mission="07">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Heavy Lifting</span>
+                    <span class="marker-label">07</span>
+                </div>
+                
+                <!-- M08 -->
+                <div class="marker" style="left: 83.6%; top: 45.5%;" data-mission="08">
+                    <span class="marker-label">08</span>
+                    <span class="marker-name">Silo</span>
+                </div>
+                
+                <!-- M09 -->
+                <div class="marker" style="left: 65.7%; top: 47.7%;" data-mission="09">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">What's on Sale?</span>
+                    <span class="marker-label">09</span>
+                </div>
+                
+                <!-- M10 -->
+                <div class="marker" style="left: 58.2%; top: 51.8%;" data-mission="10">
+                    <span class="marker-label">10</span>
+                    <span class="marker-name">Tip the Scales</span>
+                </div>
+                
+                <!-- M11 -->
+                <div class="marker" style="left: 58.1%; top: 92.9%;" data-mission="11">
+                    <span class="marker-name" style="position: absolute; bottom: 100%; margin-bottom: 5px; left: 50%; transform: translateX(-50%);">Angler Artifacts</span>
+                    <span class="marker-label">11</span>
+                </div>
+                
+                <!-- M12 -->
+                <div class="marker" style="left: 46.8%; top: 93%;" data-mission="12">
+                    <span class="marker-label">12</span>
+                    <span class="marker-name">Salvage Operation</span>
+                </div>
+                
+                <!-- M13 -->
+                <div class="marker" style="left: 44.2%; top: 46.5%;" data-mission="13">
+                    <span class="marker-name" style="position: absolute; bottom: 98%; left: 50%; transform: translateX(-50%);">Statue Rebuild</span>
+                    <span class="marker-label">13</span>
+                </div>
+                
+                <!-- M14 -->
+                <div class="marker" style="left: 38%; top: 50%;" data-mission="14">
+                    <span class="marker-label">14</span>
+                    <span class="marker-name" style="position: absolute; left: -50%; top: 80%;">Forum</span>
+                </div>
             </div>
             
             <div class="legend">
@@ -83,8 +1459,119 @@
                     <th>Video</th>
                 </tr>
             </thead>
-            <tbody id="mission-table-body">
-                <!-- Mission rows will be dynamically generated -->
+            <tbody>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="01">M01</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="01">Surface Brushing</a></td>
+                    <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
+                    <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('OUHg0bMwHtM', 'M01: Surface Brushing', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="02">M02</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="02">Map Reveal</a></td>
+                    <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
+                    <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('b-7zkBkgNUw', 'M02: Map Reveal', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="03">M03</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="03">Mineshaft Explorer</a></td>
+                    <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
+                    <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('y6RxJpgBOQM', 'M03: Mineshaft Explorer', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="04">M04</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="04">Careful Recovery</a></td>
+                    <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
+                    <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('MX2WMQ4vN0g', 'M04: Careful Recovery', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="05">M05</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="05">Who Lived Here?</a></td>
+                    <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
+                    <td class="mission-points">• Structure floor completely upright: 30 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('JmYsPn4cig8', 'M05: Who Lived Here?', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="06">M06</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="06">Forge</a></td>
+                    <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
+                    <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('szFSKDQCFFw', 'M06: Forge', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="07">M07</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="07">Heavy Lifting</a></td>
+                    <td class="mission-desc">Move the millstone that was used to process grain.</td>
+                    <td class="mission-points">• Millstone not touching base: 30 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('6xcrIo-2WJ8', 'M07: Heavy Lifting', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="08">M08</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="08">Silo</a></td>
+                    <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
+                    <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('MbvDiuorKsc', 'M08: Silo', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="09">M09</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="09">What's on Sale?</a></td>
+                    <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
+                    <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('yymtNugu4V4', 'M09: What\'s on Sale?', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="10">M10</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="10">Tip the Scales</a></td>
+                    <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
+                    <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('RX8MMw_MJ9g', 'M10: Tip the Scales', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="11">M11</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="11">Angler Artifacts</a></td>
+                    <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
+                    <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('qVrT1DH4Zh8', 'M11: Angler Artifacts', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="12">M12</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="12">Salvage Operation</a></td>
+                    <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
+                    <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('hFzNIv1NBzg', 'M12: Salvage Operation', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="13">M13</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="13">Statue Rebuild</a></td>
+                    <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
+                    <td class="mission-points">• Statue completely raised: 30 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('1yyh08hg398', 'M13: Statue Rebuild', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="14">M14</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="14">Forum</a></td>
+                    <td class="mission-desc">Deliver artifacts to the forum and choose significant items to display.</td>
+                    <td class="mission-points">• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('Pq9d-23TMos', 'M14: Forum', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="15">M15</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="15">Site Marking</a></td>
+                    <td class="mission-desc">Place flags to mark locations for further study.</td>
+                    <td class="mission-points">• Each site with flag: 10 pts</td>
+                    <td class="mission-video"><button class="video-link" onclick="playVideo('d6cNKGmYxh4', 'M15: Site Marking', 6, 126)">Watch Video 🎬</button></td>
+                </tr>
+                <tr>
+                    <td class="mission-number"><a href="#" class="mission-link" data-mission="PT">PT</a></td>
+                    <td class="mission-name"><a href="#" class="mission-link" data-mission="PT">Precision Tokens</a></td>
+                    <td class="mission-desc">Start with 6 tokens. Lose one for each robot interruption outside home.</td>
+                    <td class="mission-points">1 token: 10 pts<br>2 tokens: 15 pts<br>3 tokens: 25 pts<br>4 tokens: 35 pts<br>5-6 tokens: 50 pts</td>
+                    <td class="mission-video"></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -136,268 +1623,898 @@
     <div class="playlist-controls" id="playlistControls">
         <div class="playlist-header">
             <h4>Mission Playlist</h4>
-            <button class="playlist-close" id="playlistCloseBtn">&times;</button>
+            <button class="playlist-close" onclick="togglePlaylist()">&times;</button>
         </div>
         <div class="playlist-items" id="playlistItems">
             <!-- Playlist items will be dynamically added -->
         </div>
         <div class="playlist-actions">
-            <button id="playAllBtn">▶ Play All</button>
-            <button id="shuffleBtn">🔀 Shuffle</button>
-            <button id="clearBtn">🗑️ Clear</button>
+            <button onclick="playAllMissions()">▶ Play All</button>
+            <button onclick="shufflePlaylist()">🔀 Shuffle</button>
+            <button onclick="clearPlaylist()">🗑️ Clear</button>
         </div>
     </div>
     
     <!-- Playlist Trigger Button -->
-    <button class="playlist-trigger" id="playlistTrigger">📋 Mission Playlist</button>
+    <button class="playlist-trigger" onclick="togglePlaylist()">📋 Mission Playlist</button>
     </div>
 
-        <script src="mission_data.js"></script>
     <script>
-        // --- Globals ---
-        let player;
-        let currentMissionIndex = -1;
-        let playlist = [];
-        let playlistMode = false;
-
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            generateMarkers();
-            generateTable();
-            initializeLogic();
-        });
-
-        window.onYouTubeIframeAPIReady = function() {};
-
-        // --- DOM Generation ---
-        function generateMarkers() {
-            const container = document.getElementById('markers-container');
-            if (!container) return;
-            const fragment = document.createDocumentFragment();
-            missionData.forEach(mission => {
-                if (!mission.position || mission.position.x === 0) return;
-                const marker = document.createElement('div');
-                marker.className = 'marker';
-                marker.style.setProperty('--x', mission.position.x + '%');
-                marker.style.setProperty('--y', mission.position.y + '%');
-                marker.dataset.mission = mission.id;
-                marker.setAttribute('role', 'button');
-                marker.setAttribute('aria-label', `Mission ${mission.id}: ${mission.name}`);
-                marker.innerHTML = `
-                    <div class="marker-content">
-                        <span class="marker-label">${mission.id}</span>
-                        <span class="marker-name">${mission.name}</span>
-                    </div>
-                `;
-                fragment.appendChild(marker);
-            });
-            container.appendChild(fragment);
-        }
-
-        function generateTable() {
-            const tbody = document.getElementById('mission-table-body');
-            if (!tbody) return;
-            const fragment = document.createDocumentFragment();
-            missionData.forEach(mission => {
-                const row = document.createElement('tr');
-                const videoButton = mission.video_id ? `<button class="video-link" data-video-id="${mission.video_id}">Watch Video 🎬</button>` : '';
-                row.innerHTML = `
-                    <td class="mission-number"><a href="#" class="mission-link" data-mission="${mission.id}">M${mission.id}</a></td>
-                    <td class="mission-name"><a href="#" class="mission-link" data-mission="${mission.id}">${mission.name}</a></td>
-                    <td class="mission-desc">${mission.description}</td>
-                    <td class="mission-points">${mission.points}</td>
-                    <td class="mission-video">${videoButton}</td>
-                `;
-                fragment.appendChild(row);
-            });
-            tbody.appendChild(fragment);
+        // Load YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        // YouTube player variable
+        var player;
+        var playerReady = false;
+        
+        // This function creates an <iframe> (and YouTube player) after the API code downloads
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API ready');
+            playerReady = true;
         }
         
+        // Create grid overlay
         function createGrid() {
             const gridOverlay = document.getElementById('gridOverlay');
-            if (!gridOverlay) return;
-            const fragment = document.createDocumentFragment();
+            gridOverlay.innerHTML = '';
+            
+            // Create horizontal lines every 10%
             for (let i = 0; i <= 100; i += 10) {
-                const lineH = document.createElement('div');
-                lineH.className = 'grid-line-h';
-                lineH.style.top = i + '%';
-                fragment.appendChild(lineH);
-
-                const lineV = document.createElement('div');
-                lineV.className = 'grid-line-v';
-                lineV.style.left = i + '%';
-                fragment.appendChild(lineV);
+                const line = document.createElement('div');
+                line.className = 'grid-line-h';
+                line.style.top = i + '%';
+                
+                const label = document.createElement('div');
+                label.className = 'grid-label';
+                label.style.top = i + '%';
+                label.style.left = '5px';
+                label.textContent = i + '%';
+                
+                gridOverlay.appendChild(line);
+                gridOverlay.appendChild(label);
             }
-            gridOverlay.appendChild(fragment);
+            
+            // Create vertical lines every 10%
+            for (let i = 0; i <= 100; i += 10) {
+                const line = document.createElement('div');
+                line.className = 'grid-line-v';
+                line.style.left = i + '%';
+                
+                const label = document.createElement('div');
+                label.className = 'grid-label';
+                label.style.left = i + '%';
+                label.style.top = '5px';
+                label.textContent = i + '%';
+                
+                gridOverlay.appendChild(line);
+                gridOverlay.appendChild(label);
+            }
+        }
+        
+        // Toggle grid visibility
+        function toggleGrid() {
+            const gridOverlay = document.getElementById('gridOverlay');
+            gridOverlay.classList.toggle('show');
+        }
+        
+        // Track mouse coordinates
+        document.addEventListener('DOMContentLoaded', function() {
+            createGrid();
+            
+            const mapWrapper = document.getElementById('mapWrapper');
+            const xCoord = document.getElementById('xCoord');
+            const yCoord = document.getElementById('yCoord');
+            
+            mapWrapper.addEventListener('mousemove', function(e) {
+                const rect = mapWrapper.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+                const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+                
+                xCoord.textContent = x;
+                yCoord.textContent = y;
+            });
+            
+            // Click to log coordinates
+            mapWrapper.addEventListener('click', function(e) {
+                if (e.target.closest('.marker')) return;
+                
+                const rect = mapWrapper.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+                const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+                
+                console.log(`Clicked at: X: ${x}%, Y: ${y}%`);
+            });
+        });
+        
+        // Mission data with scoring information
+        const missionData = {
+            '01': {
+                title: 'M01: Surface Brushing',
+                hint: '<picture><source srcset="mission_cards/M01_Surface_Brushing.webp" type="image/webp"><img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '02': {
+                title: 'M02: Map Reveal',
+                hint: '<picture><source srcset="mission_cards/M02_Map_Reward.webp" type="image/webp"><img src="mission_cards/M02_Map_Reward.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '03': {
+                title: 'M03: Mineshaft Explorer',
+                hint: '<picture><source srcset="mission_cards/M03_Mineshaft_Explorers.webp" type="image/webp"><img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '04': {
+                title: 'M04: Careful Recovery',
+                hint: '<picture><source srcset="mission_cards/M04_Careful_Recovery.webp" type="image/webp"><img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '05': {
+                title: 'M05: Who Lived Here?',
+                hint: '<picture><source srcset="mission_cards/M05_Who_Lived_Here.webp" type="image/webp"><img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '06': {
+                title: 'M06: Forge',
+                hint: '<picture><source srcset="mission_cards/M06_Forge.webp" type="image/webp"><img src="mission_cards/M06_Forge.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '07': {
+                title: 'M07: Heavy Lifting',
+                hint: '<picture><source srcset="mission_cards/M07_Heavy_Lifting.webp" type="image/webp"><img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '08': {
+                title: 'M08: Silo',
+                hint: '<picture><source srcset="mission_cards/M08_Silo.webp" type="image/webp"><img src="mission_cards/M08_Silo.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '09': {
+                title: 'M09: What\'s on Sale?',
+                hint: '<picture><source srcset="mission_cards/M09_Rock_on_Slab.webp" type="image/webp"><img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '10': {
+                title: 'M10: Tip the Scales',
+                hint: '<picture><source srcset="mission_cards/M10_Tip_the_Scales.webp" type="image/webp"><img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '11': {
+                title: 'M11: Angler Artifacts',
+                hint: '<picture><source srcset="mission_cards/M11_Angler_Artifacts.webp" type="image/webp"><img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '12': {
+                title: 'M12: Salvage Operation',
+                hint: '<picture><source srcset="mission_cards/M12_Salvage_Operation.webp" type="image/webp"><img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '13': {
+                title: 'M13: Statue Rebuild',
+                hint: '<picture><source srcset="mission_cards/M13_Statue_Rebuild.webp" type="image/webp"><img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '14': {
+                title: 'M14: Forum',
+                hint: '<picture><source srcset="mission_cards/M14_Forum.webp" type="image/webp"><img src="mission_cards/M14_Forum.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            '15': {
+                title: 'M15: Site Marking',
+                hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            },
+            'PT': {
+                title: 'Precision Tokens',
+                hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+            }
+        };
+
+        // Get all markers
+        const markers = document.querySelectorAll('.marker');
+        const hintPopup = document.getElementById('hintPopup');
+        const hintTitle = document.getElementById('hintTitle');
+        const hintContent = document.getElementById('hintContent');
+        
+        // Track closing timeout
+        let closeTimeout = null;
+        
+        // Function to cancel close timeout
+        function cancelCloseTimeout() {
+            if (closeTimeout) {
+                clearTimeout(closeTimeout);
+                closeTimeout = null;
+            }
+        }
+        
+        // Function to schedule popup close
+        function scheduleClose() {
+            cancelCloseTimeout();
+            closeTimeout = setTimeout(() => {
+                // Check if mouse is not over any marker, link, or the popup itself
+                const isOverMarker = Array.from(markers).some(m => m.matches(':hover'));
+                const isOverPopup = hintPopup.matches(':hover');
+                const isOverLink = Array.from(document.querySelectorAll('.mission-link')).some(l => l.matches(':hover'));
+                
+                if (!isOverMarker && !isOverPopup && !isOverLink) {
+                    closeHint();
+                }
+            }, 300); // Increased delay to 300ms for better tolerance
         }
 
-        // --- Event & Core Logic ---
-        function initializeLogic() {
-            const tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            document.head.appendChild(tag);
-
-            createGrid();
-
-            // Event Listeners
-            document.querySelector('.toggle-grid')?.addEventListener('click', () => document.getElementById('gridOverlay').classList.toggle('show'));
-            document.querySelector('.video-close-btn')?.addEventListener('click', closeVideo);
-            document.getElementById('videoModal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeVideo(); });
-            document.getElementById('playlistTrigger')?.addEventListener('click', togglePlaylist);
-            document.getElementById('playlistCloseBtn')?.addEventListener('click', togglePlaylist);
-            document.getElementById('playAllBtn')?.addEventListener('click', playAllMissions);
-            document.getElementById('shuffleBtn')?.addEventListener('click', shufflePlaylist);
-            document.getElementById('clearBtn')?.addEventListener('click', clearPlaylist);
-            
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-            document.body.addEventListener('click', (e) => {
-                const missionLink = e.target.closest('.mission-link, .marker');
-                if (missionLink) {
+        // Check if device is touch-enabled
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        // Add hover events to each marker
+        markers.forEach(marker => {
+            if (isTouchDevice) {
+                // For touch devices, use click/tap
+                marker.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const mission = missionData.find(m => m.id === missionLink.dataset.mission);
-                    if (mission) showHint(mission, missionLink);
-                }
-
-                const videoLink = e.target.closest('.video-link');
-                if (videoLink) {
-                    const mission = missionData.find(m => m.video_id === videoLink.dataset.videoId);
-                    if (mission) playVideo(mission);
-                }
-            });
-
-            if (!isTouchDevice) {
-                document.body.addEventListener('mouseover', (e) => {
-                    const target = e.target.closest('.mission-link, .marker');
-                    if (target) {
-                        const mission = missionData.find(m => m.id === target.dataset.mission);
-                        if (mission) showHint(mission, target);
+                    e.stopPropagation();
+                    
+                    const missionId = this.getAttribute('data-mission');
+                    const mission = missionData[missionId];
+                    
+                    if (mission) {
+                        // Close any open popup first
+                        if (hintPopup.classList.contains('active')) {
+                            closeHint();
+                            // If clicking the same marker, just close
+                            if (hintPopup.dataset.currentMission === missionId) {
+                                delete hintPopup.dataset.currentMission;
+                                return;
+                            }
+                        }
+                        // Show the new popup
+                        hintPopup.dataset.currentMission = missionId;
+                        showHint(mission, this);
                     }
                 });
-                document.getElementById('hintPopup')?.addEventListener('mouseleave', closeHint);
+            } else {
+                // For non-touch devices, use hover
+                marker.addEventListener('mouseenter', function(e) {
+                    cancelCloseTimeout(); // Cancel any pending close
+                    const missionId = this.getAttribute('data-mission');
+                    const mission = missionData[missionId];
+                    
+                    if (mission) {
+                        showHint(mission, this);
+                    }
+                });
+                
+                marker.addEventListener('mouseleave', function(e) {
+                    scheduleClose(); // Schedule close with delay
+                });
             }
-        }
+        });
+        
+        // Keep hint open when hovering over it
+        hintPopup.addEventListener('mouseenter', function() {
+            cancelCloseTimeout(); // Cancel close when entering popup
+            hintPopup.classList.add('active');
+        });
+        
+        hintPopup.addEventListener('mouseleave', function() {
+            scheduleClose(); // Schedule close when leaving popup
+        });
 
-        // --- Hint Popup --- 
-        function showHint(mission, element) {
-            const hintPopup = document.getElementById('hintPopup');
-            document.getElementById('hintTitle').textContent = `M${mission.id}: ${mission.name}`;
-            document.getElementById('hintContent').innerHTML = `<picture><source srcset="${mission.hint_image}.webp" type="image/webp"><img src="${mission.hint_image}.png" alt="${mission.name} Hint Card"></picture>`;
-            const rect = element.getBoundingClientRect();
-            const popupWidth = hintPopup.offsetWidth;
-            let left = rect.right + 10;
-            if (left + popupWidth > window.innerWidth) left = rect.left - popupWidth - 10;
+        // Add hover events to table mission links
+        const missionLinks = document.querySelectorAll('.mission-link');
+        missionLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+            });
+            
+            link.addEventListener('mouseenter', function(e) {
+                cancelCloseTimeout(); // Cancel any pending close
+                const missionId = this.getAttribute('data-mission');
+                const mission = missionData[missionId];
+                
+                if (mission) {
+                    showHint(mission, this);
+                }
+            });
+            
+            link.addEventListener('mouseleave', function(e) {
+                scheduleClose(); // Schedule close with delay
+            });
+        });
+
+        function showHint(mission, markerElement) {
+            hintTitle.textContent = mission.title;
+            hintContent.innerHTML = mission.hint;
+            
+            // Get marker position and dimensions
+            const rect = markerElement.getBoundingClientRect();
+            const popupWidth = 320;
+            const popupMaxHeight = window.innerHeight * 0.8;
+            
+            // Calculate position relative to viewport
+            let left = rect.right + 10; // Default: right of marker
+            let top = rect.top;
+            
+            // Check if popup would go off right edge
+            if (left + popupWidth > window.innerWidth) {
+                left = rect.left - popupWidth - 10; // Show on left instead
+            }
+            
+            // Check if popup would go off left edge
+            if (left < 10) {
+                // Center horizontally on mobile
+                left = (window.innerWidth - popupWidth) / 2;
+                // Position below marker on mobile
+                top = rect.bottom + 10;
+            }
+            
+            // Check if popup would go off bottom
+            if (top + popupMaxHeight > window.innerHeight) {
+                top = Math.max(10, window.innerHeight - popupMaxHeight - 10);
+            }
+            
+            // Check if popup would go off top
+            if (top < 10) {
+                top = 10;
+            }
+            
             hintPopup.style.left = left + 'px';
-            hintPopup.style.top = rect.top + 'px';
+            hintPopup.style.top = top + 'px';
             hintPopup.classList.add('active');
         }
 
-        function closeHint() { document.getElementById('hintPopup')?.classList.remove('active'); }
+        function closeHint() {
+            hintPopup.classList.remove('active');
+        }
 
-        // --- Video Player ---
-        function playVideo(mission) {
-            const modal = document.getElementById('videoModal');
-            const videoContainer = document.getElementById('videoContainer');
-            document.getElementById('videoTitle').textContent = `M${mission.id}: ${mission.name}`;
+        // Close popup when clicking outside (especially for touch devices)
+        document.addEventListener('click', function(e) {
+            // Only close if it's a touch device or clicking outside marker/popup
+            if (isTouchDevice) {
+                if (!e.target.closest('.marker') && !e.target.closest('.hint-popup')) {
+                    closeHint();
+                    delete hintPopup.dataset.currentMission;
+                }
+            } else {
+                if (!e.target.closest('.marker') && !e.target.closest('.hint-popup') && !e.target.closest('.mission-link')) {
+                    closeHint();
+                }
+            }
+        });
 
-            if (player && typeof player.destroy === 'function') player.destroy();
-            videoContainer.innerHTML = '<div id="youtube-player"></div>';
-            modal.classList.add('active');
-
-            currentMissionIndex = playlist.findIndex(p => p.id === mission.id);
-
-            player = new YT.Player('youtube-player', {
-                height: '100%',
-                width: '100%',
-                videoId: mission.video_id,
-                playerVars: { autoplay: 1, controls: 1, modestbranding: 1, rel: 0, start: mission.start_time, end: mission.end_time, playsinline: 1 },
-                events: { 'onStateChange': onPlayerStateChange }
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            closeHint();
+        });
+        
+        // Mission data for playlist and end screens
+        const allMissions = [
+            {id: 'M01', videoId: 'OUHg0bMwHtM', name: 'Surface Brushing', points: '30', start: 6, end: 126},
+            {id: 'M02', videoId: 'b-7zkBkgNUw', name: 'Map Reveal', points: '40', start: 6, end: 126},
+            {id: 'M03', videoId: 'y6RxJpgBOQM', name: 'Mineshaft Explorer', points: '40', start: 6, end: 126},
+            {id: 'M04', videoId: 'MX2WMQ4vN0g', name: 'Careful Recovery', points: '40', start: 6, end: 126},
+            {id: 'M05', videoId: 'JmYsPn4cig8', name: 'Who Lived Here?', points: '30', start: 6, end: 126},
+            {id: 'M06', videoId: 'szFSKDQCFFw', name: 'Forge', points: '30', start: 6, end: 126},
+            {id: 'M07', videoId: '6xcrIo-2WJ8', name: 'Heavy Lifting', points: '30', start: 6, end: 126},
+            {id: 'M08', videoId: 'MbvDiuorKsc', name: 'Silo', points: '40', start: 6, end: 126},
+            {id: 'M09', videoId: 'yymtNugu4V4', name: "What's on Sale?", points: '30', start: 6, end: 126},
+            {id: 'M10', videoId: 'RX8MMw_MJ9g', name: 'Tip the Scales', points: '30', start: 6, end: 126},
+            {id: 'M11', videoId: 'qVrT1DH4Zh8', name: 'Angler Artifacts', points: '30', start: 6, end: 126},
+            {id: 'M12', videoId: 'hFzNIv1NBzg', name: 'Salvage Operation', points: '30', start: 6, end: 126},
+            {id: 'M13', videoId: '1yyh08hg398', name: 'Statue Rebuild', points: '30', start: 6, end: 126},
+            {id: 'M14', videoId: 'Pq9d-23TMos', name: 'Forum', points: '35', start: 6, end: 126},
+            {id: 'M15', videoId: 'd6cNKGmYxh4', name: 'Site Marking', points: '40', start: 6, end: 126}
+        ];
+        
+        let currentMissionIndex = -1;
+        let playlist = [];
+        let playlistMode = false;
+        let completedMissions = [];
+        let currentPlayer = null;
+        let checkEndInterval = null;
+        
+        // Initialize playlist display
+        function initializePlaylist() {
+            const playlistItems = document.getElementById('playlistItems');
+            playlistItems.innerHTML = '';
+            
+            allMissions.forEach((mission, index) => {
+                const item = document.createElement('div');
+                item.className = 'playlist-item';
+                item.dataset.index = index;
+                item.onclick = () => playMissionFromPlaylist(index);
+                
+                item.innerHTML = `
+                    <span class="playlist-item-number">${mission.id}</span>
+                    <span class="playlist-item-name">${mission.name}</span>
+                    <span class="playlist-item-status" id="status-${mission.id}"></span>
+                `;
+                
+                playlistItems.appendChild(item);
             });
         }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) showEndScreen();
+        
+        // Store current video details for replay
+        let currentVideoDetails = null;
+        
+        // Video modal functions with enhanced features
+        function playVideo(videoId, title, startTime = null, endTime = null) {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const videoTitle = document.getElementById('videoTitle');
+            
+            // Store video details for potential replay
+            currentVideoDetails = { videoId, title, startTime, endTime };
+            
+            // Find mission details
+            const missionIndex = allMissions.findIndex(m => m.videoId === videoId);
+            if (missionIndex !== -1) {
+                currentMissionIndex = missionIndex;
+            }
+            
+            videoTitle.textContent = title;
+            
+            // Clear existing player
+            if (window.player && typeof window.player.destroy === 'function') {
+                try {
+                    window.player.destroy();
+                    window.player = null;
+                } catch(e) {
+                    console.error('Error destroying player:', e);
+                }
+            }
+            
+            modal.classList.add('active');
+            
+            // Reset end screen and speed selector
+            document.getElementById('customEndScreen').classList.remove('active');
+            document.getElementById('speedSelect').value = '1';
+            
+            // Update playlist UI
+            updatePlaylistUI();
+            
+            // Create player container
+            videoContainer.innerHTML = '<div id="ytplayer" style="width: 100%; height: 100%;"></div>';
+            
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                createYouTubePlayer(videoId, startTime, endTime);
+            }, 100);
         }
-
+        
+        // Separate function to create YouTube player
+        function createYouTubePlayer(videoId, startTime, endTime) {
+            // Check if API is loaded
+            if (typeof YT !== 'undefined' && YT.Player) {
+                console.log('Creating YouTube player with API');
+                
+                window.player = new YT.Player('ytplayer', {
+                    width: '100%',
+                    height: '100%',
+                    videoId: videoId,
+                    playerVars: {
+                        'autoplay': 1,
+                        'controls': 1,
+                        'modestbranding': 1,
+                        'rel': 0,
+                        'showinfo': 0,
+                        'fs': 1,
+                        'loop': 0,
+                        'start': startTime || 0,
+                        'end': endTime || undefined,
+                        'enablejsapi': 1,
+                        'origin': window.location.origin,
+                        'playsinline': 1,
+                        'iv_load_policy': 3,
+                        'disablekb': 0
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError
+                    }
+                });
+                
+                // Store player globally
+                player = window.player;
+            } else {
+                console.log('YouTube API not loaded, using iframe fallback');
+                // Fallback to iframe
+                const videoContainer = document.getElementById('videoContainer');
+                let embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&origin=${window.location.origin}`;
+                if (startTime !== null) {
+                    embedUrl += `&start=${startTime}`;
+                }
+                if (endTime !== null) {
+                    embedUrl += `&end=${endTime}`;
+                }
+                
+                videoContainer.innerHTML = `<iframe id="ytplayer" src="${embedUrl}" style="width: 100%; height: 100%;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                
+                // Try to get iframe reference for postMessage API
+                setTimeout(() => {
+                    const iframe = document.getElementById('ytplayer');
+                    if (iframe) {
+                        window.playerIframe = iframe;
+                    }
+                }, 500);
+            }
+        }
+        
+        // YouTube player event handlers
+        function onPlayerReady(event) {
+            console.log('Player ready - speed control enabled');
+            // Store player reference
+            window.player = event.target;
+            player = event.target;
+            
+            // Set default playback rate
+            try {
+                event.target.setPlaybackRate(1);
+                
+                // Get available playback rates
+                const rates = event.target.getAvailablePlaybackRates();
+                console.log('Available playback rates:', rates);
+            } catch(e) {
+                console.error('Error setting initial playback rate:', e);
+            }
+        }
+        
+        function onPlayerStateChange(event) {
+            // Check if video ended
+            if (event.data == YT.PlayerState.ENDED) {
+                console.log('Video ended');
+                
+                // Check if we should loop (single video mode) or show end screen
+                if (playlistMode && playlist.length > 0) {
+                    // In playlist mode, show end screen which handles auto-advance
+                    setTimeout(() => {
+                        showEndScreen();
+                    }, 500);
+                } else {
+                    // In single video mode, loop the video
+                    if (currentVideoDetails && window.player && window.player.seekTo) {
+                        // Loop by seeking back to start time
+                        const startTime = currentVideoDetails.startTime || 0;
+                        window.player.seekTo(startTime, true);
+                        window.player.playVideo();
+                    } else {
+                        // Show end screen if we can't loop
+                        setTimeout(() => {
+                            showEndScreen();
+                        }, 500);
+                    }
+                }
+            } else if (event.data == YT.PlayerState.PLAYING) {
+                console.log('Video playing');
+                // Ensure player reference is set
+                if (event.target) {
+                    window.player = event.target;
+                    player = event.target;
+                }
+            }
+        }
+        
+        function onPlayerError(event) {
+            console.error('Player error:', event.data);
+        }
+        
         function closeVideo() {
             const modal = document.getElementById('videoModal');
-            if (player && typeof player.stopVideo === 'function') player.stopVideo();
+            const videoContainer = document.getElementById('videoContainer');
+            
+            // Destroy YouTube player properly
+            if (player && player.destroy) {
+                try {
+                    player.destroy();
+                    player = null;
+                } catch (e) {
+                    console.error('Error destroying player:', e);
+                }
+            }
+            
             modal.classList.remove('active');
-            document.getElementById('videoContainer').innerHTML = '';
+            videoContainer.innerHTML = ''; // Clear container
+            clearInterval(checkEndInterval);
+            
+            // Hide end screen
+            document.getElementById('customEndScreen').classList.remove('active');
         }
-
-        // --- End Screen ---
+        
+        // Custom End Screen Functions
         function showEndScreen() {
             const endScreen = document.getElementById('customEndScreen');
-            const mission = playlist[currentMissionIndex];
-            if (!mission) { closeVideo(); return; }
-
-            document.getElementById('endScreenTitle').textContent = `M${mission.id}: ${mission.name} Complete!`;
-            document.getElementById('endScreenScore').textContent = `Maximum Points: ${mission.points.replace(/<br>/g, ' ')}`;
+            const mission = allMissions[currentMissionIndex];
+            
+            if (!mission) return;
+            
+            document.getElementById('endScreenTitle').textContent = `${mission.id}: ${mission.name} Complete!`;
+            document.getElementById('endScreenScore').textContent = `Maximum Points: ${mission.points}`;
             
             const nextOptions = document.getElementById('nextOptions');
             nextOptions.innerHTML = '';
-
+            
+            // Replay button
             const replayBtn = document.createElement('button');
             replayBtn.textContent = '🔄 Replay Mission';
-            replayBtn.onclick = () => playVideo(mission);
+            replayBtn.onclick = () => {
+                document.getElementById('customEndScreen').classList.remove('active');
+                playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.start, mission.end);
+            };
             nextOptions.appendChild(replayBtn);
-
-            if (playlistMode && currentMissionIndex < playlist.length - 1) {
-                 const nextBtn = document.createElement('button');
-                 const nextMission = playlist[currentMissionIndex + 1];
-                 nextBtn.textContent = `➡️ Next: ${nextMission.id}`;
-                 nextBtn.onclick = () => playVideo(nextMission);
-                 nextOptions.appendChild(nextBtn);
+            
+            // Next mission button
+            if (currentMissionIndex < allMissions.length - 1) {
+                const nextBtn = document.createElement('button');
+                const nextMission = allMissions[currentMissionIndex + 1];
+                nextBtn.textContent = `➡️ Next: ${nextMission.id}`;
+                nextBtn.onclick = () => {
+                    document.getElementById('customEndScreen').classList.remove('active');
+                    playVideo(nextMission.videoId, `${nextMission.id}: ${nextMission.name}`, nextMission.start, nextMission.end);
+                };
+                nextOptions.appendChild(nextBtn);
             }
+            
+            // View scoring details button
+            const detailsBtn = document.createElement('button');
+            detailsBtn.textContent = '📋 View Scoring';
+            detailsBtn.onclick = () => {
+                // Scroll to mission in table
+                const missionRow = document.querySelector(`a[data-mission="${mission.id.substring(1)}"]`);
+                if (missionRow) {
+                    closeVideo();
+                    missionRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            };
+            nextOptions.appendChild(detailsBtn);
+            
+            // Back to playlist button
+            const playlistBtn = document.createElement('button');
+            playlistBtn.textContent = '📋 Back to Playlist';
+            playlistBtn.onclick = () => {
+                closeVideo();
+                togglePlaylist();
+            };
+            nextOptions.appendChild(playlistBtn);
+            
+            // Mark as completed
+            if (!completedMissions.includes(mission.id)) {
+                completedMissions.push(mission.id);
+                document.getElementById(`status-${mission.id}`).textContent = '✓';
+            }
+            
             endScreen.classList.add('active');
+            
+            // Auto-play next if in playlist mode
+            if (playlistMode && playlist.length > 0) {
+                const currentInPlaylist = playlist.findIndex(m => m.id === mission.id);
+                if (currentInPlaylist !== -1 && currentInPlaylist < playlist.length - 1) {
+                    setTimeout(() => {
+                        const nextInPlaylist = playlist[currentInPlaylist + 1];
+                        document.getElementById('customEndScreen').classList.remove('active');
+                        playVideo(nextInPlaylist.videoId, `${nextInPlaylist.id}: ${nextInPlaylist.name}`, nextInPlaylist.start, nextInPlaylist.end);
+                    }, 5000); // Auto-advance after 5 seconds
+                }
+            }
         }
-
-        // --- Playlist ---
+        
+        // Playback Speed Control
+        function changePlaybackSpeed(speed) {
+            const speedValue = parseFloat(speed);
+            console.log(`Attempting to change speed to ${speedValue}x`);
+            
+            // Try multiple methods to change speed
+            
+            // Method 1: Use player API if available
+            if (window.player && typeof window.player.setPlaybackRate === 'function') {
+                try {
+                    window.player.setPlaybackRate(speedValue);
+                    console.log(`Speed changed to ${speedValue}x via API`);
+                    return;
+                } catch (e) {
+                    console.error('Error with API method:', e);
+                }
+            }
+            
+            // Method 2: Try postMessage to iframe
+            const iframe = document.getElementById('ytplayer');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    const message = JSON.stringify({
+                        event: 'command',
+                        func: 'setPlaybackRate',
+                        args: [speedValue]
+                    });
+                    iframe.contentWindow.postMessage(message, 'https://www.youtube.com');
+                    console.log(`Speed change command sent via postMessage to ${speedValue}x`);
+                    return;
+                } catch (e) {
+                    console.error('Error with postMessage method:', e);
+                }
+            }
+            
+            // Method 3: If all else fails, recreate player with new speed
+            if (currentVideoDetails) {
+                console.log('Attempting to reload video with new speed setting');
+                // Store the current time if possible
+                let currentTime = 0;
+                if (window.player && typeof window.player.getCurrentTime === 'function') {
+                    try {
+                        currentTime = window.player.getCurrentTime();
+                    } catch(e) {}
+                }
+                
+                // Note: This would require modifying the player creation to accept speed parameter
+                console.log('Speed control requires API. Please ensure YouTube IFrame API is loaded.');
+            }
+            
+            console.log('Unable to change playback speed. Check console for details.');
+        }
+        
+        // Playlist Functions
         function togglePlaylist() {
             const controls = document.getElementById('playlistControls');
-            if (!controls.classList.contains('active')) initializePlaylist();
             controls.classList.toggle('active');
+            
+            if (controls.classList.contains('active')) {
+                initializePlaylist();
+                updatePlaylistUI();
+            }
         }
-
-        function initializePlaylist() {
-            const container = document.getElementById('playlistItems');
-            container.innerHTML = '';
-            const videoMissions = missionData.filter(m => m.video_id);
-            videoMissions.forEach((mission) => {
-                const item = document.createElement('div');
-                item.className = 'playlist-item';
-                item.dataset.missionId = mission.id;
-                item.innerHTML = `<span class="playlist-item-number">${mission.id}</span><span class="playlist-item-name">${mission.name}</span>`;
-                item.onclick = () => {
-                    playlist = videoMissions;
-                    playlistMode = true;
-                    playVideo(mission);
-                    togglePlaylist();
-                };
-                container.appendChild(item);
+        
+        function updatePlaylistUI() {
+            const items = document.querySelectorAll('.playlist-item');
+            items.forEach(item => {
+                const index = parseInt(item.dataset.index);
+                item.classList.remove('active');
+                if (index === currentMissionIndex) {
+                    item.classList.add('active');
+                }
+                if (completedMissions.includes(allMissions[index].id)) {
+                    item.classList.add('completed');
+                }
             });
         }
-
+        
+        function playMissionFromPlaylist(index) {
+            const mission = allMissions[index];
+            playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.start, mission.end);
+            document.getElementById('playlistControls').classList.remove('active');
+        }
+        
         function playAllMissions() {
-            playlist = missionData.filter(m => m.video_id);
+            playlist = [...allMissions];
             playlistMode = true;
-            if(playlist.length > 0) playVideo(playlist[0]);
-            togglePlaylist();
+            completedMissions = [];
+            
+            // Start with first mission
+            if (playlist.length > 0) {
+                const firstMission = playlist[0];
+                playVideo(firstMission.videoId, `${firstMission.id}: ${firstMission.name}`, firstMission.start, firstMission.end);
+                document.getElementById('playlistControls').classList.remove('active');
+            }
         }
-
+        
         function shufflePlaylist() {
-            playlist = missionData.filter(m => m.video_id).sort(() => Math.random() - 0.5);
+            // Fisher-Yates shuffle
+            const shuffled = [...allMissions];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            playlist = shuffled;
             playlistMode = true;
-            if(playlist.length > 0) playVideo(playlist[0]);
-            togglePlaylist();
+            completedMissions = [];
+            
+            // Start with first shuffled mission
+            if (playlist.length > 0) {
+                const firstMission = playlist[0];
+                playVideo(firstMission.videoId, `${firstMission.id}: ${firstMission.name}`, firstMission.start, firstMission.end);
+                document.getElementById('playlistControls').classList.remove('active');
+            }
         }
-
+        
         function clearPlaylist() {
             playlist = [];
             playlistMode = false;
-            currentMissionIndex = -1;
+            completedMissions = [];
+            
+            // Clear all checkmarks
+            allMissions.forEach(mission => {
+                const status = document.getElementById(`status-${mission.id}`);
+                if (status) status.textContent = '';
+            });
+            
+            // Reset UI
+            updatePlaylistUI();
         }
+        
+        // Test function to debug player API
+        function testPlayerAPI() {
+            console.log('=== Testing Player API ===');
+            console.log('1. window.player exists?', !!window.player);
+            console.log('2. player variable exists?', !!player);
+            console.log('3. YT API loaded?', typeof YT !== 'undefined');
+            console.log('4. YT.Player exists?', typeof YT !== 'undefined' && !!YT.Player);
+            
+            if (window.player) {
+                console.log('5. Player methods available:');
+                console.log('   - setPlaybackRate?', typeof window.player.setPlaybackRate === 'function');
+                console.log('   - getPlaybackRate?', typeof window.player.getPlaybackRate === 'function');
+                console.log('   - getAvailablePlaybackRates?', typeof window.player.getAvailablePlaybackRates === 'function');
+                
+                try {
+                    const currentRate = window.player.getPlaybackRate();
+                    console.log('6. Current playback rate:', currentRate);
+                    
+                    const availableRates = window.player.getAvailablePlaybackRates();
+                    console.log('7. Available rates:', availableRates);
+                    
+                    // Try setting rate to 1.5
+                    console.log('8. Attempting to set rate to 1.5x...');
+                    window.player.setPlaybackRate(1.5);
+                    
+                    setTimeout(() => {
+                        const newRate = window.player.getPlaybackRate();
+                        console.log('9. New rate after change:', newRate);
+                        if (newRate === 1.5) {
+                            console.log('✅ Speed control is working!');
+                            alert('Speed control is working! Changed to 1.5x');
+                        } else {
+                            console.log('❌ Speed did not change');
+                            alert('Speed control not working - check console');
+                        }
+                    }, 500);
+                } catch(e) {
+                    console.error('Error during API test:', e);
+                }
+            } else {
+                console.log('❌ No player object found');
+                
+                // Check for iframe
+                const iframe = document.getElementById('ytplayer');
+                console.log('10. iframe exists?', !!iframe);
+                if (iframe) {
+                    console.log('11. iframe src:', iframe.src);
+                }
+            }
+            console.log('=== End Test ===');
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            const videoModal = document.getElementById('videoModal');
+            const playlistModal = document.getElementById('playlistControls');
+            
+            // Escape key to close modals
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                // Close video if it's open
+                if (videoModal && videoModal.classList.contains('active')) {
+                    e.preventDefault();
+                    closeVideo();
+                }
+                // Close playlist if it's open
+                else if (playlistModal && playlistModal.classList.contains('active')) {
+                    e.preventDefault();
+                    togglePlaylist();
+                }
+            }
+            
+            // 'E' key to manually trigger end screen (for testing)
+            if (e.key === 'e' && videoModal.classList.contains('active')) {
+                showEndScreen();
+            }
+            
+            // Space bar to pause/play video (when modal is active)
+            if (e.key === ' ' && videoModal.classList.contains('active')) {
+                e.preventDefault(); // Prevent page scroll
+                if (window.player && typeof window.player.getPlayerState === 'function') {
+                    const state = window.player.getPlayerState();
+                    if (state === 1) { // Playing
+                        window.player.pauseVideo();
+                    } else if (state === 2) { // Paused
+                        window.player.playVideo();
+                    }
+                }
+            }
+        });
+        
+        // Close modal when clicking outside the video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
+        
+        // Header scroll effect is handled by shared-scripts.js
+        // Mobile menu is handled by shared-scripts.js
     </script>
     <script src="shared-scripts.js"></script>
 </body>
