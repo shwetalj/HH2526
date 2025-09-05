@@ -675,6 +675,66 @@
             border-radius: 10px;
         }
 
+        /* Responsive video modal for mobile devices */
+        @media (max-width: 768px) {
+            .video-modal-content {
+                width: 95%;
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .video-close-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            
+            #videoTitle {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .video-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .speed-control {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .video-modal-content {
+                width: 100%;
+                padding: 10px;
+                border-radius: 0;
+                margin: 0;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
+            
+            .video-container {
+                padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
+            }
+            
+            #videoTitle {
+                font-size: 1rem;
+            }
+            
+            .custom-end-screen h3 {
+                font-size: 1.2rem;
+            }
+            
+            .next-options {
+                flex-direction: column;
+            }
+            
+            .next-options button {
+                width: 100%;
+            }
+        }
+
         /* Responsive table for tablets */
         @media (max-width: 768px) {
             .mission-table-container h2 {
