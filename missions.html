@@ -1301,6 +1301,363 @@
             font-size: 1.5rem;
         }
     }
+    
+    /* API Loading Status Indicators */
+    .api-status-indicator {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 10px 20px;
+        z-index: 3000;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .api-loading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffd700;
+    }
+    
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 215, 0, 0.3);
+        border-top-color: #ffd700;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .api-error {
+        background: linear-gradient(145deg, #3a1a1a, #2a0a0a);
+        border-color: #ff4444;
+    }
+    
+    .api-error-msg {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ff6666;
+    }
+    
+    .api-error-msg button {
+        background: #ff4444;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background 0.3s;
+    }
+    
+    .api-error-msg button:hover {
+        background: #ff6666;
+    }
+    
+    .api-success {
+        background: linear-gradient(145deg, #1a3a1a, #0a2a0a);
+        border-color: #44ff44;
+        color: #66ff66;
+        animation: slideIn 0.3s ease, fadeOut 0.5s ease 1.5s forwards;
+    }
+    
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+    
+    /* Mobile adjustments for status indicators */
+    @media (max-width: 768px) {
+        .api-status-indicator {
+            top: 60px;
+            right: 10px;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .spinner {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    
+    /* Mobile Touch Gestures Support */
+    .video-modal-content {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    /* Mobile-optimized Video Modal */
+    @media (max-width: 768px) {
+        .video-modal-content {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            padding: 0;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .video-close-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            z-index: 2002;
+            top: 15px;
+            right: 15px;
+        }
+        
+        #videoTitle {
+            padding: 15px;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .video-container {
+            flex: 1;
+            width: 100%;
+            padding-bottom: 0;
+            height: auto;
+            min-height: 200px;
+        }
+        
+        .video-controls {
+            position: sticky;
+            bottom: 0;
+            margin: 0;
+            border-radius: 0;
+            padding: 15px;
+            background: linear-gradient(to top, #1a1a1a, rgba(26, 26, 26, 0.95));
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .speed-control {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .speed-control select {
+            min-width: 120px;
+            height: 44px;
+            font-size: 16px;
+        }
+    }
+    
+    /* Landscape Mode Optimization */
+    @media (max-width: 768px) and (orientation: landscape) {
+        .video-modal-content {
+            padding: 10px;
+        }
+        
+        #videoTitle {
+            display: none;
+        }
+        
+        .video-controls {
+            padding: 8px;
+            background: rgba(26, 26, 26, 0.9);
+        }
+        
+        .video-close-btn {
+            width: 36px;
+            height: 36px;
+            top: 10px;
+            right: 10px;
+        }
+    }
+    
+    /* Touch-friendly Buttons */
+    @media (pointer: coarse) {
+        .video-link, button {
+            min-height: 44px;
+            min-width: 44px;
+            padding: 12px 20px;
+        }
+        
+        .playlist-trigger {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            bottom: 80px;
+            right: 20px;
+        }
+        
+        .playlist-controls button {
+            min-height: 44px;
+            padding: 12px;
+        }
+        
+        .custom-end-screen button {
+            min-height: 48px;
+            font-size: 16px;
+        }
+    }
+    
+    /* Small Screen Optimizations */
+    @media (max-width: 480px) {
+        .video-modal.active {
+            padding: 0;
+        }
+        
+        .playlist-controls {
+            width: 100%;
+            height: 70vh;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+        }
+        
+        .playlist-items {
+            max-height: calc(70vh - 150px);
+        }
+        
+        .toast-container {
+            bottom: 60px;
+            width: 90%;
+            left: 5%;
+            transform: none;
+        }
+        
+        .toast {
+            width: 100%;
+            font-size: 14px;
+        }
+    }
+    
+    /* Toast Notification System */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3001;
+        pointer-events: none;
+    }
+    
+    .toast {
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffd700;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        animation: toastSlideUp 0.3s ease, toastFadeOut 0.5s ease 2s forwards;
+        pointer-events: auto;
+    }
+    
+    @keyframes toastSlideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes toastFadeOut {
+        to {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+    }
+    
+    .toast-icon {
+        font-size: 20px;
+    }
+    
+    .toast-success {
+        border-color: #44ff44;
+        color: #66ff66;
+    }
+    
+    .toast-error {
+        border-color: #ff4444;
+        color: #ff6666;
+    }
+    
+    .toast-info {
+        border-color: #4444ff;
+        color: #6666ff;
+    }
+    
+    /* Speed indicator overlay */
+    .speed-indicator-overlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #ffd700;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        z-index: 2001;
+        animation: fadeInOut 2s ease;
+        pointer-events: none;
+    }
+    
+    @media (max-width: 768px) {
+        .speed-indicator-overlay {
+            top: 60px;
+            right: 15px;
+            font-size: 20px;
+            padding: 10px 18px;
+        }
+    }
+    
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0; }
+        20%, 80% { opacity: 1; }
+    }
+    
+    /* Highlight speed selector when changed */
+    .speed-control select.speed-changed {
+        animation: pulseGold 1s ease;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    
+    @keyframes pulseGold {
+        0%, 100% { 
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        50% { 
+            border-color: #ffed4e;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+    }
     </style>
 </head>
 <body>
@@ -1640,21 +1997,160 @@
     </div>
 
     <script>
-        // Load YouTube IFrame API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // YouTube API Loading with Retry Logic
+        const API_LOADING_CONFIG = {
+            maxRetries: 3,
+            retryDelay: 1000, // Start with 1 second
+            maxWaitTime: 10000, // Maximum 10 seconds to wait
+            checkInterval: 100 // Check every 100ms
+        };
+        
+        // API Loading State Management
+        const apiState = {
+            status: 'idle', // idle, loading, ready, failed
+            retryCount: 0,
+            loadingStartTime: null,
+            callbacks: [],
+            errorMessage: null
+        };
         
         // YouTube player variable
         var player;
         var playerReady = false;
         
-        // This function creates an <iframe> (and YouTube player) after the API code downloads
+        // Enhanced API Ready Handler
         function onYouTubeIframeAPIReady() {
-            console.log('YouTube IFrame API ready');
+            console.log('✅ YouTube IFrame API ready');
+            apiState.status = 'ready';
             playerReady = true;
+            
+            // Execute any pending callbacks
+            apiState.callbacks.forEach(callback => callback());
+            apiState.callbacks = [];
+            
+            // Show success indicator
+            showApiStatus('ready');
         }
+        
+        // Show API loading status to user
+        function showApiStatus(status, message = '') {
+            // Remove any existing status indicators
+            const existingStatus = document.querySelector('.api-status-indicator');
+            if (existingStatus) existingStatus.remove();
+            
+            if (status === 'loading') {
+                const indicator = document.createElement('div');
+                indicator.className = 'api-status-indicator';
+                indicator.innerHTML = `
+                    <div class="api-loading">
+                        <div class="spinner"></div>
+                        <span>Loading video player...</span>
+                    </div>
+                `;
+                document.body.appendChild(indicator);
+            } else if (status === 'error') {
+                const indicator = document.createElement('div');
+                indicator.className = 'api-status-indicator api-error';
+                indicator.innerHTML = `
+                    <div class="api-error-msg">
+                        <span>⚠️ ${message}</span>
+                        <button onclick="retryApiLoad()">Retry</button>
+                    </div>
+                `;
+                document.body.appendChild(indicator);
+            } else if (status === 'ready') {
+                // Briefly show success, then remove
+                const indicator = document.createElement('div');
+                indicator.className = 'api-status-indicator api-success';
+                indicator.innerHTML = '<span>✅ Video player ready</span>';
+                document.body.appendChild(indicator);
+                setTimeout(() => indicator.remove(), 2000);
+            }
+        }
+        
+        // Load YouTube API with retry logic
+        function loadYouTubeAPI() {
+            if (apiState.status === 'loading' || apiState.status === 'ready') {
+                console.log(`API already ${apiState.status}`);
+                return Promise.resolve();
+            }
+            
+            return new Promise((resolve, reject) => {
+                apiState.status = 'loading';
+                apiState.loadingStartTime = Date.now();
+                showApiStatus('loading');
+                
+                const attemptLoad = () => {
+                    console.log(`Loading YouTube API (attempt ${apiState.retryCount + 1}/${API_LOADING_CONFIG.maxRetries})`);
+                    
+                    // Create and insert script tag
+                    const tag = document.createElement('script');
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    tag.onerror = () => handleApiLoadError(resolve, reject, attemptLoad);
+                    
+                    const firstScriptTag = document.getElementsByTagName('script')[0];
+                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                    
+                    // Check if API is ready
+                    const checkReady = setInterval(() => {
+                        const elapsed = Date.now() - apiState.loadingStartTime;
+                        
+                        if (typeof YT !== 'undefined' && YT.Player) {
+                            clearInterval(checkReady);
+                            if (apiState.status !== 'ready') {
+                                onYouTubeIframeAPIReady();
+                            }
+                            resolve();
+                        } else if (elapsed > API_LOADING_CONFIG.maxWaitTime) {
+                            clearInterval(checkReady);
+                            handleApiLoadError(resolve, reject, attemptLoad);
+                        }
+                    }, API_LOADING_CONFIG.checkInterval);
+                };
+                
+                attemptLoad();
+            });
+        }
+        
+        // Handle API loading errors
+        function handleApiLoadError(resolve, reject, retryFunc) {
+            apiState.retryCount++;
+            
+            if (apiState.retryCount < API_LOADING_CONFIG.maxRetries) {
+                const delay = API_LOADING_CONFIG.retryDelay * Math.pow(2, apiState.retryCount - 1);
+                console.log(`Retrying in ${delay}ms...`);
+                showApiStatus('error', `Loading failed. Retrying (${apiState.retryCount}/${API_LOADING_CONFIG.maxRetries})...`);
+                
+                setTimeout(() => {
+                    retryFunc();
+                }, delay);
+            } else {
+                apiState.status = 'failed';
+                apiState.errorMessage = 'Failed to load YouTube API after multiple attempts';
+                console.error(apiState.errorMessage);
+                showApiStatus('error', 'Video player unavailable. Using fallback mode.');
+                resolve(); // Resolve anyway to allow fallback
+            }
+        }
+        
+        // Manual retry function
+        function retryApiLoad() {
+            apiState.retryCount = 0;
+            apiState.status = 'idle';
+            loadYouTubeAPI();
+        }
+        
+        // Initialize API loading on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pre-load API in background
+            setTimeout(() => {
+                if (apiState.status === 'idle') {
+                    loadYouTubeAPI().catch(err => {
+                        console.error('Failed to pre-load YouTube API:', err);
+                    });
+                }
+            }, 1000);
+        });
         
         // Create grid overlay
         function createGrid() {
@@ -1703,6 +2199,8 @@
         // Track mouse coordinates
         document.addEventListener('DOMContentLoaded', function() {
             createGrid();
+            initializeTouchGestures();
+            setMobileViewportHeight();
             
             const mapWrapper = document.getElementById('mapWrapper');
             const xCoord = document.getElementById('xCoord');
@@ -2023,6 +2521,98 @@
         // Store current video details for replay
         let currentVideoDetails = null;
         
+        // Touch gesture support
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        
+        // Initialize touch gestures for mobile
+        function initializeTouchGestures() {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            if (!modal || !videoContainer) return;
+            
+            // Swipe gestures on video container
+            videoContainer.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+            
+            videoContainer.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipeGesture();
+            }, { passive: true });
+            
+            // Double tap to toggle playback
+            let lastTap = 0;
+            videoContainer.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                if (tapLength < 300 && tapLength > 0) {
+                    e.preventDefault();
+                    togglePlayback();
+                }
+                lastTap = currentTime;
+            });
+        }
+        
+        // Handle swipe gestures
+        function handleSwipeGesture() {
+            const swipeThreshold = 50;
+            const verticalThreshold = 100;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Horizontal swipe for playlist navigation
+            if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaY) < verticalThreshold) {
+                if (playlistMode && playlist.length > 0) {
+                    if (deltaX > 0) {
+                        // Swipe right - previous video
+                        playPreviousInPlaylist();
+                    } else {
+                        // Swipe left - next video
+                        playNextInPlaylist();
+                    }
+                }
+            }
+            
+            // Vertical swipe down to close
+            if (deltaY > verticalThreshold && Math.abs(deltaX) < swipeThreshold) {
+                closeVideo();
+            }
+        }
+        
+        // Toggle video playback
+        function togglePlayback() {
+            if (window.player && typeof window.player.getPlayerState === 'function') {
+                const state = window.player.getPlayerState();
+                if (state === YT.PlayerState.PLAYING) {
+                    window.player.pauseVideo();
+                    showToast('Paused', 'info', 1000);
+                } else {
+                    window.player.playVideo();
+                    showToast('Playing', 'info', 1000);
+                }
+            }
+        }
+        
+        // Add previous video function
+        function playPreviousInPlaylist() {
+            if (currentMissionIndex > 0) {
+                currentMissionIndex--;
+                const mission = allMissions[currentMissionIndex];
+                playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.startTime, mission.endTime);
+                showToast('Previous: ' + mission.name, 'info', 2000);
+            } else {
+                showToast('First video in playlist', 'info', 1500);
+            }
+        }
+        
         // Video modal functions with enhanced features
         function playVideo(videoId, title, startTime = null, endTime = null) {
             const modal = document.getElementById('videoModal');
@@ -2052,6 +2642,12 @@
             
             modal.classList.add('active');
             
+            // Mobile optimizations
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = 'hidden';
+                setMobileViewportHeight();
+            }
+            
             // Reset end screen and speed selector
             document.getElementById('customEndScreen').classList.remove('active');
             document.getElementById('speedSelect').value = '1';
@@ -2068,10 +2664,22 @@
             }, 100);
         }
         
-        // Separate function to create YouTube player
-        function createYouTubePlayer(videoId, startTime, endTime) {
+        // Separate function to create YouTube player with API checking
+        async function createYouTubePlayer(videoId, startTime, endTime) {
+            // Ensure API is loaded first
+            if (apiState.status !== 'ready') {
+                console.log('API not ready, loading...');
+                showApiStatus('loading');
+                
+                try {
+                    await loadYouTubeAPI();
+                } catch (err) {
+                    console.error('Failed to load API:', err);
+                }
+            }
+            
             // Check if API is loaded
-            if (typeof YT !== 'undefined' && YT.Player) {
+            if (typeof YT !== 'undefined' && YT.Player && apiState.status === 'ready') {
                 console.log('Creating YouTube player with API');
                 
                 window.player = new YT.Player('ytplayer', {
@@ -2134,9 +2742,24 @@
             window.player = event.target;
             player = event.target;
             
-            // Set default playback rate
+            // Load saved speed preference or set default
+            const savedSpeed = localStorage.getItem('preferredPlaybackSpeed');
+            const initialSpeed = savedSpeed ? parseFloat(savedSpeed) : 1;
+            
             try {
-                event.target.setPlaybackRate(1);
+                event.target.setPlaybackRate(initialSpeed);
+                
+                // Update selector to match
+                const selector = document.getElementById('speedSelect');
+                if (selector) {
+                    selector.value = initialSpeed.toString();
+                }
+                
+                // Show speed if not default
+                if (initialSpeed !== 1) {
+                    showToast(`Playback speed: ${initialSpeed}x`, 'speed');
+                    showSpeedIndicator(initialSpeed);
+                }
                 
                 // Get available playback rates
                 const rates = event.target.getAvailablePlaybackRates();
@@ -2202,6 +2825,11 @@
             modal.classList.remove('active');
             videoContainer.innerHTML = ''; // Clear container
             clearInterval(checkEndInterval);
+            
+            // Restore body scroll on mobile
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = '';
+            }
             
             // Hide end screen
             document.getElementById('customEndScreen').classList.remove('active');
@@ -2284,10 +2912,79 @@
             }
         }
         
-        // Playback Speed Control
+        // Toast Notification System
+        function showToast(message, type = 'info', duration = 2500) {
+            // Create container if it doesn't exist
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            // Add icon based on type
+            const icons = {
+                'success': '✅',
+                'error': '❌',
+                'info': 'ℹ️',
+                'speed': '⚡'
+            };
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Remove toast after duration
+            setTimeout(() => {
+                toast.remove();
+                if (container.children.length === 0) {
+                    container.remove();
+                }
+            }, duration);
+        }
+        
+        // Show speed indicator on video
+        function showSpeedIndicator(speed) {
+            const videoContainer = document.getElementById('videoContainer');
+            if (!videoContainer) return;
+            
+            // Remove existing indicator
+            const existing = videoContainer.querySelector('.speed-indicator-overlay');
+            if (existing) existing.remove();
+            
+            // Create new indicator
+            const indicator = document.createElement('div');
+            indicator.className = 'speed-indicator-overlay';
+            indicator.textContent = `${speed}x`;
+            videoContainer.appendChild(indicator);
+            
+            // Remove after animation
+            setTimeout(() => indicator.remove(), 2000);
+        }
+        
+        // Enhanced Playback Speed Control with Visual Feedback
         function changePlaybackSpeed(speed) {
             const speedValue = parseFloat(speed);
             console.log(`Attempting to change speed to ${speedValue}x`);
+            
+            // Store speed preference in localStorage
+            localStorage.setItem('preferredPlaybackSpeed', speed);
+            
+            // Visual feedback - highlight selector
+            const selector = document.getElementById('speedSelect');
+            if (selector) {
+                selector.classList.add('speed-changed');
+                setTimeout(() => selector.classList.remove('speed-changed'), 1000);
+            }
+            
+            let speedChanged = false;
             
             // Try multiple methods to change speed
             
@@ -2295,6 +2992,21 @@
             if (window.player && typeof window.player.setPlaybackRate === 'function') {
                 try {
                     window.player.setPlaybackRate(speedValue);
+                    
+                    // Verify the speed was actually changed
+                    setTimeout(() => {
+                        if (window.player && typeof window.player.getPlaybackRate === 'function') {
+                            const actualSpeed = window.player.getPlaybackRate();
+                            if (Math.abs(actualSpeed - speedValue) < 0.01) {
+                                showToast(`Playback speed: ${speedValue}x`, 'speed');
+                                showSpeedIndicator(speedValue);
+                                speedChanged = true;
+                            } else {
+                                showToast(`Speed change failed. Current: ${actualSpeed}x`, 'error');
+                            }
+                        }
+                    }, 100);
+                    
                     console.log(`Speed changed to ${speedValue}x via API`);
                     return;
                 } catch (e) {
@@ -2313,6 +3025,10 @@
                     });
                     iframe.contentWindow.postMessage(message, 'https://www.youtube.com');
                     console.log(`Speed change command sent via postMessage to ${speedValue}x`);
+                    
+                    // Show feedback for postMessage method
+                    showToast(`Speed command sent: ${speedValue}x`, 'info');
+                    showSpeedIndicator(speedValue);
                     return;
                 } catch (e) {
                     console.error('Error with postMessage method:', e);
@@ -2334,7 +3050,32 @@
                 console.log('Speed control requires API. Please ensure YouTube IFrame API is loaded.');
             }
             
+            // If no method worked, show error
+            if (!speedChanged) {
+                showToast('Unable to change speed. Try reloading the video.', 'error');
+            }
+            
             console.log('Unable to change playback speed. Check console for details.');
+        }
+        
+        // Load saved speed preference
+        function loadSpeedPreference() {
+            const savedSpeed = localStorage.getItem('preferredPlaybackSpeed');
+            if (savedSpeed) {
+                const selector = document.getElementById('speedSelect');
+                if (selector) {
+                    selector.value = savedSpeed;
+                    // Apply speed after player is ready
+                    if (window.player && typeof window.player.setPlaybackRate === 'function') {
+                        try {
+                            window.player.setPlaybackRate(parseFloat(savedSpeed));
+                            showToast(`Restored speed: ${savedSpeed}x`, 'info');
+                        } catch (e) {
+                            console.error('Error restoring speed preference:', e);
+                        }
+                    }
+                }
+            }
         }
         
         // Playlist Functions
@@ -2467,6 +3208,26 @@
             }
             console.log('=== End Test ===');
         }
+        
+        // Mobile viewport height fix for iOS
+        function setMobileViewportHeight() {
+            if (window.innerWidth <= 768) {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+                
+                // Apply to video modal
+                const modal = document.querySelector('.video-modal-content');
+                if (modal && window.innerWidth <= 768) {
+                    modal.style.height = `${window.innerHeight}px`;
+                }
+            }
+        }
+        
+        // Update on resize and orientation change
+        window.addEventListener('resize', setMobileViewportHeight);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(setMobileViewportHeight, 100);
+        });
         
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
