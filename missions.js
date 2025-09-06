@@ -1369,6 +1369,9 @@ function openPDF(pdfUrl, title) {
         closeBtn.innerHTML = '×';
         closeBtn.onclick = closePDF;
         closeBtn.setAttribute('aria-label', 'Close PDF');
+        closeBtn.style.position = 'absolute'; // Position relative to modal content
+        closeBtn.style.top = '10px';
+        closeBtn.style.right = '10px';
         closeBtn.style.zIndex = '10002'; // Ensure it's above everything including header
         closeBtn.style.display = 'flex'; // Make sure it's visible
         
