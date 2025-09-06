@@ -1372,6 +1372,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 closePDF();
             }
         });
+        
+        // Add swipe down to close for mobile
+        let pdfTouchStartY = 0;
+        let pdfTouchEndY = 0;
+        
+        pdfModal.addEventListener('touchstart', function(e) {
+            pdfTouchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        
+        pdfModal.addEventListener('touchend', function(e) {
+            pdfTouchEndY = e.changedTouches[0].screenY;
+            handlePDFSwipe();
+        }, { passive: true });
+        
+        function handlePDFSwipe() {
+            const swipeDistance = pdfTouchEndY - pdfTouchStartY;
+            const swipeThreshold = 100; // Minimum swipe distance
+            
+            // Swipe down to close
+            if (swipeDistance > swipeThreshold) {
+                closePDF();
+            }
+        }
     }
 });
 
