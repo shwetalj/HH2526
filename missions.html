@@ -510,23 +510,27 @@
         }
 
         .mission-table th:nth-child(1) {
-            width: 8%;
+            width: 6%;
         }
 
         .mission-table th:nth-child(2) {
-            width: 18%;
+            width: 15%;
         }
 
         .mission-table th:nth-child(3) {
-            width: 35%;
+            width: 30%;
         }
 
         .mission-table th:nth-child(4) {
-            width: 25%;
+            width: 22%;
         }
 
         .mission-table th:nth-child(5) {
-            width: 14%;
+            width: 12%;
+        }
+
+        .mission-table th:nth-child(6) {
+            width: 15%;
         }
 
         .mission-table tbody tr {
@@ -1840,14 +1844,13 @@
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
     <div class="bg-animation"></div>
+    
     <!-- Loader -->
     <div class="loader">
         <div class="loader-spinner"></div>
     </div>
-
-    <!-- Animated Background -->
-    <div class="bg-animation"></div>
     
     <!-- Navigation -->
     <header id="header">
@@ -1992,6 +1995,7 @@
                     <th>Mission Name</th>
                     <th>Description</th>
                     <th>Points Scoring</th>
+                    <th>Build Instructions</th>
                     <th>Video</th>
                 </tr>
             </thead>
@@ -2001,6 +2005,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="01">Surface Brushing</a></td>
                     <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
                     <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M01_SurfaceBrushing_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('OUHg0bMwHtM', 'M01: Surface Brushing', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2008,6 +2013,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="02">Map Reveal</a></td>
                     <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
                     <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
+                    <td class="mission-build"><a href="pdf/M02_MapReveal_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('b-7zkBkgNUw', 'M02: Map Reveal', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2015,6 +2021,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="03">Mineshaft Explorer</a></td>
                     <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
                     <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
+                    <td class="mission-build"><a href="pdf/M03_M04_MineshaftExplorer_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('y6RxJpgBOQM', 'M03: Mineshaft Explorer', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2022,6 +2029,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="04">Careful Recovery</a></td>
                     <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
                     <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M03_M04_MineshaftExplorer_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('MX2WMQ4vN0g', 'M04: Careful Recovery', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2029,6 +2037,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="05">Who Lived Here?</a></td>
                     <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
                     <td class="mission-points">• Structure floor completely upright: 30 pts</td>
+                    <td class="mission-build"><a href="pdf/M05_WhoLIvedHere_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('JmYsPn4cig8', 'M05: Who Lived Here?', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2036,6 +2045,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="06">Forge</a></td>
                     <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
                     <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
+                    <td class="mission-build"><a href="pdf/M06_M07_ForgeHeavyLifting_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('szFSKDQCFFw', 'M06: Forge', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2043,6 +2053,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="07">Heavy Lifting</a></td>
                     <td class="mission-desc">Move the millstone that was used to process grain.</td>
                     <td class="mission-points">• Millstone not touching base: 30 pts</td>
+                    <td class="mission-build"><a href="pdf/M06_M07_ForgeHeavyLifting_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('6xcrIo-2WJ8', 'M07: Heavy Lifting', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2050,6 +2061,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="08">Silo</a></td>
                     <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
                     <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
+                    <td class="mission-build"><a href="pdf/M08_Silo_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('MbvDiuorKsc', 'M08: Silo', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2057,6 +2069,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="09">What's on Sale?</a></td>
                     <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
                     <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M09_WhatsOnSale_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('yymtNugu4V4', 'M09: What\'s on Sale?', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2064,6 +2077,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="10">Tip the Scales</a></td>
                     <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
                     <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M10_TipTheScales_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('RX8MMw_MJ9g', 'M10: Tip the Scales', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2071,6 +2085,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="11">Angler Artifacts</a></td>
                     <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
                     <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
+                    <td class="mission-build"><a href="pdf/M11_AngularArtifacts_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('qVrT1DH4Zh8', 'M11: Angler Artifacts', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2078,6 +2093,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="12">Salvage Operation</a></td>
                     <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
                     <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M12_SalvageOperationBuild.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('hFzNIv1NBzg', 'M12: Salvage Operation', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2085,6 +2101,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="13">Statue Rebuild</a></td>
                     <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
                     <td class="mission-points">• Statue completely raised: 30 pts</td>
+                    <td class="mission-build"><a href="pdf/M13_StatueRebuild_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('1yyh08hg398', 'M13: Statue Rebuild', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2092,6 +2109,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="14">Forum</a></td>
                     <td class="mission-desc">Deliver artifacts to the forum and choose significant items to display.</td>
                     <td class="mission-points">• Each artifact in forum: 5 pts<br>(Brush, Topsoil, Precious Artifact, Minecart, Ore, Millstone, Scale Pan)</td>
+                    <td class="mission-build">-</td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('Pq9d-23TMos', 'M14: Forum', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2099,6 +2117,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="15">Site Marking</a></td>
                     <td class="mission-desc">Place flags to mark locations for further study.</td>
                     <td class="mission-points">• Each site with flag: 10 pts</td>
+                    <td class="mission-build"><a href="pdf/M15_SiteMarkings_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('d6cNKGmYxh4', 'M15: Site Marking', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2106,6 +2125,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="PT">Precision Tokens</a></td>
                     <td class="mission-desc">Start with 6 tokens. Lose one for each robot interruption outside home.</td>
                     <td class="mission-points">1 token: 10 pts<br>2 tokens: 15 pts<br>3 tokens: 25 pts<br>4 tokens: 35 pts<br>5-6 tokens: 50 pts</td>
+                    <td class="mission-build">-</td>
                     <td class="mission-video"></td>
                 </tr>
             </tbody>
