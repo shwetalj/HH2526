@@ -1347,26 +1347,21 @@ function getResponsivePageMultiplier() {
     }
 }
 
-// Get actual PDF page count using PDF.js
-async function getPDFPageCount(pdfUrl) {
-    try {
-        if (typeof pdfjsLib !== 'undefined') {
-            console.log('Loading PDF to get page count:', pdfUrl);
-            const loadingTask = pdfjsLib.getDocument(pdfUrl);
-            const pdf = await loadingTask.promise;
-            const pageCount = pdf.numPages;
-            console.log('PDF has', pageCount, 'pages');
-            return pageCount;
-        }
-    } catch (error) {
-        console.log('Could not load PDF metadata:', error);
-    }
+// Simple page estimates based on file names
+function getEstimatedPageCount(pdfUrl) {
+    const filename = pdfUrl.split('/').pop();
     
-    // Fallback if PDF.js fails
-    return null;
+    // Quick estimates for known PDFs
+    const estimates = {
+        'M08_Silo_Build.pdf': 45,
+        'M01_SurfaceBrushing_Build.pdf': 28,
+        'M02_MapReveal_Build.pdf': 25
+    };
+    
+    return estimates[filename] || 40; // Default 40 pages
 }
 
-async function openPDF(pdfUrl, title) {
+function openPDF(pdfUrl, title) {
     const modal = document.getElementById('pdfModal');
     const pdfContainer = document.getElementById('pdfContainer');
     const pdfTitle = document.getElementById('pdfTitle');
@@ -1375,16 +1370,8 @@ async function openPDF(pdfUrl, title) {
     // Store current PDF URL
     currentPDFUrl = pdfUrl;
     
-    // Try to get actual page count from PDF metadata
-    const actualPageCount = await getPDFPageCount(pdfUrl);
-    if (actualPageCount) {
-        estimatedPDFPages = actualPageCount;
-        console.log('Using actual PDF page count:', estimatedPDFPages);
-    } else {
-        // Fallback to conservative estimate
-        estimatedPDFPages = 30;
-        console.log('Using estimated pages:', estimatedPDFPages);
-    }
+    // Get quick estimate
+    estimatedPDFPages = getEstimatedPageCount(pdfUrl);
     
     // Set title
     pdfTitle.textContent = title || 'Build Instructions';
@@ -1434,13 +1421,14 @@ async function openPDF(pdfUrl, title) {
         scrollContainer.style.WebkitOverflowScrolling = 'touch';
     } else {
         // For desktop, embed the PDF directly
-        iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=page-width`; // Use page-width zoom
+        iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=page-width`;
         iframe.style.width = '100%';
         iframe.style.border = 'none';
         
-        // Set a large initial height to accommodate any PDF
+        // Start with reasonable height based on estimate
+        const initialPages = Math.min(estimatedPDFPages, 50); // Cap initial render
         iframe.style.minHeight = '100vh';
-        iframe.style.height = '5000vh'; // Large initial height, will be adjusted
+        iframe.style.height = `${initialPages * 100}vh`; // Reasonable initial height
     }
     
     // Add iframe to container
@@ -1455,8 +1443,8 @@ async function openPDF(pdfUrl, title) {
     iframe.onload = function() {
         console.log('PDF iframe loaded');
         
-        // Wait a bit for PDF to render, then calculate actual height
-        setTimeout(() => {
+        // Quick setup without waiting
+        requestAnimationFrame(() => {
             const containerHeight = scrollContainer.clientHeight;
             
             // Dynamic height adjustment based on actual content
@@ -1477,35 +1465,18 @@ async function openPDF(pdfUrl, title) {
                     console.log('Cannot access iframe content (CORS), using dynamic adjustment');
                 }
                 
-                if (actualHeight > 0) {
-                    // Use actual detected height
-                    iframe.style.height = actualHeight + 'px';
-                } else if (estimatedPDFPages && estimatedPDFPages !== 30) {
-                    // We have actual page count from PDF.js
-                    // Add extra height to ensure we can scroll to the end
-                    // PDF renders at approximately 1.3x viewport height per page
-                    const pageHeight = containerHeight * 1.3; // More generous height per page
-                    const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
-                    // Add 10% buffer to ensure we can reach the end
-                    const finalHeight = calculatedHeight * 1.1;
-                    iframe.style.height = finalHeight + 'px';
-                    console.log(`Using PDF.js page count: ${estimatedPDFPages} pages, height: ${finalHeight}px`);
-                } else {
-                    // Fallback: use a very large height for desktop
-                    // The browser will only render what's visible
-                    const fallbackHeight = containerHeight * 100; // Support up to 100 pages
-                    iframe.style.height = fallbackHeight + 'px';
-                    console.log('Using fallback height for desktop:', fallbackHeight);
-                    
-                    // Still try to detect actual pages for the indicator
-                    setTimeout(() => {
-                        const actualPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
-                        if (actualPages > 0 && actualPages < 100) {
-                            estimatedPDFPages = actualPages;
-                            updatePageIndicator(actualPages);
-                        }
-                    }, 2000);
-                }
+                // Quick height calculation for desktop
+                const pageHeight = containerHeight * 1.2; // 1.2x viewport per page
+                const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
+                
+                // Add buffer to ensure we can reach the end
+                const finalHeight = calculatedHeight + (containerHeight * 2); // Add 2 pages buffer
+                iframe.style.height = finalHeight + 'px';
+                
+                console.log(`Desktop: ${estimatedPDFPages} pages, height: ${finalHeight}px`);
+                
+                // Update page indicator
+                updatePageIndicator(estimatedPDFPages);
                 
                 console.log(`Desktop - Dynamic height adjustment`);
             } else {
@@ -1594,7 +1565,7 @@ async function openPDF(pdfUrl, title) {
                     }
                 }, 100); // Debounce scroll events
             });
-        }, 500); // Give PDF time to start rendering
+        }); // Execute on next frame
     };
     
     // Navigation buttons and page indicator will be added after iframe loads
