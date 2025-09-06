@@ -1363,24 +1363,43 @@ function openPDF(pdfUrl, title) {
         const encodedUrl = encodeURIComponent(window.location.origin + '/' + pdfUrl);
         iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
         
-        // Add mobile close button
+        // Add mobile close button to modal content (not container)
         const closeBtn = document.createElement('button');
         closeBtn.className = 'pdf-mobile-close';
         closeBtn.innerHTML = '×';
         closeBtn.onclick = closePDF;
         closeBtn.setAttribute('aria-label', 'Close PDF');
-        pdfContainer.appendChild(closeBtn);
+        
+        // Find the modal content and append the button there
+        const modalContent = document.querySelector('.pdf-modal-content');
+        if (modalContent) {
+            modalContent.appendChild(closeBtn);
+        }
+        
+        // Hide the desktop close button on mobile
+        const desktopCloseBtn = document.querySelector('.pdf-close-btn');
+        if (desktopCloseBtn) {
+            desktopCloseBtn.style.display = 'none';
+        }
     } else {
         // For desktop, embed PDF directly
         iframe.src = pdfUrl;
+        
+        // Show the desktop close button
+        const desktopCloseBtn = document.querySelector('.pdf-close-btn');
+        if (desktopCloseBtn) {
+            desktopCloseBtn.style.display = '';
+        }
     }
     
     // Add iframe to container
     pdfContainer.appendChild(iframe);
     
-    // Show modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    // Show modal after elements are added
+    setTimeout(() => {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }, 50);
 }
 
 function closePDF() {
@@ -1392,6 +1411,18 @@ function closePDF() {
     
     // Clear PDF container
     pdfContainer.innerHTML = '';
+    
+    // Remove mobile close button if it exists
+    const mobileCloseBtn = document.querySelector('.pdf-mobile-close');
+    if (mobileCloseBtn) {
+        mobileCloseBtn.remove();
+    }
+    
+    // Show desktop close button again
+    const desktopCloseBtn = document.querySelector('.pdf-close-btn');
+    if (desktopCloseBtn) {
+        desktopCloseBtn.style.display = '';
+    }
     
     // Reset current PDF URL
     currentPDFUrl = null;
