@@ -1279,9 +1279,95 @@ document.getElementById('videoModal').addEventListener('click', function(e) {
 // Header scroll effect is handled by shared-scripts.js
 // Mobile menu is handled by shared-scripts.js
 
+// Handle window resize for PDF viewer
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        // Only recalculate if PDF modal is open
+        const pdfModal = document.getElementById('pdfModal');
+        const scrollContainer = document.getElementById('pdfScrollContainer');
+        const iframe = document.getElementById('pdfIframe');
+        
+        if (pdfModal && pdfModal.classList.contains('active') && scrollContainer && iframe) {
+            // Update page height multiplier
+            const oldMultiplier = pdfPageHeightMultiplier;
+            pdfPageHeightMultiplier = getResponsivePageMultiplier();
+            
+            if (oldMultiplier !== pdfPageHeightMultiplier) {
+                // Recalculate iframe height
+                const containerHeight = scrollContainer.clientHeight;
+                const pageHeight = containerHeight * pdfPageHeightMultiplier;
+                const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
+                
+                iframe.style.height = calculatedHeight + 'px';
+                
+                // Recalculate current page position
+                const scrollTop = scrollContainer.scrollTop;
+                const effectivePageHeight = containerHeight * pdfPageHeightMultiplier;
+                const scrollProgress = scrollTop + (containerHeight / 2);
+                const actualTotalPages = Math.max(
+                    estimatedPDFPages,
+                    Math.ceil(scrollContainer.scrollHeight / containerHeight)
+                );
+                
+                currentPDFPage = Math.min(
+                    Math.max(1, Math.ceil(scrollProgress / effectivePageHeight)),
+                    actualTotalPages
+                );
+                
+                updatePageIndicator(actualTotalPages);
+                
+                console.log(`Resize: Multiplier changed from ${oldMultiplier} to ${pdfPageHeightMultiplier}`);
+            }
+        }
+    }, 250); // Debounce resize events
+});
+
 // PDF Modal Functions
 let currentPDFUrl = null;
 let currentPDFPage = 1;
+let estimatedPDFPages = 50; // Default estimate
+let pdfPageHeightMultiplier = 1.0; // Store current multiplier
+
+// Get responsive page height multiplier based on screen size
+function getResponsivePageMultiplier() {
+    if (window.innerWidth <= 480) {
+        // Small mobile screens - smaller pages
+        return 0.85;
+    } else if (window.innerWidth <= 768) {
+        // Tablets and larger phones
+        return 0.9;
+    } else if (window.innerWidth <= 1024) {
+        // Small laptops
+        return 0.95;
+    } else {
+        // Desktop
+        return 1.0;
+    }
+}
+
+// Estimate page count based on PDF filename (can be customized per PDF)
+function estimatePDFPageCount(pdfUrl) {
+    // You can add specific page counts for known PDFs
+    const pageEstimates = {
+        'M01_SurfaceBrushing_Build.pdf': 28,
+        'M02_MapReveal_Build.pdf': 25,
+        'M03_M04_MineshaftExplorer_Build.pdf': 45,
+        'M05_WhoLIvedHere_Build.pdf': 35,
+        'M06_M07_ForgeHeavyLifting_Build.pdf': 50,
+        'M08_Silo_Build.pdf': 40,
+        'M09_WhatsOnSale_Build.pdf': 35,
+        'M10_TipTheScales_Build.pdf': 30,
+        'M11_AngularArtifacts_Build.pdf': 40,
+        'M12_SalvageOperationBuild.pdf': 45,
+        'M13_StatueRebuild_Build.pdf': 35,
+        'M15_SiteMarkings_Build.pdf': 25
+    };
+    
+    const filename = pdfUrl.split('/').pop();
+    return pageEstimates[filename] || 50; // Default to 50 pages if not found
+}
 
 function openPDF(pdfUrl, title) {
     const modal = document.getElementById('pdfModal');
@@ -1291,6 +1377,10 @@ function openPDF(pdfUrl, title) {
     
     // Store current PDF URL
     currentPDFUrl = pdfUrl;
+    
+    // Estimate page count for this PDF
+    estimatedPDFPages = estimatePDFPageCount(pdfUrl);
+    console.log('Estimated PDF pages:', estimatedPDFPages);
     
     // Set title
     pdfTitle.textContent = title || 'Build Instructions';
@@ -1305,80 +1395,128 @@ function openPDF(pdfUrl, title) {
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isMobile = isIOS || isAndroid;
     
-    if (isIOS) {
-        // For iOS, provide a simple preview with action buttons
-        // iOS Safari has known issues with embedded PDFs in iframes
-        pdfContainer.innerHTML = `
-            <div style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                padding: 20px;
-                background: #f5f5f5;
-                text-align: center;
-            ">
-                <div style="
-                    background: white;
-                    border-radius: 10px;
-                    padding: 30px;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                    max-width: 300px;
-                ">
-                    <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
-                    <h3 style="color: #333; margin-bottom: 10px; font-size: 18px;">
-                        ${title || 'Build Instructions'}
-                    </h3>
-                    <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
-                        PDF preview is not available on iOS Safari.
-                        <br>
-                        Use the buttons below to view the PDF.
-                    </p>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <a href="${pdfUrl}" target="_blank" style="
-                            background: #ffd700;
-                            color: #1a1a1a;
-                            padding: 12px 20px;
-                            border-radius: 8px;
-                            text-decoration: none;
-                            font-weight: bold;
-                            display: block;
-                        ">📖 Open PDF</a>
-                        <a href="${pdfUrl}" download="${filename}" style="
-                            background: #4CAF50;
-                            color: white;
-                            padding: 12px 20px;
-                            border-radius: 8px;
-                            text-decoration: none;
-                            font-weight: bold;
-                            display: block;
-                        ">💾 Download PDF</a>
-                    </div>
-                </div>
-            </div>
-        `;
-    } else if (isAndroid) {
-        // For Android, use iframe with specific parameters
-        pdfContainer.innerHTML = `
-            <iframe 
-                src="${pdfUrl}" 
-                style="width: 100%; height: 100%; min-height: 600px;" 
-                frameborder="0"
-                scrolling="auto">
-            </iframe>
-        `;
+    // Reset page counter
+    currentPDFPage = 1;
+    
+    // Clear container first
+    pdfContainer.innerHTML = '';
+    
+    // Create a scrollable container for the PDF
+    const scrollContainer = document.createElement('div');
+    scrollContainer.style.width = '100%';
+    scrollContainer.style.height = '100%';
+    scrollContainer.style.overflow = 'auto';
+    scrollContainer.style.position = 'relative';
+    scrollContainer.id = 'pdfScrollContainer';
+    
+    // Create iframe element
+    const iframe = document.createElement('iframe');
+    iframe.id = 'pdfIframe';
+    iframe.frameBorder = '0';
+    iframe.style.width = '100%';
+    
+    // Don't set initial height - let it be determined after load
+    iframe.style.minHeight = '100vh';
+    
+    if (isIOS || isAndroid) {
+        // For mobile, use Google Docs Viewer for better compatibility
+        const encodedUrl = encodeURIComponent(window.location.origin + '/' + pdfUrl);
+        iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
     } else {
-        // Use direct PDF embedding for desktop
-        pdfContainer.innerHTML = `
-            <iframe 
-                src="${pdfUrl}#view=FitH&scrollbar=1&toolbar=0&navpanes=0" 
-                style="width: 100%; height: 100%;" 
-                frameborder="0"
-                loading="lazy">
-            </iframe>
-        `;
+        // For desktop, embed the PDF directly
+        iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=100`;
     }
+    
+    // Add iframe to container
+    scrollContainer.appendChild(iframe);
+    pdfContainer.appendChild(scrollContainer);
+    
+    // Enable smooth scrolling
+    scrollContainer.style.scrollBehavior = 'smooth';
+    scrollContainer.style.webkitOverflowScrolling = 'touch';
+    
+    // Try to detect PDF load and setup navigation
+    iframe.onload = function() {
+        console.log('PDF iframe loaded');
+        
+        // Wait a bit for PDF to render, then calculate actual height
+        setTimeout(() => {
+            const containerHeight = scrollContainer.clientHeight;
+            
+            // Responsive page height calculation
+            pdfPageHeightMultiplier = getResponsivePageMultiplier();
+            
+            const pageHeight = containerHeight * pdfPageHeightMultiplier;
+            const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
+            
+            // Set the actual iframe height
+            iframe.style.height = calculatedHeight + 'px';
+            
+            console.log(`Container: ${containerHeight}px, Page: ${pageHeight}px, Total: ${calculatedHeight}px`);
+            console.log(`Screen width: ${window.innerWidth}, Multiplier: ${pdfPageHeightMultiplier}`);
+            
+            // Force a reflow to ensure proper scroll height calculation
+            scrollContainer.style.display = 'none';
+            scrollContainer.offsetHeight; // Trigger reflow
+            scrollContainer.style.display = '';
+            
+            // Add navigation buttons and page indicator after height is set
+            const navButtons = document.createElement('div');
+            navButtons.className = 'pdf-nav-buttons';
+            navButtons.innerHTML = `
+                <button class="pdf-nav-btn prev" onclick="scrollPDF('prev')" title="Previous Page" disabled>&lt;</button>
+                <button class="pdf-nav-btn next" onclick="scrollPDF('next')" title="Next Page">&gt;</button>
+            `;
+            
+            const pageIndicator = document.createElement('div');
+            pageIndicator.className = 'pdf-page-indicator';
+            pageIndicator.id = 'pdfPageIndicator';
+            
+            pdfContainer.appendChild(navButtons);
+            pdfContainer.appendChild(pageIndicator);
+            
+            // Calculate actual total pages after height is set
+            const actualTotalPages = Math.max(
+                estimatedPDFPages,
+                Math.ceil(scrollContainer.scrollHeight / containerHeight)
+            );
+            
+            // Update initial page indicator
+            updatePageIndicator(actualTotalPages);
+            
+            // Setup scroll listener for page tracking
+            let scrollTimeout;
+            scrollContainer.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const scrollTop = this.scrollTop;
+                    const containerHeight = this.clientHeight;
+                    const scrollHeight = this.scrollHeight;
+                    
+                    // More accurate page calculation
+                    const effectivePageHeight = containerHeight * pdfPageHeightMultiplier;
+                    const scrollProgress = scrollTop + (containerHeight / 2); // Use middle of viewport
+                    const newPage = Math.min(
+                        Math.max(1, Math.ceil(scrollProgress / effectivePageHeight)),
+                        actualTotalPages
+                    );
+                    
+                    if (newPage !== currentPDFPage) {
+                        currentPDFPage = newPage;
+                        updatePageIndicator(actualTotalPages);
+                        
+                        // Update button states
+                        const prevBtn = document.querySelector('.pdf-nav-btn.prev');
+                        const nextBtn = document.querySelector('.pdf-nav-btn.next');
+                        if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
+                        if (nextBtn) nextBtn.disabled = (currentPDFPage === actualTotalPages);
+                    }
+                }, 100); // Debounce scroll events
+            });
+        }, 500); // Give PDF time to start rendering
+    };
+    
+    // Navigation buttons and page indicator will be added after iframe loads
     
     // Show modal
     modal.classList.add('active');
@@ -1394,12 +1532,8 @@ function closePDF() {
     // Hide modal
     modal.classList.remove('active');
     
-    // Clear PDF container (but keep navigation buttons)
-    const navButtons = pdfContainer.querySelector('.pdf-nav-buttons');
-    const pageIndicator = pdfContainer.querySelector('.pdf-page-indicator');
+    // Clear PDF container completely
     pdfContainer.innerHTML = '';
-    if (navButtons) pdfContainer.appendChild(navButtons);
-    if (pageIndicator) pdfContainer.appendChild(pageIndicator);
     
     // Reset current PDF URL and page
     currentPDFUrl = null;
@@ -1409,61 +1543,80 @@ function closePDF() {
     document.body.style.overflow = '';
 }
 
-// Scroll PDF horizontally or vertically
+// Scroll PDF page by page
 function scrollPDF(direction) {
-    const pdfContainer = document.getElementById('pdfContainer');
-    const iframe = pdfContainer.querySelector('iframe');
-    const scrollAmount = 300; // Pixels to scroll
+    console.log('Navigating PDF:', direction);
     
-    if (pdfContainer) {
-        if (direction === 'left') {
-            // Scroll left/up
-            pdfContainer.scrollBy({
-                left: -scrollAmount,
-                top: 0,
-                behavior: 'smooth'
-            });
-            
-            // Try to scroll iframe content if possible
-            if (iframe && iframe.contentWindow) {
-                try {
-                    iframe.contentWindow.scrollBy(-scrollAmount, 0);
-                } catch(e) {
-                    // Cross-origin restriction, can't access iframe content
-                }
-            }
-            
-            currentPDFPage = Math.max(1, currentPDFPage - 1);
-            updatePageIndicator();
-            
-        } else if (direction === 'right') {
-            // Scroll right/down
-            pdfContainer.scrollBy({
-                left: scrollAmount,
-                top: 0,
-                behavior: 'smooth'
-            });
-            
-            // Try to scroll iframe content if possible
-            if (iframe && iframe.contentWindow) {
-                try {
-                    iframe.contentWindow.scrollBy(scrollAmount, 0);
-                } catch(e) {
-                    // Cross-origin restriction, can't access iframe content
-                }
-            }
-            
-            currentPDFPage++;
-            updatePageIndicator();
-        }
+    const scrollContainer = document.getElementById('pdfScrollContainer');
+    
+    if (!scrollContainer) {
+        console.error('PDF scroll container not found');
+        return;
     }
+    
+    // Get responsive page height multiplier
+    pdfPageHeightMultiplier = getResponsivePageMultiplier();
+    
+    // Calculate page dimensions
+    const containerHeight = scrollContainer.clientHeight;
+    const effectivePageHeight = containerHeight * pdfPageHeightMultiplier;
+    const scrollHeight = scrollContainer.scrollHeight;
+    const currentScroll = scrollContainer.scrollTop;
+    
+    // Use the estimated pages or calculated pages, whichever is larger
+    const calculatedPages = Math.ceil(scrollHeight / effectivePageHeight);
+    const totalPages = Math.max(estimatedPDFPages, calculatedPages);
+    
+    // Calculate target page
+    let targetPage = currentPDFPage;
+    
+    if (direction === 'prev' && currentPDFPage > 1) {
+        targetPage = currentPDFPage - 1;
+    } else if (direction === 'next' && currentPDFPage < totalPages) {
+        targetPage = currentPDFPage + 1;
+    } else {
+        return; // No change needed
+    }
+    
+    // Calculate scroll position for target page
+    const targetScroll = (targetPage - 1) * effectivePageHeight;
+    const maxScroll = scrollHeight - containerHeight;
+    
+    // Scroll to target page
+    scrollContainer.scrollTo({
+        top: Math.min(targetScroll, maxScroll),
+        behavior: 'smooth'
+    });
+    
+    // Update current page
+    currentPDFPage = targetPage;
+    
+    // Update page indicator
+    updatePageIndicator(totalPages);
+    
+    // Update navigation button states
+    const prevBtn = document.querySelector('.pdf-nav-btn.prev');
+    const nextBtn = document.querySelector('.pdf-nav-btn.next');
+    
+    if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
+    if (nextBtn) nextBtn.disabled = (currentPDFPage === totalPages);
+    
+    console.log(`Page ${currentPDFPage} of ${totalPages}`);
+    console.log(`Effective page height: ${effectivePageHeight}px`);
 }
 
+// Make function globally accessible
+window.scrollPDF = scrollPDF;
+
 // Update page indicator
-function updatePageIndicator() {
+function updatePageIndicator(totalPages) {
     const indicator = document.getElementById('pdfPageIndicator');
     if (indicator) {
-        indicator.textContent = `Page ${currentPDFPage}`;
+        if (totalPages) {
+            indicator.textContent = `Page ${currentPDFPage} of ${totalPages}`;
+        } else {
+            indicator.textContent = `Page ${currentPDFPage}`;
+        }
         indicator.classList.add('active');
         
         // Hide after 2 seconds
@@ -1538,13 +1691,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Add keyboard shortcut to close PDF modal
+// Add keyboard shortcuts for PDF modal
 document.addEventListener('keydown', function(e) {
     const pdfModal = document.getElementById('pdfModal');
     if (pdfModal && pdfModal.classList.contains('active')) {
         if (e.key === 'Escape' || e.key === 'Esc') {
             e.preventDefault();
             closePDF();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            scrollPDF('prev');
+        } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+            e.preventDefault();
+            scrollPDF('next');
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            const scrollContainer = document.getElementById('pdfScrollContainer');
+            if (scrollContainer) {
+                currentPDFPage = 1;
+                scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                updatePageIndicator(Math.ceil(scrollContainer.scrollHeight / scrollContainer.clientHeight));
+            }
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            const scrollContainer = document.getElementById('pdfScrollContainer');
+            if (scrollContainer) {
+                const totalPages = Math.ceil(scrollContainer.scrollHeight / scrollContainer.clientHeight);
+                currentPDFPage = totalPages;
+                scrollContainer.scrollTo({ 
+                    top: scrollContainer.scrollHeight - scrollContainer.clientHeight, 
+                    behavior: 'smooth' 
+                });
+                updatePageIndicator(totalPages);
+            }
         }
     }
 });

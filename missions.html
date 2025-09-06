@@ -1868,6 +1868,7 @@
         width: 90%;
         max-width: 1200px;
         height: 90vh;
+        max-height: 90vh;
         position: relative;
         box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         border: 2px solid rgba(255, 215, 0, 0.3);
@@ -1916,21 +1917,29 @@
     
     .pdf-container {
         flex: 1;
-        overflow-x: auto;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        overflow: hidden;
         border-radius: 10px;
         background: #ffffff;
         position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #pdfScrollContainer {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
         scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        flex: 1;
     }
     
     .pdf-container iframe {
         width: 100%;
-        height: 100%;
-        min-height: 600px;
         border: none;
-        border-radius: 10px;
+        display: block;
+        min-height: 100%;
     }
     
     .pdf-controls {
@@ -1966,81 +1975,88 @@
     .pdf-nav-buttons {
         position: absolute;
         top: 50%;
+        left: 0;
+        right: 0;
         transform: translateY(-50%);
-        width: 100%;
         display: flex;
         justify-content: space-between;
-        padding: 0 10px;
+        padding: 0 20px;
         pointer-events: none;
         z-index: 10;
     }
     
     .pdf-nav-btn {
-        background: rgba(255, 215, 0, 0.9);
+        background: rgba(255, 215, 0, 0.95);
         color: #1a1a1a;
         border: none;
-        width: 40px;
-        height: 60px;
-        border-radius: 5px;
+        width: 50px;
+        height: 70px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
         pointer-events: auto;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
     
-    .pdf-nav-btn:hover {
-        background: rgba(255, 215, 0, 1);
+    .pdf-nav-btn:hover:not(:disabled) {
+        background: #ffd700;
         transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
     
-    .pdf-nav-btn:active {
+    .pdf-nav-btn:active:not(:disabled) {
         transform: scale(0.95);
     }
     
     .pdf-nav-btn.prev {
-        margin-left: 5px;
+        margin-left: 0;
     }
     
     .pdf-nav-btn.next {
-        margin-right: 5px;
+        margin-right: 0;
     }
     
     .pdf-nav-btn:disabled {
-        opacity: 0.5;
+        opacity: 0.3;
         cursor: not-allowed;
-        background: rgba(200, 200, 200, 0.5);
+        background: rgba(150, 150, 150, 0.5);
+        transform: none;
     }
     
     /* Page indicator */
     .pdf-page-indicator {
         position: absolute;
-        bottom: 70px;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(26, 26, 26, 0.9);
         color: #ffd700;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 14px;
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-size: 16px;
         font-weight: bold;
         z-index: 10;
         display: none;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
     
     .pdf-page-indicator.active {
         display: block;
+        animation: fadeIn 0.3s ease;
     }
     
     /* Mobile PDF Modal Styles */
     @media (max-width: 768px) {
         .pdf-modal-content {
             width: 95%;
-            height: 85vh;
+            height: 80vh;
+            max-height: none;
             padding: 15px;
             padding-top: 60px; /* Make room for fixed header */
         }
@@ -2105,8 +2121,15 @@
         }
         
         .pdf-container {
-            margin-bottom: 70px; /* Space for fixed controls */
-            height: calc(100vh - 200px); /* Account for header and controls */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        #pdfScrollContainer {
+            flex: 1;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -2114,6 +2137,17 @@
         .pdf-container iframe {
             min-height: 100%;
             width: 100%;
+        }
+        
+        /* Fix navigation buttons on mobile */
+        .pdf-nav-buttons {
+            padding: 0 10px;
+        }
+        
+        .pdf-nav-btn {
+            width: 45px;
+            height: 60px;
+            font-size: 22px;
         }
     }
     
@@ -2154,43 +2188,45 @@
             left: 0;
             right: 0;
             bottom: 60px;
-            overflow-x: auto;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+        }
+        
+        #pdfScrollContainer {
+            flex: 1;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
-            background: #fff;
             scroll-behavior: smooth;
         }
         
         /* Show scrollbars on mobile for PDF */
-        .pdf-container::-webkit-scrollbar {
+        #pdfScrollContainer::-webkit-scrollbar {
             height: 8px;
             width: 8px;
         }
         
-        .pdf-container::-webkit-scrollbar-track {
+        #pdfScrollContainer::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
         
-        .pdf-container::-webkit-scrollbar-thumb {
+        #pdfScrollContainer::-webkit-scrollbar-thumb {
             background: #888;
             border-radius: 4px;
         }
         
-        .pdf-container::-webkit-scrollbar-thumb:hover {
+        #pdfScrollContainer::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
         
         /* Simple embed for iOS */
-        .pdf-container iframe,
-        .pdf-container object,
-        .pdf-container embed {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .pdf-container iframe {
             width: 100%;
-            height: 100%;
+            min-height: 100%;
             border: none;
+            display: block;
         }
         
         .pdf-controls {
