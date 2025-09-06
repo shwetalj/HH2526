@@ -1347,21 +1347,26 @@ function getResponsivePageMultiplier() {
     }
 }
 
-// Simple page estimates based on file names
-function getEstimatedPageCount(pdfUrl) {
-    const filename = pdfUrl.split('/').pop();
-    
-    // Quick estimates for known PDFs
-    const estimates = {
-        'M08_Silo_Build.pdf': 45,
-        'M01_SurfaceBrushing_Build.pdf': 28,
-        'M02_MapReveal_Build.pdf': 25
-    };
-    
-    return estimates[filename] || 40; // Default 40 pages
+// Get actual PDF page count using PDF.js
+async function getActualPDFPageCount(pdfUrl) {
+    try {
+        // Load PDF.js if not already loaded
+        await window.loadPDFJS();
+        
+        if (typeof pdfjsLib !== 'undefined') {
+            const loadingTask = pdfjsLib.getDocument(pdfUrl);
+            const pdf = await loadingTask.promise;
+            const pageCount = pdf.numPages;
+            console.log('PDF.js: Actual page count is', pageCount);
+            return pageCount;
+        }
+    } catch (error) {
+        console.log('Could not get PDF page count:', error);
+    }
+    return null; // Fallback to dynamic detection
 }
 
-function openPDF(pdfUrl, title) {
+async function openPDF(pdfUrl, title) {
     const modal = document.getElementById('pdfModal');
     const pdfContainer = document.getElementById('pdfContainer');
     const pdfTitle = document.getElementById('pdfTitle');
@@ -1370,8 +1375,8 @@ function openPDF(pdfUrl, title) {
     // Store current PDF URL
     currentPDFUrl = pdfUrl;
     
-    // Get quick estimate
-    estimatedPDFPages = getEstimatedPageCount(pdfUrl);
+    // Start with reasonable estimate
+    estimatedPDFPages = 35;
     
     // Set title
     pdfTitle.textContent = title || 'Build Instructions';
@@ -1425,10 +1430,9 @@ function openPDF(pdfUrl, title) {
         iframe.style.width = '100%';
         iframe.style.border = 'none';
         
-        // Start with reasonable height based on estimate
-        const initialPages = Math.min(estimatedPDFPages, 50); // Cap initial render
+        // Start with reasonable height
         iframe.style.minHeight = '100vh';
-        iframe.style.height = `${initialPages * 100}vh`; // Reasonable initial height
+        iframe.style.height = '3500vh'; // ~35 pages initial
     }
     
     // Add iframe to container
@@ -1465,20 +1469,24 @@ function openPDF(pdfUrl, title) {
                     console.log('Cannot access iframe content (CORS), using dynamic adjustment');
                 }
                 
-                // Quick height calculation for desktop
-                const pageHeight = containerHeight * 1.2; // 1.2x viewport per page
-                const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
+                // Set initial height for desktop
+                const pageHeight = containerHeight * 1.1; // 1.1x viewport per page
+                const initialHeight = Math.ceil(estimatedPDFPages * pageHeight);
+                iframe.style.height = initialHeight + 'px';
                 
-                // Add buffer to ensure we can reach the end
-                const finalHeight = calculatedHeight + (containerHeight * 2); // Add 2 pages buffer
-                iframe.style.height = finalHeight + 'px';
-                
-                console.log(`Desktop: ${estimatedPDFPages} pages, height: ${finalHeight}px`);
-                
-                // Update page indicator
+                console.log(`Desktop - Initial: ${estimatedPDFPages} pages, height: ${initialHeight}px`);
                 updatePageIndicator(estimatedPDFPages);
                 
-                console.log(`Desktop - Dynamic height adjustment`);
+                // Load PDF.js in background to get actual page count
+                getActualPDFPageCount(pdfUrl).then(actualCount => {
+                    if (actualCount) {
+                        estimatedPDFPages = actualCount;
+                        const accurateHeight = Math.ceil(actualCount * pageHeight);
+                        iframe.style.height = accurateHeight + 'px';
+                        console.log(`Updated with PDF.js: ${actualCount} pages, height: ${accurateHeight}px`);
+                        updatePageIndicator(actualCount);
+                    }
+                });
             } else {
                 // For mobile, let Google Docs Viewer handle its own height
                 iframe.style.height = '100vh';
@@ -1570,11 +1578,7 @@ function openPDF(pdfUrl, title) {
     
     // Navigation buttons and page indicator will be added after iframe loads
     
-    // Show modal
-    modal.classList.add('active');
-    
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
+    // Modal already shown at the beginning for fast response
 }
 
 function closePDF() {
