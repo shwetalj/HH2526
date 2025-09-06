@@ -1347,29 +1347,26 @@ function getResponsivePageMultiplier() {
     }
 }
 
-// Estimate page count based on PDF filename (can be customized per PDF)
-function estimatePDFPageCount(pdfUrl) {
-    // You can add specific page counts for known PDFs
-    const pageEstimates = {
-        'M01_SurfaceBrushing_Build.pdf': 28,
-        'M02_MapReveal_Build.pdf': 25,
-        'M03_M04_MineshaftExplorer_Build.pdf': 45,
-        'M05_WhoLIvedHere_Build.pdf': 35,
-        'M06_M07_ForgeHeavyLifting_Build.pdf': 50,
-        'M08_Silo_Build.pdf': 40,
-        'M09_WhatsOnSale_Build.pdf': 35,
-        'M10_TipTheScales_Build.pdf': 30,
-        'M11_AngularArtifacts_Build.pdf': 40,
-        'M12_SalvageOperationBuild.pdf': 45,
-        'M13_StatueRebuild_Build.pdf': 35,
-        'M15_SiteMarkings_Build.pdf': 25
-    };
+// Get actual PDF page count using PDF.js
+async function getPDFPageCount(pdfUrl) {
+    try {
+        if (typeof pdfjsLib !== 'undefined') {
+            console.log('Loading PDF to get page count:', pdfUrl);
+            const loadingTask = pdfjsLib.getDocument(pdfUrl);
+            const pdf = await loadingTask.promise;
+            const pageCount = pdf.numPages;
+            console.log('PDF has', pageCount, 'pages');
+            return pageCount;
+        }
+    } catch (error) {
+        console.log('Could not load PDF metadata:', error);
+    }
     
-    const filename = pdfUrl.split('/').pop();
-    return pageEstimates[filename] || 50; // Default to 50 pages if not found
+    // Fallback if PDF.js fails
+    return null;
 }
 
-function openPDF(pdfUrl, title) {
+async function openPDF(pdfUrl, title) {
     const modal = document.getElementById('pdfModal');
     const pdfContainer = document.getElementById('pdfContainer');
     const pdfTitle = document.getElementById('pdfTitle');
@@ -1378,9 +1375,16 @@ function openPDF(pdfUrl, title) {
     // Store current PDF URL
     currentPDFUrl = pdfUrl;
     
-    // Estimate page count for this PDF
-    estimatedPDFPages = estimatePDFPageCount(pdfUrl);
-    console.log('Estimated PDF pages:', estimatedPDFPages);
+    // Try to get actual page count from PDF metadata
+    const actualPageCount = await getPDFPageCount(pdfUrl);
+    if (actualPageCount) {
+        estimatedPDFPages = actualPageCount;
+        console.log('Using actual PDF page count:', estimatedPDFPages);
+    } else {
+        // Fallback to conservative estimate
+        estimatedPDFPages = 30;
+        console.log('Using estimated pages:', estimatedPDFPages);
+    }
     
     // Set title
     pdfTitle.textContent = title || 'Build Instructions';
@@ -1415,16 +1419,28 @@ function openPDF(pdfUrl, title) {
     iframe.frameBorder = '0';
     iframe.style.width = '100%';
     
-    // Don't set initial height - let it be determined after load
-    iframe.style.minHeight = '100vh';
-    
     if (isIOS || isAndroid) {
-        // For mobile, use Google Docs Viewer for better compatibility
+        // For mobile devices, use Google Docs Viewer
         const encodedUrl = encodeURIComponent(window.location.origin + '/' + pdfUrl);
         iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
+        
+        // Don't set any height - let the iframe size itself
+        // This prevents the distortion issue
+        iframe.style.width = '100%';
+        iframe.style.border = 'none';
+        
+        // Remove height constraints for mobile
+        scrollContainer.style.overflow = 'auto';
+        scrollContainer.style.WebkitOverflowScrolling = 'touch';
     } else {
         // For desktop, embed the PDF directly
         iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=100`;
+        iframe.style.width = '100%';
+        iframe.style.border = 'none';
+        
+        // Set initial height - will be adjusted based on actual page count
+        iframe.style.minHeight = '100vh';
+        iframe.style.height = '100vh'; // Start with viewport height
     }
     
     // Add iframe to container
@@ -1443,37 +1459,103 @@ function openPDF(pdfUrl, title) {
         setTimeout(() => {
             const containerHeight = scrollContainer.clientHeight;
             
-            // Responsive page height calculation
-            pdfPageHeightMultiplier = getResponsivePageMultiplier();
-            
-            const pageHeight = containerHeight * pdfPageHeightMultiplier;
-            const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
-            
-            // Set the actual iframe height
-            iframe.style.height = calculatedHeight + 'px';
-            
-            console.log(`Container: ${containerHeight}px, Page: ${pageHeight}px, Total: ${calculatedHeight}px`);
-            console.log(`Screen width: ${window.innerWidth}, Multiplier: ${pdfPageHeightMultiplier}`);
+            // Dynamic height adjustment based on actual content
+            if (!isMobile) {
+                // For desktop, start with a reasonable height and adjust
+                pdfPageHeightMultiplier = getResponsivePageMultiplier();
+                
+                // Try to detect actual PDF height by checking iframe content
+                let actualHeight = 0;
+                try {
+                    // Check if we can access iframe content (may be blocked by CORS)
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                    if (iframeDoc && iframeDoc.body) {
+                        actualHeight = iframeDoc.body.scrollHeight;
+                        console.log('Detected actual PDF height:', actualHeight);
+                    }
+                } catch (e) {
+                    console.log('Cannot access iframe content (CORS), using dynamic adjustment');
+                }
+                
+                if (actualHeight > 0) {
+                    // Use actual detected height
+                    iframe.style.height = actualHeight + 'px';
+                } else if (estimatedPDFPages && estimatedPDFPages !== 30) {
+                    // We have actual page count from PDF.js, calculate proper height
+                    const pageHeight = containerHeight * pdfPageHeightMultiplier;
+                    const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
+                    iframe.style.height = calculatedHeight + 'px';
+                    console.log(`Using PDF.js page count: ${estimatedPDFPages} pages, height: ${calculatedHeight}px`);
+                } else {
+                    // Fallback: monitor scroll height if we couldn't get page count
+                    const initialHeight = containerHeight * 10;
+                    iframe.style.height = initialHeight + 'px';
+                    
+                    let lastScrollHeight = scrollContainer.scrollHeight;
+                    const checkHeight = setInterval(() => {
+                        if (scrollContainer.scrollHeight > lastScrollHeight) {
+                            lastScrollHeight = scrollContainer.scrollHeight;
+                            const currentPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
+                            estimatedPDFPages = currentPages;
+                            console.log('Detected pages so far:', currentPages);
+                        } else {
+                            clearInterval(checkHeight);
+                            const finalPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
+                            estimatedPDFPages = finalPages;
+                            console.log('Final detected pages:', finalPages);
+                            updatePageIndicator(finalPages);
+                        }
+                    }, 500);
+                    
+                    setTimeout(() => clearInterval(checkHeight), 5000);
+                }
+                
+                console.log(`Desktop - Dynamic height adjustment`);
+            } else {
+                // For mobile, let Google Docs Viewer handle its own height
+                iframe.style.height = '100vh';
+                iframe.style.position = 'fixed';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.right = '0';
+                iframe.style.bottom = '0';
+                
+                console.log('Mobile - Using fixed viewport height');
+            }
             
             // Force a reflow to ensure proper scroll height calculation
             scrollContainer.style.display = 'none';
             scrollContainer.offsetHeight; // Trigger reflow
             scrollContainer.style.display = '';
             
-            // Add navigation buttons and page indicator after height is set
-            const navButtons = document.createElement('div');
-            navButtons.className = 'pdf-nav-buttons';
-            navButtons.innerHTML = `
-                <button class="pdf-nav-btn prev" onclick="scrollPDF('prev')" title="Previous Page" disabled>&lt;</button>
-                <button class="pdf-nav-btn next" onclick="scrollPDF('next')" title="Next Page">&gt;</button>
-            `;
+            // Only add navigation buttons for desktop
+            const isMobileDevice = window.innerWidth <= 768;
             
+            if (!isMobileDevice) {
+                const navButtons = document.createElement('div');
+                navButtons.className = 'pdf-nav-buttons';
+                navButtons.innerHTML = `
+                    <button class="pdf-nav-btn prev" onclick="scrollPDF('prev')" title="Previous Page" disabled>&lt;</button>
+                    <button class="pdf-nav-btn next" onclick="scrollPDF('next')" title="Next Page">&gt;</button>
+                `;
+                pdfContainer.appendChild(navButtons);
+            }
+            
+            // Add page indicator for all devices
             const pageIndicator = document.createElement('div');
             pageIndicator.className = 'pdf-page-indicator';
             pageIndicator.id = 'pdfPageIndicator';
-            
-            pdfContainer.appendChild(navButtons);
             pdfContainer.appendChild(pageIndicator);
+            
+            // Add mobile close button
+            if (isMobileDevice) {
+                const mobileCloseBtn = document.createElement('button');
+                mobileCloseBtn.className = 'pdf-mobile-close';
+                mobileCloseBtn.innerHTML = '×';
+                mobileCloseBtn.onclick = closePDF;
+                mobileCloseBtn.setAttribute('aria-label', 'Close PDF');
+                pdfContainer.appendChild(mobileCloseBtn);
+            }
             
             // Calculate actual total pages after height is set
             const actualTotalPages = Math.max(
@@ -1505,11 +1587,13 @@ function openPDF(pdfUrl, title) {
                         currentPDFPage = newPage;
                         updatePageIndicator(actualTotalPages);
                         
-                        // Update button states
-                        const prevBtn = document.querySelector('.pdf-nav-btn.prev');
-                        const nextBtn = document.querySelector('.pdf-nav-btn.next');
-                        if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
-                        if (nextBtn) nextBtn.disabled = (currentPDFPage === actualTotalPages);
+                        // Update button states (only for desktop)
+                        if (window.innerWidth > 768) {
+                            const prevBtn = document.querySelector('.pdf-nav-btn.prev');
+                            const nextBtn = document.querySelector('.pdf-nav-btn.next');
+                            if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
+                            if (nextBtn) nextBtn.disabled = (currentPDFPage === actualTotalPages);
+                        }
                     }
                 }, 100); // Debounce scroll events
             });
@@ -1594,12 +1678,14 @@ function scrollPDF(direction) {
     // Update page indicator
     updatePageIndicator(totalPages);
     
-    // Update navigation button states
-    const prevBtn = document.querySelector('.pdf-nav-btn.prev');
-    const nextBtn = document.querySelector('.pdf-nav-btn.next');
-    
-    if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
-    if (nextBtn) nextBtn.disabled = (currentPDFPage === totalPages);
+    // Update navigation button states (only for desktop)
+    if (window.innerWidth > 768) {
+        const prevBtn = document.querySelector('.pdf-nav-btn.prev');
+        const nextBtn = document.querySelector('.pdf-nav-btn.next');
+        
+        if (prevBtn) prevBtn.disabled = (currentPDFPage === 1);
+        if (nextBtn) nextBtn.disabled = (currentPDFPage === totalPages);
+    }
     
     console.log(`Page ${currentPDFPage} of ${totalPages}`);
     console.log(`Effective page height: ${effectivePageHeight}px`);
