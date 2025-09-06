@@ -1434,13 +1434,13 @@ async function openPDF(pdfUrl, title) {
         scrollContainer.style.WebkitOverflowScrolling = 'touch';
     } else {
         // For desktop, embed the PDF directly
-        iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=100`;
+        iframe.src = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&zoom=page-width`; // Use page-width zoom
         iframe.style.width = '100%';
         iframe.style.border = 'none';
         
-        // Set initial height - will be adjusted based on actual page count
+        // Set a large initial height to accommodate any PDF
         iframe.style.minHeight = '100vh';
-        iframe.style.height = '100vh'; // Start with viewport height
+        iframe.style.height = '5000vh'; // Large initial height, will be adjusted
     }
     
     // Add iframe to container
@@ -1481,33 +1481,30 @@ async function openPDF(pdfUrl, title) {
                     // Use actual detected height
                     iframe.style.height = actualHeight + 'px';
                 } else if (estimatedPDFPages && estimatedPDFPages !== 30) {
-                    // We have actual page count from PDF.js, calculate proper height
-                    const pageHeight = containerHeight * pdfPageHeightMultiplier;
+                    // We have actual page count from PDF.js
+                    // Add extra height to ensure we can scroll to the end
+                    // PDF renders at approximately 1.3x viewport height per page
+                    const pageHeight = containerHeight * 1.3; // More generous height per page
                     const calculatedHeight = Math.ceil(estimatedPDFPages * pageHeight);
-                    iframe.style.height = calculatedHeight + 'px';
-                    console.log(`Using PDF.js page count: ${estimatedPDFPages} pages, height: ${calculatedHeight}px`);
+                    // Add 10% buffer to ensure we can reach the end
+                    const finalHeight = calculatedHeight * 1.1;
+                    iframe.style.height = finalHeight + 'px';
+                    console.log(`Using PDF.js page count: ${estimatedPDFPages} pages, height: ${finalHeight}px`);
                 } else {
-                    // Fallback: monitor scroll height if we couldn't get page count
-                    const initialHeight = containerHeight * 10;
-                    iframe.style.height = initialHeight + 'px';
+                    // Fallback: use a very large height for desktop
+                    // The browser will only render what's visible
+                    const fallbackHeight = containerHeight * 100; // Support up to 100 pages
+                    iframe.style.height = fallbackHeight + 'px';
+                    console.log('Using fallback height for desktop:', fallbackHeight);
                     
-                    let lastScrollHeight = scrollContainer.scrollHeight;
-                    const checkHeight = setInterval(() => {
-                        if (scrollContainer.scrollHeight > lastScrollHeight) {
-                            lastScrollHeight = scrollContainer.scrollHeight;
-                            const currentPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
-                            estimatedPDFPages = currentPages;
-                            console.log('Detected pages so far:', currentPages);
-                        } else {
-                            clearInterval(checkHeight);
-                            const finalPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
-                            estimatedPDFPages = finalPages;
-                            console.log('Final detected pages:', finalPages);
-                            updatePageIndicator(finalPages);
+                    // Still try to detect actual pages for the indicator
+                    setTimeout(() => {
+                        const actualPages = Math.ceil(scrollContainer.scrollHeight / containerHeight);
+                        if (actualPages > 0 && actualPages < 100) {
+                            estimatedPDFPages = actualPages;
+                            updatePageIndicator(actualPages);
                         }
-                    }, 500);
-                    
-                    setTimeout(() => clearInterval(checkHeight), 5000);
+                    }, 2000);
                 }
                 
                 console.log(`Desktop - Dynamic height adjustment`);

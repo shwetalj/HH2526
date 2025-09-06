@@ -1934,16 +1934,36 @@
         -webkit-overflow-scrolling: touch;
         position: relative;
         flex: 1;
+        /* Ensure scrollbar is always visible on desktop */
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+    
+    /* Custom scrollbar for desktop */
+    #pdfScrollContainer::-webkit-scrollbar {
+        width: 12px;
+    }
+    
+    #pdfScrollContainer::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 6px;
+    }
+    
+    #pdfScrollContainer::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 6px;
+    }
+    
+    #pdfScrollContainer::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
     
     .pdf-container iframe {
         width: 100%;
         border: none;
         display: block;
-        min-height: 100%;
-        /* Prevent distortion with proper aspect ratio */
+        /* Remove constraints that might limit height */
         max-width: 100%;
-        object-fit: contain;
     }
     
     .pdf-controls {
