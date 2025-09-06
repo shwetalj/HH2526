@@ -1846,7 +1846,7 @@
     .pdf-modal {
         display: none;
         position: fixed;
-        z-index: 2000;
+        z-index: 10001; /* Higher than header */
         left: 0;
         top: 0;
         width: 100%;
@@ -1867,6 +1867,8 @@
         padding: 20px;
         width: 90%;
         max-width: 1200px;
+        position: relative;
+        z-index: 10001;
         height: 90vh;
         max-height: 90vh;
         position: relative;
@@ -2091,7 +2093,7 @@
         font-weight: bold;
         line-height: 1;
         cursor: pointer;
-        z-index: 10000; /* Very high z-index to ensure it's always on top */
+        z-index: 10002; /* Higher than modal and header */
         box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 20px rgba(255, 215, 0, 0.4);
         transition: all 0.3s ease;
         padding: 0;

@@ -1369,6 +1369,8 @@ function openPDF(pdfUrl, title) {
         closeBtn.innerHTML = '×';
         closeBtn.onclick = closePDF;
         closeBtn.setAttribute('aria-label', 'Close PDF');
+        closeBtn.style.zIndex = '10002'; // Ensure it's above everything including header
+        closeBtn.style.display = 'flex'; // Make sure it's visible
         
         // Find the modal content and append the button there
         const modalContent = document.querySelector('.pdf-modal-content');
