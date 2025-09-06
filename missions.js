@@ -1281,6 +1281,7 @@ document.getElementById('videoModal').addEventListener('click', function(e) {
 
 // PDF Modal Functions
 let currentPDFUrl = null;
+let currentPDFPage = 1;
 
 function openPDF(pdfUrl, title) {
     const modal = document.getElementById('pdfModal');
@@ -1393,14 +1394,83 @@ function closePDF() {
     // Hide modal
     modal.classList.remove('active');
     
-    // Clear PDF container
+    // Clear PDF container (but keep navigation buttons)
+    const navButtons = pdfContainer.querySelector('.pdf-nav-buttons');
+    const pageIndicator = pdfContainer.querySelector('.pdf-page-indicator');
     pdfContainer.innerHTML = '';
+    if (navButtons) pdfContainer.appendChild(navButtons);
+    if (pageIndicator) pdfContainer.appendChild(pageIndicator);
     
-    // Reset current PDF URL
+    // Reset current PDF URL and page
     currentPDFUrl = null;
+    currentPDFPage = 1;
     
     // Restore body scroll
     document.body.style.overflow = '';
+}
+
+// Scroll PDF horizontally or vertically
+function scrollPDF(direction) {
+    const pdfContainer = document.getElementById('pdfContainer');
+    const iframe = pdfContainer.querySelector('iframe');
+    const scrollAmount = 300; // Pixels to scroll
+    
+    if (pdfContainer) {
+        if (direction === 'left') {
+            // Scroll left/up
+            pdfContainer.scrollBy({
+                left: -scrollAmount,
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Try to scroll iframe content if possible
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.scrollBy(-scrollAmount, 0);
+                } catch(e) {
+                    // Cross-origin restriction, can't access iframe content
+                }
+            }
+            
+            currentPDFPage = Math.max(1, currentPDFPage - 1);
+            updatePageIndicator();
+            
+        } else if (direction === 'right') {
+            // Scroll right/down
+            pdfContainer.scrollBy({
+                left: scrollAmount,
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Try to scroll iframe content if possible
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.scrollBy(scrollAmount, 0);
+                } catch(e) {
+                    // Cross-origin restriction, can't access iframe content
+                }
+            }
+            
+            currentPDFPage++;
+            updatePageIndicator();
+        }
+    }
+}
+
+// Update page indicator
+function updatePageIndicator() {
+    const indicator = document.getElementById('pdfPageIndicator');
+    if (indicator) {
+        indicator.textContent = `Page ${currentPDFPage}`;
+        indicator.classList.add('active');
+        
+        // Hide after 2 seconds
+        setTimeout(() => {
+            indicator.classList.remove('active');
+        }, 2000);
+    }
 }
 
 function openPDFInNewTab() {

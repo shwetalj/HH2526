@@ -1916,11 +1916,13 @@
     
     .pdf-container {
         flex: 1;
-        overflow: auto;
+        overflow-x: auto;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         border-radius: 10px;
         background: #ffffff;
         position: relative;
+        scroll-behavior: smooth;
     }
     
     .pdf-container iframe {
@@ -1958,6 +1960,80 @@
         background: linear-gradient(135deg, var(--gold-dark), var(--gold));
         transform: scale(1.05);
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    /* PDF Navigation Buttons */
+    .pdf-nav-buttons {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+        pointer-events: none;
+        z-index: 10;
+    }
+    
+    .pdf-nav-btn {
+        background: rgba(255, 215, 0, 0.9);
+        color: #1a1a1a;
+        border: none;
+        width: 40px;
+        height: 60px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        pointer-events: auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .pdf-nav-btn:hover {
+        background: rgba(255, 215, 0, 1);
+        transform: scale(1.1);
+    }
+    
+    .pdf-nav-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .pdf-nav-btn.prev {
+        margin-left: 5px;
+    }
+    
+    .pdf-nav-btn.next {
+        margin-right: 5px;
+    }
+    
+    .pdf-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: rgba(200, 200, 200, 0.5);
+    }
+    
+    /* Page indicator */
+    .pdf-page-indicator {
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #ffd700;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 10;
+        display: none;
+    }
+    
+    .pdf-page-indicator.active {
+        display: block;
     }
     
     /* Mobile PDF Modal Styles */
@@ -2078,10 +2154,31 @@
             left: 0;
             right: 0;
             bottom: 60px;
-            overflow: scroll;
+            overflow-x: auto;
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
             background: #fff;
+            scroll-behavior: smooth;
+        }
+        
+        /* Show scrollbars on mobile for PDF */
+        .pdf-container::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        
+        .pdf-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .pdf-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        .pdf-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
         
         /* Simple embed for iOS */
@@ -2499,6 +2596,11 @@
             </div>
             <div class="pdf-container" id="pdfContainer">
                 <!-- PDF iframe will be inserted here -->
+                <div class="pdf-nav-buttons">
+                    <button class="pdf-nav-btn prev" onclick="scrollPDF('left')" title="Previous Page">&lt;</button>
+                    <button class="pdf-nav-btn next" onclick="scrollPDF('right')" title="Next Page">&gt;</button>
+                </div>
+                <div class="pdf-page-indicator" id="pdfPageIndicator">Page 1</div>
             </div>
             <div class="pdf-controls">
                 <a href="#" id="pdfDownloadLink" class="pdf-control-btn" download>📥 Download PDF</a>
