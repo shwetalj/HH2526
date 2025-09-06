@@ -2156,12 +2156,12 @@
             width: 100%;
             height: calc(90vh - 50px); /* Account for modal height and header */
             display: flex;
-            border-radius: 0 0 10px 10px;
-            overflow: hidden;
             flex-direction: column;
-            overflow: hidden;
+            border-radius: 0 0 10px 10px;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            touch-action: pan-x pan-y pinch-zoom; /* Enable pinch zoom */
             background: #fff;
-            border-radius: 0;
         }
         
         #pdfScrollContainer {
@@ -2181,6 +2181,9 @@
             left: 0;
             right: 0;
             bottom: 0;
+            touch-action: auto !important; /* Enable pinch-to-zoom */
+            pointer-events: auto !important;
+            -webkit-transform: translate3d(0,0,0); /* Hardware acceleration */
         }
         
         /* iOS specific fixes */

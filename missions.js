@@ -1358,10 +1358,29 @@ function openPDF(pdfUrl, title) {
     iframe.style.top = '0';
     iframe.style.left = '0';
     
+    // Enable zooming on mobile
+    iframe.setAttribute('scrolling', 'yes');
+    iframe.setAttribute('allowfullscreen', 'true');
+    iframe.style.touchAction = 'auto'; // Allow pinch-to-zoom
+    
     if (isMobile) {
-        // For mobile, use Google Docs Viewer
-        const encodedUrl = encodeURIComponent(window.location.origin + '/' + pdfUrl);
-        iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
+        // For mobile, try native PDF viewing first, fallback to Google Docs
+        // Native PDF viewing allows pinch-to-zoom
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (isIOS) {
+            // iOS handles PDFs natively with good pinch-to-zoom
+            iframe.src = pdfUrl;
+        } else {
+            // Android - try direct PDF, some browsers support it
+            iframe.src = pdfUrl;
+            
+            // Fallback to Google Docs Viewer if PDF doesn't load
+            iframe.onerror = function() {
+                const encodedUrl = encodeURIComponent(window.location.origin + '/' + pdfUrl);
+                iframe.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
+            };
+        }
         
         // Add mobile close button to modal content (not container)
         const closeBtn = document.createElement('button');
