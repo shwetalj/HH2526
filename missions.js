@@ -1300,21 +1300,72 @@ function openPDF(pdfUrl, title) {
     downloadLink.download = filename;
     
     // Create iframe for PDF with mobile-friendly embedding
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isMobile = isIOS || isAndroid;
     
-    if (isMobile) {
-        // For mobile, use object tag with fallback
+    if (isIOS) {
+        // For iOS, provide a simple preview with action buttons
+        // iOS Safari has known issues with embedded PDFs in iframes
         pdfContainer.innerHTML = `
-            <object data="${pdfUrl}" type="application/pdf" style="width: 100%; height: 100%; min-height: 800px;">
-                <iframe 
-                    src="${pdfUrl}#view=FitH&scrollbar=1&toolbar=1&navpanes=0" 
-                    style="width: 100%; height: 100%; min-height: 800px;" 
-                    frameborder="0"
-                    scrolling="auto">
-                    <p>Your browser doesn't support embedded PDFs. 
-                    <a href="${pdfUrl}" target="_blank">Click here to download the PDF</a>.</p>
-                </iframe>
-            </object>
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                padding: 20px;
+                background: #f5f5f5;
+                text-align: center;
+            ">
+                <div style="
+                    background: white;
+                    border-radius: 10px;
+                    padding: 30px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    max-width: 300px;
+                ">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
+                    <h3 style="color: #333; margin-bottom: 10px; font-size: 18px;">
+                        ${title || 'Build Instructions'}
+                    </h3>
+                    <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
+                        PDF preview is not available on iOS Safari.
+                        <br>
+                        Use the buttons below to view the PDF.
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="${pdfUrl}" target="_blank" style="
+                            background: #ffd700;
+                            color: #1a1a1a;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: block;
+                        ">📖 Open PDF</a>
+                        <a href="${pdfUrl}" download="${filename}" style="
+                            background: #4CAF50;
+                            color: white;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: block;
+                        ">💾 Download PDF</a>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (isAndroid) {
+        // For Android, use iframe with specific parameters
+        pdfContainer.innerHTML = `
+            <iframe 
+                src="${pdfUrl}" 
+                style="width: 100%; height: 100%; min-height: 600px;" 
+                frameborder="0"
+                scrolling="auto">
+            </iframe>
         `;
     } else {
         // Use direct PDF embedding for desktop
