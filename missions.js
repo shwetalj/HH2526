@@ -1278,3 +1278,110 @@ document.getElementById('videoModal').addEventListener('click', function(e) {
 
 // Header scroll effect is handled by shared-scripts.js
 // Mobile menu is handled by shared-scripts.js
+
+// PDF Modal Functions
+let currentPDFUrl = null;
+
+function openPDF(pdfUrl, title) {
+    const modal = document.getElementById('pdfModal');
+    const pdfContainer = document.getElementById('pdfContainer');
+    const pdfTitle = document.getElementById('pdfTitle');
+    const downloadLink = document.getElementById('pdfDownloadLink');
+    
+    // Store current PDF URL
+    currentPDFUrl = pdfUrl;
+    
+    // Set title
+    pdfTitle.textContent = title || 'Build Instructions';
+    
+    // Set download link
+    downloadLink.href = pdfUrl;
+    const filename = pdfUrl.split('/').pop();
+    downloadLink.download = filename;
+    
+    // Create iframe for PDF
+    pdfContainer.innerHTML = `
+        <iframe 
+            src="${pdfUrl}" 
+            style="width: 100%; height: 100%;" 
+            frameborder="0"
+            loading="lazy">
+        </iframe>
+    `;
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+}
+
+function closePDF() {
+    const modal = document.getElementById('pdfModal');
+    const pdfContainer = document.getElementById('pdfContainer');
+    
+    // Hide modal
+    modal.classList.remove('active');
+    
+    // Clear PDF container
+    pdfContainer.innerHTML = '';
+    
+    // Reset current PDF URL
+    currentPDFUrl = null;
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+function openPDFInNewTab() {
+    if (currentPDFUrl) {
+        window.open(currentPDFUrl, '_blank');
+    }
+}
+
+function togglePDFFullscreen() {
+    const pdfModalContent = document.querySelector('.pdf-modal-content');
+    
+    if (!document.fullscreenElement) {
+        // Enter fullscreen
+        if (pdfModalContent.requestFullscreen) {
+            pdfModalContent.requestFullscreen();
+        } else if (pdfModalContent.webkitRequestFullscreen) { // Safari
+            pdfModalContent.webkitRequestFullscreen();
+        } else if (pdfModalContent.msRequestFullscreen) { // IE11
+            pdfModalContent.msRequestFullscreen();
+        }
+    } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { // Safari
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE11
+            document.msExitFullscreen();
+        }
+    }
+}
+
+// Close PDF modal when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+    const pdfModal = document.getElementById('pdfModal');
+    if (pdfModal) {
+        pdfModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePDF();
+            }
+        });
+    }
+});
+
+// Add keyboard shortcut to close PDF modal
+document.addEventListener('keydown', function(e) {
+    const pdfModal = document.getElementById('pdfModal');
+    if (pdfModal && pdfModal.classList.contains('active')) {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            e.preventDefault();
+            closePDF();
+        }
+    }
+});

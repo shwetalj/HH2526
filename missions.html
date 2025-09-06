@@ -1841,6 +1841,164 @@
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
     }
+    
+    /* PDF Modal Styles */
+    .pdf-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .pdf-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pdf-modal-content {
+        background: #1a1a1a;
+        border-radius: 15px;
+        padding: 20px;
+        width: 90%;
+        max-width: 1200px;
+        height: 90vh;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .pdf-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .pdf-title {
+        color: var(--gold);
+        margin: 0;
+        font-size: 1.3rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .pdf-close-btn {
+        background: var(--gold);
+        color: var(--bg-dark);
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 35px;
+        text-align: center;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .pdf-close-btn:hover {
+        background: var(--gold-dark);
+        transform: scale(1.1);
+    }
+    
+    .pdf-container {
+        flex: 1;
+        overflow: hidden;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+    
+    .pdf-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 10px;
+    }
+    
+    .pdf-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .pdf-control-btn {
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        color: var(--bg-dark);
+        border: none;
+        padding: 8px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .pdf-control-btn:hover {
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    /* Mobile PDF Modal Styles */
+    @media (max-width: 768px) {
+        .pdf-modal-content {
+            width: 95%;
+            height: 85vh;
+            padding: 15px;
+        }
+        
+        .pdf-title {
+            font-size: 1rem;
+        }
+        
+        .pdf-close-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            line-height: 44px;
+        }
+        
+        .pdf-controls {
+            flex-wrap: wrap;
+        }
+        
+        .pdf-control-btn {
+            min-height: 44px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .pdf-modal-content {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            padding: 10px;
+        }
+        
+        .pdf-container {
+            border-radius: 5px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -2005,7 +2163,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="01">Surface Brushing</a></td>
                     <td class="mission-desc">Brush away sediment to uncover artifacts. Clean and uncover buried artifacts without damaging them.</td>
                     <td class="mission-points">• Soil deposits cleared: 10 pts each<br>• Brush not touching dig site: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M01_SurfaceBrushing_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M01_SurfaceBrushing_Build.pdf', 'M01: Surface Brushing - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('OUHg0bMwHtM', 'M01: Surface Brushing', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2013,7 +2171,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="02">Map Reveal</a></td>
                     <td class="mission-desc">Shift and remove topsoil to reveal sections of a hidden map.</td>
                     <td class="mission-points">• Topsoil sections cleared: 10 pts each</td>
-                    <td class="mission-build"><a href="pdf/M02_MapReveal_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M02_MapReveal_Build.pdf', 'M02: Map Reveal - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('b-7zkBkgNUw', 'M02: Map Reveal', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2021,7 +2179,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="03">Mineshaft Explorer</a></td>
                     <td class="mission-desc">Your team's minecart must pass completely through the mineshaft entry.</td>
                     <td class="mission-points">• Minecart on opposing field: 30 pts<br>• Bonus if opposing cart on your field: +10 pts</td>
-                    <td class="mission-build"><a href="pdf/M03_M04_MineshaftExplorer_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M03_M04_MineshaftExplorer_Build.pdf', 'M03/M04: Mineshaft Explorer - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('y6RxJpgBOQM', 'M03: Mineshaft Explorer', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2029,7 +2187,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="04">Careful Recovery</a></td>
                     <td class="mission-desc">Carefully extract the precious artifact from the mine, ensuring the site remains stable.</td>
                     <td class="mission-points">• Artifact not touching mine: 30 pts<br>• Both supports standing: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M03_M04_MineshaftExplorer_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M03_M04_MineshaftExplorer_Build.pdf', 'M03/M04: Mineshaft Explorer - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('MX2WMQ4vN0g', 'M04: Careful Recovery', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2037,7 +2195,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="05">Who Lived Here?</a></td>
                     <td class="mission-desc">Rebuild the structure to restore a vital part of the village where people once lived.</td>
                     <td class="mission-points">• Structure floor completely upright: 30 pts</td>
-                    <td class="mission-build"><a href="pdf/M05_WhoLIvedHere_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M05_WhoLIvedHere_Build.pdf', 'M05: Who Lived Here? - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('JmYsPn4cig8', 'M05: Who Lived Here?', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2045,7 +2203,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="06">Forge</a></td>
                     <td class="mission-desc">Release the ore blocks from the forge. One block holds a mysterious artifact.</td>
                     <td class="mission-points">• Ore blocks not touching forge: 10 pts each</td>
-                    <td class="mission-build"><a href="pdf/M06_M07_ForgeHeavyLifting_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M06_M07_ForgeHeavyLifting_Build.pdf', 'M06/M07: Forge & Heavy Lifting - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('szFSKDQCFFw', 'M06: Forge', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2053,7 +2211,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="07">Heavy Lifting</a></td>
                     <td class="mission-desc">Move the millstone that was used to process grain.</td>
                     <td class="mission-points">• Millstone not touching base: 30 pts</td>
-                    <td class="mission-build"><a href="pdf/M06_M07_ForgeHeavyLifting_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M06_M07_ForgeHeavyLifting_Build.pdf', 'M06/M07: Forge & Heavy Lifting - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('6xcrIo-2WJ8', 'M07: Heavy Lifting', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2061,7 +2219,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="08">Silo</a></td>
                     <td class="mission-desc">Empty the silo of the preserved food so it can be analyzed at the lab.</td>
                     <td class="mission-points">• Preserved pieces outside silo: 10 pts each</td>
-                    <td class="mission-build"><a href="pdf/M08_Silo_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M08_Silo_Build.pdf', 'M08: Silo - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('MbvDiuorKsc', 'M08: Silo', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2069,7 +2227,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="09">What's on Sale?</a></td>
                     <td class="mission-desc">Restore the market stall and reveal items that were once traded.</td>
                     <td class="mission-points">• Roof completely raised: 20 pts<br>• Market wares raised: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M09_WhatsOnSale_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M09_WhatsOnSale_Build.pdf', 'M09: What\'s on Sale? - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('yymtNugu4V4', 'M09: What\'s on Sale?', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2077,7 +2235,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="10">Tip the Scales</a></td>
                     <td class="mission-desc">Use this ancient tool that ensured fair and balanced prices.</td>
                     <td class="mission-points">• Scale tipped & touching mat: 20 pts<br>• Scale pan removed: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M10_TipTheScales_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M10_TipTheScales_Build.pdf', 'M10: Tip the Scales - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('RX8MMw_MJ9g', 'M10: Tip the Scales', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2085,7 +2243,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="11">Angler Artifacts</a></td>
                     <td class="mission-desc">Use the crane to excavate artifacts discovered at the port.</td>
                     <td class="mission-points">• Artifacts raised above ground: 20 pts<br>• Bonus if crane flag lowered: +10 pts</td>
-                    <td class="mission-build"><a href="pdf/M11_AngularArtifacts_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M11_AngularArtifacts_Build.pdf', 'M11: Angler Artifacts - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('qVrT1DH4Zh8', 'M11: Angler Artifacts', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2093,7 +2251,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="12">Salvage Operation</a></td>
                     <td class="mission-desc">Excavate the ancient ship without damaging its delicate structure.</td>
                     <td class="mission-points">• Sand completely cleared: 20 pts<br>• Ship completely raised: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M12_SalvageOperationBuild.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M12_SalvageOperationBuild.pdf', 'M12: Salvage Operation - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('hFzNIv1NBzg', 'M12: Salvage Operation', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2101,7 +2259,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="13">Statue Rebuild</a></td>
                     <td class="mission-desc">Reconstruct the statue to help piece together its historic significance.</td>
                     <td class="mission-points">• Statue completely raised: 30 pts</td>
-                    <td class="mission-build"><a href="pdf/M13_StatueRebuild_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M13_StatueRebuild_Build.pdf', 'M13: Statue Rebuild - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('1yyh08hg398', 'M13: Statue Rebuild', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2117,7 +2275,7 @@
                     <td class="mission-name"><a href="#" class="mission-link" data-mission="15">Site Marking</a></td>
                     <td class="mission-desc">Place flags to mark locations for further study.</td>
                     <td class="mission-points">• Each site with flag: 10 pts</td>
-                    <td class="mission-build"><a href="pdf/M15_SiteMarkings_Build.pdf" target="_blank" class="video-link">Build PDF 📄</a></td>
+                    <td class="mission-build"><button class="video-link" onclick="openPDF('pdf/M15_SiteMarkings_Build.pdf', 'M15: Site Marking - Build Instructions')">Build PDF 📄</button></td>
                     <td class="mission-video"><button class="video-link" onclick="playVideo('d6cNKGmYxh4', 'M15: Site Marking', 6, 126)">Watch Video 🎬</button></td>
                 </tr>
                 <tr>
@@ -2191,6 +2349,24 @@
     
     <!-- Playlist Trigger Button -->
     <button class="playlist-trigger" onclick="togglePlaylist()">📋 <span class="playlist-trigger-text">Mission Playlist</span></button>
+    </div>
+    
+    <!-- PDF Modal -->
+    <div class="pdf-modal" id="pdfModal">
+        <div class="pdf-modal-content">
+            <div class="pdf-header">
+                <h3 class="pdf-title" id="pdfTitle">Build Instructions</h3>
+                <button class="pdf-close-btn" onclick="closePDF()">&times;</button>
+            </div>
+            <div class="pdf-container" id="pdfContainer">
+                <!-- PDF iframe will be inserted here -->
+            </div>
+            <div class="pdf-controls">
+                <a href="#" id="pdfDownloadLink" class="pdf-control-btn" download>📥 Download PDF</a>
+                <button class="pdf-control-btn" onclick="openPDFInNewTab()">🔗 Open in New Tab</button>
+                <button class="pdf-control-btn" onclick="togglePDFFullscreen()">⛶ Fullscreen</button>
+            </div>
+        </div>
     </div>
 
     <script src="missions.js"></script>
