@@ -1299,15 +1299,34 @@ function openPDF(pdfUrl, title) {
     const filename = pdfUrl.split('/').pop();
     downloadLink.download = filename;
     
-    // Create iframe for PDF
-    pdfContainer.innerHTML = `
-        <iframe 
-            src="${pdfUrl}" 
-            style="width: 100%; height: 100%;" 
-            frameborder="0"
-            loading="lazy">
-        </iframe>
-    `;
+    // Create iframe for PDF with mobile-friendly embedding
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // For mobile, use object tag with fallback
+        pdfContainer.innerHTML = `
+            <object data="${pdfUrl}" type="application/pdf" style="width: 100%; height: 100%; min-height: 800px;">
+                <iframe 
+                    src="${pdfUrl}#view=FitH&scrollbar=1&toolbar=1&navpanes=0" 
+                    style="width: 100%; height: 100%; min-height: 800px;" 
+                    frameborder="0"
+                    scrolling="auto">
+                    <p>Your browser doesn't support embedded PDFs. 
+                    <a href="${pdfUrl}" target="_blank">Click here to download the PDF</a>.</p>
+                </iframe>
+            </object>
+        `;
+    } else {
+        // Use direct PDF embedding for desktop
+        pdfContainer.innerHTML = `
+            <iframe 
+                src="${pdfUrl}#view=FitH&scrollbar=1&toolbar=0&navpanes=0" 
+                style="width: 100%; height: 100%;" 
+                frameborder="0"
+                loading="lazy">
+            </iframe>
+        `;
+    }
     
     // Show modal
     modal.classList.add('active');
