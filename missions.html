@@ -2116,12 +2116,12 @@
     @media (max-width: 768px) {
         .pdf-modal-content {
             width: 95%;
-            height: 80vh;
-            max-height: 80vh;
+            height: 90vh;
+            max-height: 90vh;
             padding: 0;
             border-radius: 10px;
             margin: 0 auto;
-            margin-top: 15vh; /* Position it lower to show header */
+            margin-top: 8vh; /* Position it higher but still show header */
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             border: 2px solid #333;
         }
@@ -2154,7 +2154,7 @@
         .pdf-container {
             position: relative;
             width: 100%;
-            height: calc(80vh - 50px); /* Account for modal height and header */
+            height: calc(90vh - 50px); /* Account for modal height and header */
             display: flex;
             border-radius: 0 0 10px 10px;
             overflow: hidden;
@@ -2211,11 +2211,11 @@
         
         .pdf-modal-content {
             width: 95%;
-            height: 75vh;
-            max-height: 75vh;
+            height: 85vh;
+            max-height: 85vh;
             border-radius: 10px;
             padding: 0;
-            margin-top: 20vh; /* Even lower on small screens */
+            margin-top: 10vh; /* Slightly lower on small screens */
             display: flex;
             flex-direction: column;
             background: #000;
@@ -2234,7 +2234,7 @@
         .pdf-container {
             position: relative;
             width: 100%;
-            height: calc(75vh - 50px); /* Match the modal height */
+            height: calc(85vh - 50px); /* Match the modal height */
             display: flex;
             flex-direction: column;
             overflow: hidden;
