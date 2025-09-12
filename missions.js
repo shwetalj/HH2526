@@ -205,6 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mapWrapper = document.getElementById('mapWrapper');
     const xCoord = document.getElementById('xCoord');
     const yCoord = document.getElementById('yCoord');
+    const copyCoordsBtn = document.getElementById('copyCoordsBtn');
     
     mapWrapper.addEventListener('mousemove', function(e) {
         const rect = mapWrapper.getBoundingClientRect();
@@ -215,6 +216,22 @@ document.addEventListener('DOMContentLoaded', function() {
         yCoord.textContent = y;
     });
     
+    // Copy the current coordinates on button click
+    if (copyCoordsBtn) {
+        copyCoordsBtn.addEventListener('click', function() {
+            const x = xCoord.textContent;
+            const y = yCoord.textContent;
+            const cssText = `left: ${x}%; top: ${y}%;`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(cssText)
+                    .then(() => showToast(`Copied: ${cssText}`, 'success', 1500))
+                    .catch(() => showToast('Copy failed', 'error', 1500));
+            } else {
+                showToast(cssText, 'info', 1500);
+            }
+        });
+    }
+    
     // Click to log coordinates
     mapWrapper.addEventListener('click', function(e) {
         if (e.target.closest('.marker')) return;
@@ -222,8 +239,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const rect = mapWrapper.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
         const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-        
-        console.log(`Clicked at: X: ${x}%, Y: ${y}%`);
+        const cssText = `left: ${x}%; top: ${y}%;`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(cssText)
+                .then(() => showToast(`Copied: ${cssText}`, 'success', 1500))
+                .catch(() => console.log(`Clicked at: X: ${x}%, Y: ${y}%`));
+        } else {
+            console.log(`Clicked at: X: ${x}%, Y: ${y}%`);
+            showToast(cssText, 'info', 1500);
+        }
     });
 });
 
@@ -300,6 +324,22 @@ const markers = document.querySelectorAll('.marker');
 const hintPopup = document.getElementById('hintPopup');
 const hintTitle = document.getElementById('hintTitle');
 const hintContent = document.getElementById('hintContent');
+
+// Keyboard accessibility for markers
+markers.forEach(marker => {
+    const missionId = marker.getAttribute('data-mission');
+    marker.setAttribute('tabindex', '0');
+    marker.setAttribute('role', 'button');
+    marker.setAttribute('aria-label', `Open hint for mission ${missionId}`);
+    marker.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const id = this.getAttribute('data-mission');
+            const mission = missionData[id];
+            if (mission) showHint(mission, this);
+        }
+    });
+});
 
 // Track closing timeout
 let closeTimeout = null;
@@ -606,7 +646,7 @@ function playPreviousInPlaylist() {
     if (currentMissionIndex > 0) {
         currentMissionIndex--;
         const mission = allMissions[currentMissionIndex];
-        playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.startTime, mission.endTime);
+        playVideo(mission.videoId, `${mission.id}: ${mission.name}`, mission.start, mission.end);
         showToast('Previous: ' + mission.name, 'info', 2000);
     } else {
         showToast('First video in playlist', 'info', 1500);
