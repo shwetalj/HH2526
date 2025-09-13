@@ -127,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    // Register Service Worker for offline support
+    if ('serviceWorker' in navigator) {
+        try {
+            navigator.serviceWorker.register('/sw.js');
+        } catch (e) {
+            // ignore
+        }
+    }
 });
 
 // Copy to clipboard functionality for code blocks

@@ -251,73 +251,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Mission data with scoring information
-const missionData = {
-    '01': {
-        title: 'M01: Surface Brushing',
-        hint: '<picture><source srcset="mission_cards/M01_Surface_Brushing.webp" type="image/webp"><img src="mission_cards/M01_Surface_Brushing.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '02': {
-        title: 'M02: Map Reveal',
-        hint: '<picture><source srcset="mission_cards/M02_Map_Reward.webp" type="image/webp"><img src="mission_cards/M02_Map_Reward.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '03': {
-        title: 'M03: Mineshaft Explorer',
-        hint: '<picture><source srcset="mission_cards/M03_Mineshaft_Explorers.webp" type="image/webp"><img src="mission_cards/M03_Mineshaft_Explorers.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '04': {
-        title: 'M04: Careful Recovery',
-        hint: '<picture><source srcset="mission_cards/M04_Careful_Recovery.webp" type="image/webp"><img src="mission_cards/M04_Careful_Recovery.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '05': {
-        title: 'M05: Who Lived Here?',
-        hint: '<picture><source srcset="mission_cards/M05_Who_Lived_Here.webp" type="image/webp"><img src="mission_cards/M05_Who_Lived_Here.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '06': {
-        title: 'M06: Forge',
-        hint: '<picture><source srcset="mission_cards/M06_Forge.webp" type="image/webp"><img src="mission_cards/M06_Forge.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '07': {
-        title: 'M07: Heavy Lifting',
-        hint: '<picture><source srcset="mission_cards/M07_Heavy_Lifting.webp" type="image/webp"><img src="mission_cards/M07_Heavy_Lifting.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '08': {
-        title: 'M08: Silo',
-        hint: '<picture><source srcset="mission_cards/M08_Silo.webp" type="image/webp"><img src="mission_cards/M08_Silo.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '09': {
-        title: 'M09: What\'s on Sale?',
-        hint: '<picture><source srcset="mission_cards/M09_Rock_on_Slab.webp" type="image/webp"><img src="mission_cards/M09_Rock_on_Slab.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '10': {
-        title: 'M10: Tip the Scales',
-        hint: '<picture><source srcset="mission_cards/M10_Tip_the_Scales.webp" type="image/webp"><img src="mission_cards/M10_Tip_the_Scales.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '11': {
-        title: 'M11: Angler Artifacts',
-        hint: '<picture><source srcset="mission_cards/M11_Angler_Artifacts.webp" type="image/webp"><img src="mission_cards/M11_Angler_Artifacts.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '12': {
-        title: 'M12: Salvage Operation',
-        hint: '<picture><source srcset="mission_cards/M12_Salvage_Operation.webp" type="image/webp"><img src="mission_cards/M12_Salvage_Operation.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '13': {
-        title: 'M13: Statue Rebuild',
-        hint: '<picture><source srcset="mission_cards/M13_Statue_Rebuild.webp" type="image/webp"><img src="mission_cards/M13_Statue_Rebuild.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '14': {
-        title: 'M14: Forum',
-        hint: '<picture><source srcset="mission_cards/M14_Forum.webp" type="image/webp"><img src="mission_cards/M14_Forum.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    '15': {
-        title: 'M15: Site Marking',
-        hint: '<picture><source srcset="mission_cards/M15_Site_Marking.webp" type="image/webp"><img src="mission_cards/M15_Site_Marking.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
-    },
-    'PT': {
-        title: 'Precision Tokens',
-        hint: '<picture><source srcset="mission_cards/Precision_Tokens.webp" type="image/webp"><img src="mission_cards/Precision_Tokens.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>'
+// Build mission hint lookup from mission_data.js if available
+const missionHints = (() => {
+    const lookup = {};
+    if (Array.isArray(window.missionData)) {
+        window.missionData.forEach(m => {
+            if (!m || !m.id || !m.hint_image) return;
+            const id = m.id.toString();
+            const titlePrefix = id === 'PT' ? 'Precision Tokens' : `M${id.padStart ? id.padStart(2, '0') : id}: ${m.name}`;
+            lookup[id] = {
+                title: titlePrefix,
+                hint: `<picture><source srcset="${m.hint_image}.webp" type="image/webp"><img src="${m.hint_image}.png" style="width: 100%; max-width: 100%; height: auto; border-radius: 5px;"></picture>`
+            };
+        });
     }
-};
+    return lookup;
+})();
+
+// Generate markers from mission_data.js if present
+(function generateMarkersFromData() {
+    const wrapper = document.getElementById('mapWrapper');
+    if (!wrapper || !Array.isArray(window.missionData)) return;
+    // If static markers were removed, create them now from data
+    // Avoid duplicating if markers already exist
+    if (wrapper.querySelector('.marker')) return;
+    window.missionData.forEach(m => {
+        if (!m || !m.position || m.position.x == null || m.position.y == null) return;
+        const marker = document.createElement('div');
+        marker.className = 'marker';
+        marker.style.left = `${m.position.x}%`;
+        marker.style.top = `${m.position.y}%`;
+        marker.setAttribute('data-mission', m.id);
+        const label = document.createElement('span');
+        label.className = 'marker-label';
+        label.textContent = `${m.id}`.padStart ? `${m.id}`.padStart(2, '0') : `${m.id}`;
+        const name = document.createElement('span');
+        name.className = 'marker-name';
+        name.textContent = m.name;
+        marker.appendChild(label);
+        marker.appendChild(name);
+        wrapper.appendChild(marker);
+    });
+})();
 
 // Get all markers
 const markers = document.querySelectorAll('.marker');
@@ -335,7 +310,7 @@ markers.forEach(marker => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             const id = this.getAttribute('data-mission');
-            const mission = missionData[id];
+            const mission = (missionHints && missionHints[id]) || missionData[id];
             if (mission) showHint(mission, this);
         }
     });
@@ -379,7 +354,7 @@ markers.forEach(marker => {
             e.stopPropagation();
             
             const missionId = this.getAttribute('data-mission');
-            const mission = missionData[missionId];
+            const mission = (missionHints && missionHints[missionId]) || missionData[missionId];
             
             if (mission) {
                 // Close any open popup first
@@ -401,7 +376,7 @@ markers.forEach(marker => {
         marker.addEventListener('mouseenter', function(e) {
             cancelCloseTimeout(); // Cancel any pending close
             const missionId = this.getAttribute('data-mission');
-            const mission = missionData[missionId];
+            const mission = (missionHints && missionHints[missionId]) || missionData[missionId];
             
             if (mission) {
                 showHint(mission, this);
@@ -434,7 +409,7 @@ missionLinks.forEach(link => {
     link.addEventListener('mouseenter', function(e) {
         cancelCloseTimeout(); // Cancel any pending close
         const missionId = this.getAttribute('data-mission');
-        const mission = missionData[missionId];
+        const mission = (missionHints && missionHints[missionId]) || missionData[missionId];
         
         if (mission) {
             showHint(mission, this);
@@ -511,24 +486,17 @@ window.addEventListener('resize', function() {
     closeHint();
 });
 
-// Mission data for playlist and end screens
-const allMissions = [
-    {id: 'M01', videoId: 'OUHg0bMwHtM', name: 'Surface Brushing', points: '30', start: 6, end: 126},
-    {id: 'M02', videoId: 'b-7zkBkgNUw', name: 'Map Reveal', points: '40', start: 6, end: 126},
-    {id: 'M03', videoId: 'y6RxJpgBOQM', name: 'Mineshaft Explorer', points: '40', start: 6, end: 126},
-    {id: 'M04', videoId: 'MX2WMQ4vN0g', name: 'Careful Recovery', points: '40', start: 6, end: 126},
-    {id: 'M05', videoId: 'JmYsPn4cig8', name: 'Who Lived Here?', points: '30', start: 6, end: 126},
-    {id: 'M06', videoId: 'szFSKDQCFFw', name: 'Forge', points: '30', start: 6, end: 126},
-    {id: 'M07', videoId: '6xcrIo-2WJ8', name: 'Heavy Lifting', points: '30', start: 6, end: 126},
-    {id: 'M08', videoId: 'MbvDiuorKsc', name: 'Silo', points: '40', start: 6, end: 126},
-    {id: 'M09', videoId: 'yymtNugu4V4', name: "What's on Sale?", points: '30', start: 6, end: 126},
-    {id: 'M10', videoId: 'RX8MMw_MJ9g', name: 'Tip the Scales', points: '30', start: 6, end: 126},
-    {id: 'M11', videoId: 'qVrT1DH4Zh8', name: 'Angler Artifacts', points: '30', start: 6, end: 126},
-    {id: 'M12', videoId: 'hFzNIv1NBzg', name: 'Salvage Operation', points: '30', start: 6, end: 126},
-    {id: 'M13', videoId: '1yyh08hg398', name: 'Statue Rebuild', points: '30', start: 6, end: 126},
-    {id: 'M14', videoId: 'Pq9d-23TMos', name: 'Forum', points: '35', start: 6, end: 126},
-    {id: 'M15', videoId: 'd6cNKGmYxh4', name: 'Site Marking', points: '40', start: 6, end: 126}
-];
+// Mission data for playlist and end screens (from mission_data.js)
+const allMissions = Array.isArray(window.missionData) ? window.missionData
+    .filter(m => m && m.video_id)
+    .map(m => ({
+        id: `M${m.id.toString().padStart(2,'0')}`,
+        videoId: m.video_id,
+        name: m.name,
+        points: (m.points || '').replace(/<br>/g, ' ').replace(/[^0-9]/g, '') || '0',
+        start: m.start_time || 0,
+        end: m.end_time || undefined
+    })) : [];
 
 let currentMissionIndex = -1;
 let playlist = [];
@@ -1372,6 +1340,8 @@ function openPDF(pdfUrl, title) {
     const pdfContainer = document.getElementById('pdfContainer');
     const pdfTitle = document.getElementById('pdfTitle');
     const downloadLink = document.getElementById('pdfDownloadLink');
+    const previouslyFocused = document.activeElement;
+    modal.dataset.returnFocus = previouslyFocused && previouslyFocused.focus ? 'true' : '';
     
     // Store current PDF URL
     currentPDFUrl = pdfUrl;
@@ -1444,6 +1414,21 @@ function openPDF(pdfUrl, title) {
     setTimeout(() => {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        // Focus trap start
+        const focusable = modal.querySelectorAll('button, [href], select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length) {
+            const firstEl = focusable[0];
+            const lastEl = focusable[focusable.length - 1];
+            firstEl.focus();
+            function handleTrap(e){
+                if (e.key === 'Tab') {
+                    if (e.shiftKey && document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+                    else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); firstEl.focus(); }
+                }
+            }
+            modal.addEventListener('keydown', handleTrap);
+            modal.dataset.trap = '1';
+        }
     }, 50);
 }
 
@@ -1474,6 +1459,10 @@ function closePDF() {
     
     // Restore body scroll
     document.body.style.overflow = '';
+    // Restore focus
+    if (modal.dataset.returnFocus) {
+        try { document.querySelector('[aria-label="Open in New Tab"], .pdf-close-btn, .video-link')?.focus(); } catch(e) {}
+    }
 }
 
 function openPDFInNewTab() {
