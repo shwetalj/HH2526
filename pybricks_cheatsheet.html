@@ -916,7 +916,7 @@ motor.run_target(500, 90)   # Speed (deg/s), Target position (deg)</pre>
                                 <pre>angle = motor.angle()       # Current angle
 speed = motor.speed()       # Current speed
 motor.reset_angle(0)        # Reset angle to 0
-if motor.stalled():         # Check if stuck
+if motor.control.stalled(): # Check if stuck
     print("Motor stuck!")</pre>
                             </div>
                         </div>
@@ -966,8 +966,7 @@ robot.drive(100, 30)        # Speed (mm/s), Turn rate (deg/s)
 robot.stop()                # Stop driving
 
 # Advanced DriveBase commands
-robot.curve(radius=200, angle=90)  # Drive in arc (radius in mm)
-robot.drive_time(100, 0, 2000)     # Drive for specific time (2 seconds)
+robot.arc(radius=200, angle=90)    # Drive in arc (radius in mm)
 
 # Get current state
 distance = robot.distance()        # Total distance traveled
